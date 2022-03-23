@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="pinCodeViewModel"
+            type="com.example.kobilapp.viewModel.PinCodeViewModel" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.ActivationFragment">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:elevation="30dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="2dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:circularflow_defaultRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="30dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutIconUser"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/icon_pin"
+                            android:backgroundTint="@color/black" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/editTextUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:afterTextChanged="@{pinCodeViewModel.afterPinTextChanged}"
+                        android:hint="Enter pin"
+                        android:layout_marginStart="50dp"
+                        android:inputType="number"
+                        android:onTextChanged="@{pinCodeViewModel.onPinTextChanged}"
+                        android:text="@={pinCodeViewModel.pin}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.034" />
+
+                    <TextView
+                        android:id="@+id/textViewActivationCode1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="55dp"
+                        android:text="@{pinCodeViewModel.pinError1}"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:visibility="@{pinCodeViewModel.pinError1Visibility ?view.VISIBLE:view.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+                        app:layout_constraintVertical_bias="0.060000002" />
+
+                    <TextView
+                        android:id="@+id/textViewActivationCode2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="55dp"
+                        android:text="@{pinCodeViewModel.pinError2}"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:visibility="@{pinCodeViewModel.pinError2Visibility ?view.VISIBLE:view.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textViewActivationCode1"
+                        tools:layout_editor_absoluteX="10dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/icon_pin"
+                            android:backgroundTint="@color/black" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/editTextActivationCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Confirm pin"
+                        android:layout_marginStart="50dp"
+                        android:inputType="number"
+                        android:password="true"
+                        android:text="@={pinCodeViewModel.confirmPin}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/textViewUserId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="55dp"
+                        android:text="@{pinCodeViewModel.confirmPinError}"
+                        android:textColor="@color/red"
+                        android:textSize="10sp"
+                        android:visibility="@{pinCodeViewModel.confirmPinErrorVisibility ?view.VISIBLE:view.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/editTextActivationCode"
+                        tools:layout_editor_absoluteX="10dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="14dp"
+            android:elevation="20dp"
+            android:onClick="@{(v)->pinCodeViewModel.onSetPinClick(v)}"
+            android:text="Activate"
+            app:cardPreventCornerOverlap="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
