@@ -1,5 +1,6 @@
 package com.example.kobilapp.fragment;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -13,26 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kobilapp.R;
+import com.example.kobilapp.databinding.LoginFragmentBinding;
+import com.example.kobilapp.viewModel.LoginViewModel;
 
 public class LoginFragment extends Fragment {
 
     private LoginViewModel mViewModel;
-
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
-    }
+    private LoginFragmentBinding loginFragmentBinding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.login_fragment, container, false);
+        loginFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false);
+        return loginFragmentBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        // TODO: Use the ViewModel
+        loginFragmentBinding.setLoginViewModel(mViewModel);
     }
 
 }

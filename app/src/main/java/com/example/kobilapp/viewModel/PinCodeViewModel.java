@@ -1,16 +1,23 @@
 package com.example.kobilapp.viewModel;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.kobilapp.LoginActivity;
 import com.example.kobilapp.SdkListener;
+import com.example.kobilapp.fragment.PinCodeFragment;
+import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
@@ -31,6 +38,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     public ObservableField<Boolean> pinError2Visibility = new ObservableField<>();
     private String userId;
     private char[] activationCode;
+    private PinCodeFragment pinCodeFragment;
 
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
@@ -82,10 +90,37 @@ public class PinCodeViewModel extends AndroidViewModel {
                 AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
                 char[] pinCode = pin.getValue().toCharArray();
                 sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
-                SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
+                if (StatusMessage.getInstance().getStatus() == 0) {
+                    SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                    alert.setMessage(StatusMessage.getInstance().getMessage());
+                    alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplication(), LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplication().startActivity(intent);
+                        }
+                    });
+
+                } else if (StatusMessage.getInstance().getStatus() == 12) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                    alert.setMessage(StatusMessage.getInstance().getMessage());
+                    alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                }
             }
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
         }
+    }
+
+    public void getFragment(PinCodeFragment pinCodeFragment) {
+        this.pinCodeFragment = pinCodeFragment;
     }
 }

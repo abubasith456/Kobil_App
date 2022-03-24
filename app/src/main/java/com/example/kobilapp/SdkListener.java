@@ -1,10 +1,9 @@
 package com.example.kobilapp;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.kobilapp.model.StatusCode;
-import com.example.kobilapp.model.StatusModel;
+import com.example.kobilapp.model.StatusMessage;
 import com.kobil.midapp.ast.api.AstSdkListener;
 import com.kobil.midapp.ast.api.enums.AstCheckPinReason;
 import com.kobil.midapp.ast.api.enums.AstConfigParameter;
@@ -34,14 +33,15 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onActivationEnd(AstDeviceType astDeviceType, AstStatus astStatus) {
         Log.e("AstSDKCallback", "onActivationEnd() called ==> " + astStatus);
-        StatusModel statusModel = new StatusModel(astStatus);
-        Log.e("Value==>", statusModel.getStatus());
+        StatusMessage.getInstance().setStatus(astStatus);
+        Log.e("Value==>", String.valueOf(StatusMessage.getInstance().getStatus()));
     }
 
     @Override
     public void onLoginBegin(AstDeviceType astDeviceType, List<String> list) {
         Log.e("AstSDKCallback", "onLoginBegin() called ==> " + list);
-        new StatusCode(list.get(0));
+        StatusCode.getInstance().setStatusCode(list);
+        Log.e("check code", "=>" + StatusCode.getInstance().getStatusCode().toString());
     }
 
     @Override

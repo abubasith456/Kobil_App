@@ -50,6 +50,7 @@ public class PinCodeFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(PinCodeViewModel.class);
         pincodeFragmentBinding.setPinCodeViewModel(mViewModel);
         mViewModel.getValue(userId,activationCode);
+        mViewModel.getFragment(this);
         // TODO: Use the ViewModel
     }
 

@@ -10,15 +10,14 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.kobilapp.ActivationActivity;
+import com.example.kobilapp.LoginActivity;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.model.StatusCode;
-import com.example.kobilapp.model.StatusModel;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
-
-import java.util.logging.LogRecord;
 
 public class InitActivityViewModel extends AndroidViewModel {
 
@@ -35,8 +34,12 @@ public class InitActivityViewModel extends AndroidViewModel {
         handler.postDelayed(() -> {
             progressBarVisibility.set(false);
             startButtonVisibility.set(true);
-            Log.e("Status check==>", new StatusCode().getStatusCode());
-        }, 2000);
+//            StatusCode statusCode = new StatusCode();
+//            String value = statusCode.getStatusCode().get(0);
+//            Log.e("Status check==>", "" + value);
+            Log.e("check code", "=>" + StatusCode.getInstance().getStatusCode().toString());
+        }, 3000);
+
     }
 
     private void sdkInit() {
@@ -53,9 +56,18 @@ public class InitActivityViewModel extends AndroidViewModel {
     }
 
     public void onStartClick(View view) {
-        Intent intent = new Intent(getApplication(), ActivationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplication().startActivity(intent);
+        String value = StatusCode.getInstance().getStatusCode().get(0);
+        if (value.equals("200")) {
+            Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplication(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplication().startActivity(intent);
+        } else {
+            Intent intent = new Intent(getApplication(), ActivationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplication().startActivity(intent);
+        }
+
     }
 
 }
