@@ -2,8 +2,10 @@ package com.example.kobilapp.viewModel;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.kobilapp.LoginActivity;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.PinCodeFragment;
+import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -28,8 +31,8 @@ import java.util.Arrays;
 
 public class PinCodeViewModel extends AndroidViewModel {
 
-    public MutableLiveData<String> pin = new MutableLiveData<>();
-    public MutableLiveData<String> confirmPin = new MutableLiveData<>();
+    public ObservableField<String> pin = new ObservableField<>();
+    public ObservableField<String> confirmPin = new ObservableField<>();
     public ObservableField<String> confirmPinError = new ObservableField<>();
     public ObservableField<String> pinError1 = new ObservableField<>();
     public ObservableField<String> pinError2 = new ObservableField<>();
@@ -42,8 +45,8 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
-        pin.setValue("");
-        confirmPin.setValue("");
+        pin.set("");
+        confirmPin.set("");
         confirmPinError.set("");
         confirmPinErrorVisibility.set(false);
         pinError1Visibility.set(true);
@@ -79,41 +82,65 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     }
 
+    public void onConfirmPinTextChanged(CharSequence s, int start, int before, int count) {
+        String confirmPin = s.toString();
+        if (pin.get().equals(confirmPin)) {
+            confirmPinErrorVisibility.set(true);
+            confirmPinError.set("PIN matched!");
+        } else {
+            confirmPinErrorVisibility.set(true);
+            confirmPinError.set("PIN not matched!");
+        }
+    }
+
     public void afterPinTextChanged(Editable editable) {
 
     }
 
     public void onSetPinClick(View view) {
         try {
-            if (pin.getValue() != null && confirmPin.getValue() != null) {
+            if (pin.get() != null && confirmPin.get() != null) {
+                ProgressDialog progressdialog = new ProgressDialog((pinCodeFragment.getContext()));
+                progressdialog.setMessage("Please Wait....");
+                progressdialog.show();
                 SdkListener listener = new SdkListener();
                 AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
-                char[] pinCode = pin.getValue().toCharArray();
+                char[] pinCode = pin.get().toCharArray();
                 sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
-                if (StatusMessage.getInstance().getStatus() == 0) {
-                    SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
-                    alert.setMessage(StatusMessage.getInstance().getMessage());
-                    alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplication(), LoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getApplication().startActivity(intent);
-                        }
-                    });
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    if (StatusCode.getInstance().getStatusCode().get(0).equals("200")) {
+                        progressdialog.dismiss();
+                        SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                        alert.setMessage(StatusMessage.getInstance().getStatus());
+                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplication(), LoginActivity.class);
+                                intent.putExtra("from","pinCodeFragment");
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getApplication().startActivity(intent);
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
 
-                } else if (StatusMessage.getInstance().getStatus() == 12) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
-                    alert.setMessage(StatusMessage.getInstance().getMessage());
-                    alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                    } else {
+                        progressdialog.dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                        alert.setMessage(StatusMessage.getInstance().getStatus());
+                        alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                        }
-                    });
-                }
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
+                    }
+                }, 2000);
             }
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());

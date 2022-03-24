@@ -34,10 +34,6 @@ public class InitActivityViewModel extends AndroidViewModel {
         handler.postDelayed(() -> {
             progressBarVisibility.set(false);
             startButtonVisibility.set(true);
-//            StatusCode statusCode = new StatusCode();
-//            String value = statusCode.getStatusCode().get(0);
-//            Log.e("Status check==>", "" + value);
-            Log.e("check code", "=>" + StatusCode.getInstance().getStatusCode().toString());
         }, 3000);
 
     }

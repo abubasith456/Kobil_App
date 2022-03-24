@@ -21,6 +21,7 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.api.enums.AstUrlBlockedReason;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SdkListener implements AstSdkListener {
@@ -34,19 +35,22 @@ public class SdkListener implements AstSdkListener {
     public void onActivationEnd(AstDeviceType astDeviceType, AstStatus astStatus) {
         Log.e("AstSDKCallback", "onActivationEnd() called ==> " + astStatus);
         StatusMessage.getInstance().setStatus(astStatus);
-        Log.e("Value==>", String.valueOf(StatusMessage.getInstance().getStatus()));
     }
 
     @Override
     public void onLoginBegin(AstDeviceType astDeviceType, List<String> list) {
         Log.e("AstSDKCallback", "onLoginBegin() called ==> " + list);
         StatusCode.getInstance().setStatusCode(list);
-        Log.e("check code", "=>" + StatusCode.getInstance().getStatusCode().toString());
     }
 
     @Override
     public void onLoginEnd(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, int i, int i1) {
         Log.e("AstSDKCallback", "onLoginEnd() called ==> " + astStatus);
+        StatusMessage.getInstance().setStatus(astStatus);
+        Log.e("AstSDKCallback", "onLoginEnd() called Login otp ==> " + s);
+        Log.e("AstSDKCallback", "onLoginEnd() called userId ==> " + s1);
+        Log.e("AstSDKCallback", "onLoginEnd() called Retry counter ==> " + i);
+
     }
 
     @Override
@@ -67,6 +71,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onServerConnection(AstDeviceType astDeviceType, AstConnectionState astConnectionState) {
         Log.e("AstSDKCallback", "onServerConnection() called ==> " + astConnectionState);
+
     }
 
     @Override
@@ -132,6 +137,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onAlert(AstDeviceType astDeviceType, int i, int i1) {
         Log.e("AstSDKCallback", "onAlert(Subsystem " + i + ", ErrorCode " + i1 + ")called.");
+        StatusCode.getInstance().setErrorCode(i1);
     }
 
     @Override
@@ -175,7 +181,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onCertificateDataAvailable(AstDeviceType astDeviceType, byte[] bytes) {
-
+//        Log.e("onCertificateDataAvailable", "Called: " + Arrays.toString(bytes));
     }
 
     @Override

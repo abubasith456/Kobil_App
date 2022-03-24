@@ -21,6 +21,15 @@ public class LoginActivity extends AppCompatActivity {
         activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         loginActivityViewModel = ViewModelProviders.of(this).get(LoginActivityViewModel.class);
         activityLoginBinding.setLoginActivityViewModel(loginActivityViewModel);
-        loginActivityViewModel.setLoginFragment(this);
+        String from = getIntent().getStringExtra("from");
+        if (from!=null){
+            if (from.equals("pinCodeFragment")) {
+                loginActivityViewModel.setDashboardFragment(this);
+            } else {
+                loginActivityViewModel.setLoginFragment(this);
+            }
+        }else {
+            loginActivityViewModel.setLoginFragment(this);
+        }
     }
 }

@@ -2,27 +2,37 @@ package com.example.kobilapp.model;
 
 import android.util.Log;
 
+import java.util.Collections;
 import java.util.List;
 
 public class StatusCode {
-private static StatusCode instance;
-    //    private String statusCode;
+    private static StatusCode instance;
     private List<String> statusCode;
+    private int errorCode;
 
-    public static StatusCode getInstance(){
-        if (instance==null){
-            instance=new StatusCode();
+    public static StatusCode getInstance() {
+        if (instance == null) {
+            instance = new StatusCode();
         }
         return instance;
     }
 
-
     public List<String> getStatusCode() {
+        if (statusCode == null) {
+            setStatusCode(Collections.singletonList("0"));
+        }
         return statusCode;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
     }
 
     public void setStatusCode(List<String> statusCode) {
         this.statusCode = statusCode;
-        Log.e("setStatusCode= ", statusCode.toString());
+    }
+
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 }

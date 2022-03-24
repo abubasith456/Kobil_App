@@ -13,6 +13,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.kobilapp.LoginActivity;
 import com.example.kobilapp.R;
+import com.example.kobilapp.fragment.DashboardFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 
 public class LoginActivityViewModel extends AndroidViewModel {
@@ -28,6 +29,13 @@ public class LoginActivityViewModel extends AndroidViewModel {
 
     public void setLoginFragment(LoginActivity loginActivity) {
         Fragment fragment = new LoginFragment();
+        FragmentTransaction transaction = loginActivity.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+        transaction.commit();
+    }
+
+    public void setDashboardFragment(LoginActivity loginActivity){
+        Fragment fragment = DashboardFragment.newInstance();
         FragmentTransaction transaction = loginActivity.getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
         transaction.commit();

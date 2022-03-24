@@ -6,7 +6,7 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 
 public class StatusMessage {
     private static StatusMessage instance;
-    private int statusMessage;
+    private String statusMessage;
 
     public static StatusMessage getInstance() {
         if (instance == null) {
@@ -15,86 +15,68 @@ public class StatusMessage {
         return instance;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return statusMessage;
     }
-
-    public String getMessage() {
-        String message = "";
-        if (statusMessage == 0) {
-            return message = "Activation and pin code successfully initiated.";
-        } else if (statusMessage == 12) {
-            return message = "Invalid credential please check your activation code.";
-        } else if (statusMessage == 50) {
-            return message = "Failed";
-        } else if (statusMessage == 6) {
-            return message = "Invalid pin";
-        } else if (statusMessage == 17) {
-            return message = "User locked";
-        } else if (statusMessage == 40) {
-            return message = "Your PIN is blocked.";
-        } else if (statusMessage == 29) {
-            return message = "Please register your app.";
-        } else if (statusMessage == 1) {
-            return message = "Update available!.";
-        } else if (statusMessage == 51) {
-            return message = "Login required";
-        } else if (statusMessage == 3) {
-            return message = "App registered successfully.";
-        } else if (statusMessage == 15) {
-            return message = "Activation code expired.";
-        } else if (statusMessage == 39) {
-            return message = "Not reachable";
-        }
-        return message;
-    }
-
 
     public void setStatus(AstStatus astStatus) {
         switch (astStatus) {
             case OK:
-                statusMessage = 0;
+                statusMessage = "ok";
                 break;
             case FAILED:
-                statusMessage = 50;
+                statusMessage = "Failed!";
                 break;
             case WRONG_CREDENTIALS:
-                statusMessage = 12;
+                statusMessage = "Invalid credential!.";
                 break;
             case INVALID_PIN:
-                statusMessage = 6;
+                statusMessage = "Invalid pin";
                 break;
             case LOCKED_USER:
-                statusMessage = 17;
+                statusMessage = "User locked";
                 break;
             case PIN_BLOCKED:
-                statusMessage = 40;
+                statusMessage = "Your PIN is blocked.";
                 break;
             case REGISTER_APP:
-                statusMessage = 29;
+                statusMessage = "Please register your app.";
                 break;
             case LOGIN_REQUIRED:
-                statusMessage = 51;
+                statusMessage = "Login required";
                 break;
             case ACCESS_DENIED:
-                statusMessage = 41;
+                statusMessage = "Access denied!.";
                 break;
             case UPDATE_AVAILABLE:
-                statusMessage = 1;
+                statusMessage = "Update available!.";
                 break;
             case NOT_REACHABLE:
-                statusMessage = 39;
+                statusMessage = "Server not reachable";
                 break;
             case ACTIVATION_CODE_EXPIRED:
-                statusMessage = 15;
+                statusMessage = "Activation code expired";
                 break;
             case APP_REGISTERED:
-                statusMessage = 3;
+                statusMessage = "App registered successfully";
                 break;
+            case INVALID_STATE:
+                statusMessage = "Invalid state!";
+                break;
+            case INVALID_KEY:
+                statusMessage = "Invalid key!";
+                break;
+            case USER_ID_ALREADY_EXISTS:
+                statusMessage = "User ID already exist";
+                break;
+            case ALREADY_CREATED:
+                statusMessage = "Already created!";
+                break;
+
             default:
-                statusMessage = Integer.parseInt(null);
+                statusMessage = "";
         }
-        Log.e("StatusMessageClass=>", String.valueOf(statusMessage));
+        Log.e("StatusMessageClass=>", statusMessage);
     }
 
 }

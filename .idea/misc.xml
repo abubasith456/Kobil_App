@@ -9,7 +9,8 @@
         <entry key="app/src/main/res/layout/activity_init.xml" value="0.12782897949218747" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.11510416666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24791666666666667" />
-        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.11510416666666666" />
+        <entry key="app/src/main/res/layout/dashboard_fragment.xml" value="0.11510416666666666" />
+        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.212237040201823" />
         <entry key="app/src/main/res/layout/menu_fragment.xml" value="0.26463877360026045" />
         <entry key="app/src/main/res/layout/pincode_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/scan_barcode_fragment.xml" value="0.11354166666666667" />

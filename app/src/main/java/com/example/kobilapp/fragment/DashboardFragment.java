@@ -14,27 +14,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kobilapp.R;
-import com.example.kobilapp.databinding.LoginFragmentBinding;
-import com.example.kobilapp.viewModel.LoginViewModel;
+import com.example.kobilapp.databinding.DashboardFragmentBinding;
 
-public class LoginFragment extends Fragment {
+public class DashboardFragment extends Fragment {
 
-    private LoginViewModel mViewModel;
-    private LoginFragmentBinding loginFragmentBinding;
+    private DashboardViewModel mViewModel;
+    private DashboardFragmentBinding dashboardFragmentBinding;
+
+    public static DashboardFragment newInstance() {
+        return new DashboardFragment();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        loginFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false);
-        return loginFragmentBinding.getRoot();
+        dashboardFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.dashboard_fragment, container, false);
+        return dashboardFragmentBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        loginFragmentBinding.setLoginViewModel(mViewModel);
-        mViewModel.getFragment(this);
+        mViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        // TODO: Use the ViewModel
     }
 
 }

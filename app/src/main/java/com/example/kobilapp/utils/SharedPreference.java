@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 public class SharedPreference {
 
     private static SharedPreference instance;
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
 
     public static SharedPreference getInstance() {
         if (instance == null) {
@@ -15,9 +17,14 @@ public class SharedPreference {
     }
 
     public void saveInt(Context context, String key, String value) {
-        SharedPreferences sharedPref = context.getSharedPreferences("AppFieldValues", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        sharedPref = context.getSharedPreferences("AppFieldValues", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
         editor.putString(key, value);
         editor.commit();
+    }
+
+    public String getValue(Context context,String key) {
+        SharedPreferences prefs = context.getSharedPreferences("AppFieldValues", Context.MODE_PRIVATE);
+        return prefs.getString(key,"");
     }
 }
