@@ -72,7 +72,9 @@ public class StatusMessage {
             case ALREADY_CREATED:
                 statusMessage = "Already created!";
                 break;
-
+            case INVALID_PARAMETER:
+                statusMessage = "Invalid parameter!";
+                break;
             default:
                 statusMessage = "";
         }

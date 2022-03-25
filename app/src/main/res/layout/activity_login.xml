@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
         <variable
             name="loginActivityViewModel"
             type="com.example.kobilapp.viewModel.LoginActivityViewModel" />
+
         <variable
             name="view"
             type="android.view.View" />
     </data>
 
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
         android:id="@+id/frameLayoutLoginActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".LoginActivity">
-
+        <!-- Activity menu bar-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -39,6 +41,7 @@
                     android:backgroundTint="@color/white" />
             </LinearLayout>
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,6 +55,17 @@
                 app:drawableTint="@color/white" />
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayoutLoginFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:visibility="@{loginActivityViewModel.fieldVisibility?view.VISIBLE:view.GONE}">
+
+            <!-- Fragment container -->
+
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -132,18 +146,55 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="40dp" />
+
+<!--                                <LinearLayout-->
+<!--                                    android:id="@+id/linearLayoutFingerID"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:orientation="vertical"-->
+<!--                                    android:visibility="@{loginActivityViewModel.fingerIdVisibility?view.VISIBLE:view.GONE}">-->
+
+<!--                                    <RelativeLayout-->
+<!--                                        android:layout_width="match_parent"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:padding="10dp"-->
+<!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                        app:layout_constraintHorizontal_bias="1.0"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">-->
+
+<!--                                        <TextView-->
+<!--                                            android:id="@+id/textViewFinger"-->
+<!--                                            android:layout_width="wrap_content"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:layout_centerVertical="true"-->
+<!--                                            android:text="Finger ID"-->
+<!--                                            android:textColor="@color/white"-->
+<!--                                            android:textSize="15sp" />-->
+
+<!--                                        <Switch-->
+<!--                                            android:layout_width="wrap_content"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:layout_alignParentTop="true"-->
+<!--                                            android:layout_alignParentEnd="true"-->
+<!--                                            android:checked="@{loginActivityViewModel.fingerIdSwitch}"-->
+<!--                                            android:onCheckedChanged="@{(switch,checked) -> loginActivityViewModel.onCheckedChanged(checked)}"-->
+<!--                                            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
+
+<!--                                    </RelativeLayout>-->
+
+<!--                                    <View-->
+<!--                                        android:layout_width="match_parent"-->
+<!--                                        android:layout_height="1dp"-->
+<!--                                        android:layout_marginStart="10dp"-->
+<!--                                        android:layout_marginEnd="10dp"-->
+<!--                                        android:background="@color/white"-->
+<!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        tools:layout_editor_absoluteY="40dp" />-->
+<!--                                </LinearLayout>-->
+
             </LinearLayout>
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/frameLayoutLoginFragmentContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:visibility="@{loginActivityViewModel.fieldVisibility?view.VISIBLE:view.GONE}">
-
-            <!-- Fragment container -->
-
         </FrameLayout>
 
     </FrameLayout>

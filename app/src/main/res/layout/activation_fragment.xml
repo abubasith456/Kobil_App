@@ -30,7 +30,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="270dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
@@ -48,8 +48,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:padding="30dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,8 +60,8 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayoutIconUser"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:gravity="center"
                         android:padding="12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +79,7 @@
                         android:id="@+id/editTextUsername"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="50dp"
+                        android:layout_marginStart="65dp"
                         android:hint="Username"
                         android:text="@={activationViewModel.userId}"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -89,7 +90,7 @@
                         android:id="@+id/textViewUserId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="55dp"
+                        android:layout_marginStart="65dp"
                         android:text="@{activationViewModel.userIdError}"
                         android:textColor="@color/red"
                         android:textSize="12sp"
@@ -103,11 +104,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:gravity="center"
                         android:padding="12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -125,7 +127,7 @@
                         android:id="@+id/editTextActivationCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
+                        android:layout_marginStart="65dp"
                         android:hint="Activation code"
                         android:password="true"
                         android:inputType="numberPassword"
@@ -138,7 +140,7 @@
                         android:id="@+id/textViewActivationCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="55dp"
+                        android:layout_marginStart="65dp"
                         android:text="@{activationViewModel.activationCodeError}"
                         android:textColor="@color/red"
                         android:textSize="12sp"

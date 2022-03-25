@@ -5,6 +5,10 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+
 import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -28,6 +33,7 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 import java.util.Arrays;
+import java.util.concurrent.Executor;
 
 public class PinCodeViewModel extends AndroidViewModel {
 
@@ -42,6 +48,10 @@ public class PinCodeViewModel extends AndroidViewModel {
     private String userId;
     private char[] activationCode;
     private PinCodeFragment pinCodeFragment;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+    private Executor executor;
+    private ProgressDialog progressdialog;
 
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
@@ -55,10 +65,13 @@ public class PinCodeViewModel extends AndroidViewModel {
         pinError2.set("Minimum 8 digits.");
     }
 
+    public void getFragment(PinCodeFragment pinCodeFragment) {
+        this.pinCodeFragment = pinCodeFragment;
+    }
+
     public void getValue(String userId, char[] activationCode) {
         this.userId = userId;
         this.activationCode = activationCode;
-
     }
 
     public void onPinTextChanged(CharSequence s, int start, int before, int count) {
@@ -100,54 +113,126 @@ public class PinCodeViewModel extends AndroidViewModel {
     public void onSetPinClick(View view) {
         try {
             if (pin.get() != null && confirmPin.get() != null) {
-                ProgressDialog progressdialog = new ProgressDialog((pinCodeFragment.getContext()));
-                progressdialog.setMessage("Please Wait....");
-                progressdialog.show();
-                SdkListener listener = new SdkListener();
-                AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
-                char[] pinCode = pin.get().toCharArray();
-                sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
-                Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                    if (StatusCode.getInstance().getStatusCode().get(0).equals("200")) {
-                        progressdialog.dismiss();
-                        SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
-                        AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
-                        alert.setMessage(StatusMessage.getInstance().getStatus());
-                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplication(), LoginActivity.class);
-                                intent.putExtra("from","pinCodeFragment");
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                getApplication().startActivity(intent);
-                            }
-                        });
-                        AlertDialog alertDialog = alert.create();
-                        alertDialog.show();
+                showFingerPrintAccess();
 
-                    } else {
-                        progressdialog.dismiss();
-                        AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
-                        alert.setMessage(StatusMessage.getInstance().getStatus());
-                        alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-                        AlertDialog alertDialog = alert.create();
-                        alertDialog.show();
-                    }
-                }, 2000);
             }
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
         }
     }
 
-    public void getFragment(PinCodeFragment pinCodeFragment) {
-        this.pinCodeFragment = pinCodeFragment;
+    private void showFingerPrintAccess() {
+        try {
+
+            BiometricManager biometricManager = BiometricManager.from(pinCodeFragment.getContext());
+            switch (biometricManager.canAuthenticate()) {
+                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                    Toast.makeText(getApplication(), "Device does not have Fingerprint", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                    Toast.makeText(getApplication(), "Not working", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                    Toast.makeText(getApplication(), "No finger print assigned", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case BiometricManager.BIOMETRIC_STATUS_UNKNOWN:
+                    Toast.makeText(getApplication(), "Unknown person", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            executor = ContextCompat.getMainExecutor(pinCodeFragment.getContext());
+            biometricPrompt = new BiometricPrompt(pinCodeFragment.getActivity(), executor, new BiometricPrompt.AuthenticationCallback() {
+                @Override
+                public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                    super.onAuthenticationError(errorCode, errString);
+                    Log.e("Fingerprint ==>", "onAuthenticationError: " + errString.toString());
+                    executeActivation("cancelled");
+                }
+
+                @Override
+                public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                    super.onAuthenticationSucceeded(result);
+                    Log.e("Fingerprint ==>", "onAuthenticationSucceeded: " + result.getAuthenticationType());
+                    executeActivation("success");
+                }
+
+                @Override
+                public void onAuthenticationFailed() {
+                    super.onAuthenticationFailed();
+                    Log.e("Fingerprint ==>", "onAuthenticationFailed");
+                }
+            });
+            promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("Test app")
+                    .setDescription("Use your fingerprint to unlock")
+                    .setDeviceCredentialAllowed(true)
+                    .build();
+
+            biometricPrompt.authenticate(promptInfo);
+
+        } catch (Exception e) {
+            Log.e("Error fingerPrint=>", e.getMessage());
+        }
+    }
+
+    private void executeActivation(String fingerPrintStatus) {
+        try {
+            showProcessBar("Please wait");
+            if (fingerPrintStatus.equals("success")) {
+                SharedPreference.getInstance().saveInt(getApplication(), "fingerPrint", "success");
+            } else {
+                SharedPreference.getInstance().saveInt(getApplication(), "fingerPrint", "cancelled");
+            }
+            SdkListener listener = new SdkListener();
+            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
+            char[] pinCode = pin.get().toCharArray();
+            sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                if (StatusCode.getInstance().getStatusCode().get(0).equals("200")) {
+                    progressdialog.dismiss();
+                    SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
+                    SharedPreference.getInstance().saveInt(getApplication(), "pinCode", pin.get());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                    alert.setMessage(StatusMessage.getInstance().getStatus());
+                    alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplication(), LoginActivity.class);
+                            intent.putExtra("from", "pinCodeFragment");
+                            intent.putExtra("fingerPrintStatus", fingerPrintStatus);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplication().startActivity(intent);
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+
+                } else {
+                    progressdialog.dismiss();
+                    SharedPreference.getInstance().saveInt(getApplication(), "fingerPrint", "cancelled");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                    alert.setMessage(StatusMessage.getInstance().getStatus());
+                    alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+                }
+            }, 3000);
+        } catch (Exception e) {
+            Log.e("Error fingerPrint=>", e.getMessage());
+        }
+    }
+
+    private void showProcessBar(String message) {
+        progressdialog = new ProgressDialog((pinCodeFragment.getContext()));
+        progressdialog.setMessage(message);
+        progressdialog.show();
     }
 }

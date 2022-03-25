@@ -16,6 +16,7 @@ import com.example.kobilapp.ActivationActivity;
 import com.example.kobilapp.LoginActivity;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.model.StatusCode;
+import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -56,6 +57,7 @@ public class InitActivityViewModel extends AndroidViewModel {
         if (value.equals("200")) {
             Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplication(), LoginActivity.class);
+            intent.putExtra("from", "initActivity");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplication().startActivity(intent);
         } else {
