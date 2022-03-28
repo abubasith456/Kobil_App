@@ -8,12 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
-import com.example.kobilapp.ActivationActivity;
 import com.example.kobilapp.MainActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
@@ -24,6 +22,8 @@ import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
+
+import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
@@ -78,13 +78,13 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void onStartClick(View view) {
         frameLayoutFragmentVisibility.set(true);
         initScreenVisibility.set(false);
-        String value = StatusCode.getInstance().getStatusCode().get(0);
-        if (value.equals("200")) {
+        List<String> value = StatusCode.getInstance().getStatusCode();
+        if (value != null && !value.get(0).equals("0")) {
             Fragment fragment = new LoginFragment();
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
             transaction.commit();
-            SharedPreference.getInstance().saveInt(getApplication(), "from", "LoginFragment");
+            SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
         } else {
             Fragment fragment = new ActivationFragment();
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();

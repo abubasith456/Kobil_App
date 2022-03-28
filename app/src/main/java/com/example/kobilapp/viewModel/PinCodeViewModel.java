@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -19,9 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
@@ -32,10 +31,9 @@ import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
-import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class PinCodeViewModel extends AndroidViewModel {
@@ -50,7 +48,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     public ObservableField<Boolean> pinError2Visibility = new ObservableField<>();
     private String userId;
     private char[] activationCode;
-    private PinCodeFragment pinCodeFragment;
+    private FragmentActivity pinCodeFragment;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
     private Executor executor;
@@ -68,7 +66,7 @@ public class PinCodeViewModel extends AndroidViewModel {
         pinError2.set("Minimum 8 digits.");
     }
 
-    public void getFragment(PinCodeFragment pinCodeFragment) {
+    public void getFragment(FragmentActivity pinCodeFragment) {
         this.pinCodeFragment = pinCodeFragment;
     }
 
@@ -127,7 +125,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     private void showFingerPrintAccess() {
         try {
 
-            BiometricManager biometricManager = BiometricManager.from(pinCodeFragment.getContext());
+            BiometricManager biometricManager = BiometricManager.from(pinCodeFragment);
             switch (biometricManager.canAuthenticate()) {
                 case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
                     Toast.makeText(getApplication(), "Device does not have Fingerprint", Toast.LENGTH_SHORT).show();
@@ -145,8 +143,8 @@ public class PinCodeViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Unknown person", Toast.LENGTH_SHORT).show();
                     break;
             }
-            executor = ContextCompat.getMainExecutor(pinCodeFragment.getContext());
-            biometricPrompt = new BiometricPrompt(pinCodeFragment.getActivity(), executor, new BiometricPrompt.AuthenticationCallback() {
+            executor = ContextCompat.getMainExecutor(pinCodeFragment);
+            biometricPrompt = new BiometricPrompt(pinCodeFragment, executor, new BiometricPrompt.AuthenticationCallback() {
                 @Override
                 public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                     super.onAuthenticationError(errorCode, errString);
@@ -183,35 +181,32 @@ public class PinCodeViewModel extends AndroidViewModel {
         try {
             showProcessBar("Please wait");
             if (fingerPrintStatus.equals("success")) {
-                SharedPreference.getInstance().saveInt(getApplication(), "fingerPrint", "success");
+                SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "success");
             } else {
-                SharedPreference.getInstance().saveInt(getApplication(), "fingerPrint", "cancelled");
+                SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
             }
             SdkListener listener = new SdkListener();
             AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
             char[] pinCode = pin.get().toCharArray();
             sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
+            List<String> value = StatusCode.getInstance().getStatusCode();
             Handler handler = new Handler();
             handler.postDelayed(() -> {
-                if (StatusCode.getInstance().getStatusCode().get(0).equals("200")) {
+                if (StatusMessage.getInstance().getStatus().equals("ok")) {
                     progressdialog.dismiss();
-                    SharedPreference.getInstance().saveInt(getApplication(), "userId", userId);
-                    SharedPreference.getInstance().saveInt(getApplication(), "pinCode", pin.get());
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                    Log.e("executeActivation", "Called==> true part");
+                    SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
+                    SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                     alert.setMessage(StatusMessage.getInstance().getStatus());
                     alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
-//                            Intent intent = new Intent(getApplication(), LoginActivity.class);
-//                            intent.putExtra("from", "pinCodeFragment");
-//                            intent.putExtra("fingerPrintStatus", fingerPrintStatus);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            getApplication().startActivity(intent);
                             Fragment fragment = new LoginFragment();
-                            FragmentTransaction transaction = pinCodeFragment.getChildFragmentManager().beginTransaction();
+                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                            transaction.commit();
+                            transaction.commitNow();
+                            SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                         }
                     });
                     AlertDialog alertDialog = alert.create();
@@ -219,8 +214,9 @@ public class PinCodeViewModel extends AndroidViewModel {
 
                 } else {
                     progressdialog.dismiss();
-                    SharedPreference.getInstance().saveInt(getApplication(), "fingerPrint", "cancelled");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment.getContext());
+                    Log.e("executeActivation", "Called==> false part");
+                    SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                     alert.setMessage(StatusMessage.getInstance().getStatus());
                     alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -238,7 +234,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog((pinCodeFragment.getContext()));
+        progressdialog = new ProgressDialog((pinCodeFragment));
         progressdialog.setMessage(message);
         progressdialog.show();
     }

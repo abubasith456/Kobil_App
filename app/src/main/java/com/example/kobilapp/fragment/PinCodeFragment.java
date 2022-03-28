@@ -33,10 +33,6 @@ public class PinCodeFragment extends Fragment {
     private PinCodeViewModel mViewModel;
     private PincodeFragmentBinding pincodeFragmentBinding;
 
-    public static PinCodeFragment newInstance() {
-        return new PinCodeFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -50,7 +46,7 @@ public class PinCodeFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(PinCodeViewModel.class);
         pincodeFragmentBinding.setPinCodeViewModel(mViewModel);
         mViewModel.getValue(userId,activationCode);
-        mViewModel.getFragment(this);
+        mViewModel.getFragment(getActivity());
         // TODO: Use the ViewModel
     }
 

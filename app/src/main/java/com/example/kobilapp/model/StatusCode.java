@@ -2,6 +2,7 @@ package com.example.kobilapp.model;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,9 +19,12 @@ public class StatusCode {
     }
 
     public List<String> getStatusCode() {
-        if (statusCode == null) {
-            setStatusCode(Collections.singletonList("0"));
+        if (statusCode==null){
+            statusCode=new ArrayList<>();
+            statusCode.add("0");
+            Log.e("getStatusCode: ", ""+"Zero added");
         }
+        Log.e("getStatusCode: ", ""+statusCode.toString());
         return statusCode;
     }
 
@@ -28,7 +32,7 @@ public class StatusCode {
         return errorCode;
     }
 
-    public void setStatusCode(List<String> statusCode) {
+    public void getStatusCode(List<String> statusCode) {
         this.statusCode = statusCode;
     }
 

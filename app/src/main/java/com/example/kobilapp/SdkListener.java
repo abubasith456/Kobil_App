@@ -21,7 +21,6 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.api.enums.AstUrlBlockedReason;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SdkListener implements AstSdkListener {
@@ -40,7 +39,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onLoginBegin(AstDeviceType astDeviceType, List<String> list) {
         Log.e("AstSDKCallback", "onLoginBegin() called ==> " + list);
-        StatusCode.getInstance().setStatusCode(list);
+        StatusCode.getInstance().getStatusCode(list);
     }
 
     @Override

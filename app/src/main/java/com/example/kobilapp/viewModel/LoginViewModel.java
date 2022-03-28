@@ -139,8 +139,8 @@ public class LoginViewModel extends AndroidViewModel {
                                         transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
-                                        SharedPreference.getInstance().saveInt(getApplication(), "showFingerId", "true");
-                                        SharedPreference.getInstance().saveInt(getApplication(), "from", "DashboardFragment");
+                                        SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
+                                        SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
                                     }
                                 } catch (Exception e) {
                                     Log.e("Error=> ", e.getMessage());

@@ -20,6 +20,7 @@ import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.fragment.PinCodeFragment;
+import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -36,8 +37,6 @@ public class ActivationViewModel extends AndroidViewModel {
     public ObservableField<Boolean> userIdErrorVisibility = new ObservableField<>();
     public ObservableField<Boolean> activationErrorVisibility = new ObservableField<>();
     private FragmentActivity activity;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     public ActivationViewModel(@NonNull Application application) {
         super(application);
@@ -45,8 +44,6 @@ public class ActivationViewModel extends AndroidViewModel {
         activationCode.setValue("");
         userIdErrorVisibility.set(false);
         activationErrorVisibility.set(false);
-        sharedPreferences = getApplication().getSharedPreferences("AppFieldData", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
     }
 
     public void getFragment(FragmentActivity activity) {
@@ -62,7 +59,6 @@ public class ActivationViewModel extends AndroidViewModel {
 //            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
 //            sdk.doActivation();
             if (validate()) {
-                editor.putString("userId", id);
                 Fragment fragment = new PinCodeFragment(id, actCode);
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);

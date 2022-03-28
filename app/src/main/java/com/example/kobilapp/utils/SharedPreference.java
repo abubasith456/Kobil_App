@@ -16,7 +16,7 @@ public class SharedPreference {
         return instance;
     }
 
-    public void saveInt(Context context, String key, String value) {
+    public void saveValue(Context context, String key, String value) {
         sharedPref = context.getSharedPreferences("AppFieldValues", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
         editor.putString(key, value);
