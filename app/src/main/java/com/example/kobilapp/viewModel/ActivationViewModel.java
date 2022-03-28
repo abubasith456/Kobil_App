@@ -65,7 +65,7 @@ public class ActivationViewModel extends AndroidViewModel {
                 editor.putString("userId", id);
                 Fragment fragment = new PinCodeFragment(id, actCode);
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameLayoutFragmentContainer, fragment);
+                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

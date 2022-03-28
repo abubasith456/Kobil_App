@@ -18,11 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.ObservableField;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.kobilapp.LoginActivity;
+import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
+import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.PinCodeFragment;
 import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
@@ -200,11 +203,15 @@ public class PinCodeViewModel extends AndroidViewModel {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Toast.makeText(getApplication(), "Move to login page", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplication(), LoginActivity.class);
-                            intent.putExtra("from", "pinCodeFragment");
-                            intent.putExtra("fingerPrintStatus", fingerPrintStatus);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getApplication().startActivity(intent);
+//                            Intent intent = new Intent(getApplication(), LoginActivity.class);
+//                            intent.putExtra("from", "pinCodeFragment");
+//                            intent.putExtra("fingerPrintStatus", fingerPrintStatus);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            getApplication().startActivity(intent);
+                            Fragment fragment = new LoginFragment();
+                            FragmentTransaction transaction = pinCodeFragment.getChildFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                            transaction.commit();
                         }
                     });
                     AlertDialog alertDialog = alert.create();

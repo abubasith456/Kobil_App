@@ -4,9 +4,6 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.inputmethodservice.KeyboardView;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +17,7 @@ import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.kobilapp.AstUpdate;
-import com.example.kobilapp.LoginActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.DashboardFragment;
@@ -35,7 +28,6 @@ import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
-import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 import java.util.concurrent.Executor;
@@ -142,12 +134,13 @@ public class LoginViewModel extends AndroidViewModel {
                                 try {
                                     if (StatusMessage.getInstance().getStatus().equals("ok")) {
                                         pinCode.set("");
-                                        SharedPreference.getInstance().saveInt(getApplication(), "showFingerId", "true");
                                         Fragment fragment = DashboardFragment.newInstance();
                                         FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
                                         transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
+                                        SharedPreference.getInstance().saveInt(getApplication(), "showFingerId", "true");
+                                        SharedPreference.getInstance().saveInt(getApplication(), "from", "DashboardFragment");
                                     }
                                 } catch (Exception e) {
                                     Log.e("Error=> ", e.getMessage());
@@ -166,10 +159,6 @@ public class LoginViewModel extends AndroidViewModel {
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
         }
-
-    }
-
-    private void showDialog() {
 
     }
 

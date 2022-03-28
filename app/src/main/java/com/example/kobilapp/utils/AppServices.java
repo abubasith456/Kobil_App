@@ -1,25 +1,18 @@
 package com.example.kobilapp.utils;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CALL_PHONE;
-
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.example.kobilapp.InitActivity;
+import com.example.kobilapp.MainActivity;
 
 public class AppServices extends Service {
 
-    private InitActivity activity;
+    private MainActivity activity;
 
-    public AppServices(InitActivity activity) {
+    public AppServices(MainActivity activity) {
         this.activity = activity;
     }
 

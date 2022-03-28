@@ -1,4 +1,4 @@
-package com.example.kobilapp.fragment;
+package com.example.kobilapp.viewModel;
 
 import android.app.Application;
 

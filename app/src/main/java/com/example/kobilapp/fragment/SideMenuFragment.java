@@ -1,5 +1,6 @@
 package com.example.kobilapp.fragment;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -13,27 +14,32 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kobilapp.R;
+import com.example.kobilapp.databinding.SideMenuFragmentBinding;
 import com.example.kobilapp.viewModel.SideMenuViewModel;
 
 public class SideMenuFragment extends Fragment {
 
     private SideMenuViewModel mViewModel;
+    private SideMenuFragmentBinding sideMenuFragmentBinding;
+    private String from;
 
-    public static SideMenuFragment newInstance() {
-        return new SideMenuFragment();
+    public SideMenuFragment(String from) {
+        this.from = from;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.side_menu_fragment, container, false);
+        sideMenuFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.side_menu_fragment, container, false);
+        return sideMenuFragmentBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SideMenuViewModel.class);
-        // TODO: Use the ViewModel
+        sideMenuFragmentBinding.setSideMenuViewModel(mViewModel);
+        mViewModel.getFragment(this);
     }
 
 }
