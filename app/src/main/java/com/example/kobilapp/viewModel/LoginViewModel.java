@@ -147,7 +147,6 @@ public class LoginViewModel extends AndroidViewModel {
                                         transaction.commit();
                                         SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
                                         SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
-
                                     }
                                 } catch (Exception e) {
                                     Log.e("Error=> ", e.getMessage());

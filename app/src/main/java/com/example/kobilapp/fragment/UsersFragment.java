@@ -27,6 +27,7 @@ public class UsersFragment extends Fragment {
 
     private UsersViewModel mViewModel;
     private UsersFragmentBinding usersFragmentBinding;
+    private UsersAdapter usersAdapter;
 
 
     @Override
@@ -40,11 +41,12 @@ public class UsersFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
+        usersAdapter=new UsersAdapter();
+        usersAdapter.getFragment(this);
         mViewModel.getUsersList().observe(getViewLifecycleOwner(), new Observer<List<Users>>() {
             @Override
             public void onChanged(List<Users> users) {
-                UsersAdapter usersAdapter=new UsersAdapter(getActivity(),users);
-                usersAdapter.getFragment(getActivity());
+                usersAdapter.getUsers(users);
                 LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
                 usersFragmentBinding.recyclerViewUsers.setLayoutManager(linearLayoutManager);
                 usersFragmentBinding.recyclerViewUsers.setHasFixedSize(true);

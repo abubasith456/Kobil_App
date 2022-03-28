@@ -84,6 +84,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         AppDatabase db = AppDatabase.getDbInstance(activity);
         List<Users> usersList=db.userDao().getAllUsers();
         List<String> value = StatusCode.getInstance().getStatusCode();
+        Log.e("RoomDb value:",usersList.toString());
         if (usersList.size()>=2){
             Fragment fragment = new UsersFragment();
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
@@ -97,6 +98,7 @@ public class MainActivityViewModel extends AndroidViewModel {
             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
             transaction.commit();
             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+            SharedPreference.getInstance().saveValue(getApplication(), "userId", value.get(0));
         }
 //        else if (usersList.size()>=2){
 //            Fragment fragment = new UsersFragment();

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<data>
-    <variable
-        name="users"
-        type="com.example.kobilapp.model.Users" />
-</data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <data>
+
+        <variable
+            name="users"
+            type="com.example.kobilapp.model.Users" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cardViewUser"
         android:elevation="30dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="5dp"
@@ -21,36 +23,64 @@
         app:cardUseCompatPadding="true"
         app:circularflow_defaultRadius="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView"
+            <androidx.cardview.widget.CardView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/ic_launcher_background"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:foregroundGravity="center"
+                app:cardCornerRadius="160dp"
+                app:cardElevation="16dp">
+
+                <!-- simple image view -->
+                <ImageView
+
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/black"
+                    android:background="@drawable/icon_pin"/>
+
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:layout_width="310dp"
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_marginStart="10dp"
                 android:text="@{users.user_id}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="15sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:id="@+id/linearLayoutRemove"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/icon_remove"
+                    android:backgroundTint="@color/red" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 </layout>

@@ -244,6 +244,8 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onDeactivateEnd(AstStatus astStatus, List<String> list) {
+        Log.i("AstSDKCallback", "onDeactivateEnd "+ list.toString());
+        StatusCode.getInstance().getStatusCode(list);
 
     }
 
