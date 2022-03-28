@@ -103,6 +103,7 @@
                     android:id="@+id/linearLayoutChangePin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="@{(v)->sideMenuViewModel.onChangePinClick(v)}"
                     android:orientation="vertical"
                     android:visibility="@{sideMenuViewModel.changePinVisibility?view.VISIBLE:view.GONE}">
 

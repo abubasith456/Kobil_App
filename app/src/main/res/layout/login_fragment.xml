@@ -70,7 +70,9 @@
                     android:maxLength="8"
                     android:onTextChanged="@{loginViewModel.onPinTextChanged}"
                     android:text="@={loginViewModel.pinCode}"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/light_black" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -81,8 +83,6 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:visibility="@{loginViewModel.pinErrorVisibility?view.VISIBLE:view.GONE}" />
-
-
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -93,6 +93,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
+            android:background="@color/colorPrimary"
             android:elevation="20dp"
             android:onClick="@{(v)->loginViewModel.onLoginClick(v)}"
             android:text="Login"

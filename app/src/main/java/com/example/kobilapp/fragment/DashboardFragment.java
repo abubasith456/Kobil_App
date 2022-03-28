@@ -41,16 +41,16 @@ public class DashboardFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         // TODO: Use the ViewModel
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Toast.makeText(getActivity(), "Back pressed", Toast.LENGTH_SHORT).show();
-                Intent exitIntent = new Intent(Intent.ACTION_MAIN);
-                exitIntent.addCategory(Intent.CATEGORY_HOME);
-                exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(exitIntent);
-            }
-        });
+//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                Toast.makeText(getActivity(), "Back pressed", Toast.LENGTH_SHORT).show();
+//                Intent exitIntent = new Intent(Intent.ACTION_MAIN);
+//                exitIntent.addCategory(Intent.CATEGORY_HOME);
+//                exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(exitIntent);
+//            }
+//        });
     }
 
 }

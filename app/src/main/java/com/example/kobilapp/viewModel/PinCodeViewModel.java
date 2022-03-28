@@ -205,7 +205,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                             Fragment fragment = new LoginFragment();
                             FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                            transaction.commitNow();
+                            transaction.commit();
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                         }
                     });

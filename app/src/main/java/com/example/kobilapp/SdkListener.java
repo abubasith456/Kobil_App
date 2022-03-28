@@ -44,8 +44,8 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onLoginEnd(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, int i, int i1) {
-        Log.e("AstSDKCallback", "onLoginEnd() called ==> " + astStatus);
         StatusMessage.getInstance().setStatus(astStatus);
+        Log.e("AstSDKCallback", "onLoginEnd() called ==> " + astStatus);
         Log.e("AstSDKCallback", "onLoginEnd() called Login otp ==> " + s);
         Log.e("AstSDKCallback", "onLoginEnd() called userId ==> " + s1);
         Log.e("AstSDKCallback", "onLoginEnd() called Retry counter ==> " + i);
@@ -60,11 +60,13 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onPinChangeBegin(AstDeviceType astDeviceType, AstStatus astStatus) {
         Log.e("AstSDKCallback", "onPinChangeBegin() called ==> " + astStatus);
+        StatusMessage.getInstance().setStatus(astStatus);
     }
 
     @Override
     public void onPinChangeEnd(AstDeviceType astDeviceType, AstStatus astStatus, int i) {
         Log.e("AstSDKCallback", "onPinChangeEnd() called ==> " + astStatus);
+        StatusMessage.getInstance().setStatus(astStatus);
     }
 
     @Override

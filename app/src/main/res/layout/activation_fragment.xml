@@ -49,8 +49,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="30dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,7 +81,10 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="65dp"
                         android:hint="Username"
+                        android:textColorHint="@color/light_black"
+                        android:textColor="@color/black"
                         android:text="@={activationViewModel.userId}"
+
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -129,9 +132,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="65dp"
                         android:hint="Activation code"
-                        android:password="true"
                         android:inputType="numberPassword"
+                        android:password="true"
                         android:text="@={activationViewModel.activationCode}"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/light_black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -161,6 +166,8 @@
             android:elevation="20dp"
             android:onClick="@{(v)->activationViewModel.onActivationClick(v)}"
             android:text="Activate"
+            android:background="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimary"
             app:cardPreventCornerOverlap="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
