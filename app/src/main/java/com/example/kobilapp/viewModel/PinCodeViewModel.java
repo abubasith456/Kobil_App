@@ -24,10 +24,12 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
+import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.PinCodeFragment;
 import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
+import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
@@ -207,6 +209,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                             transaction.commit();
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+                            addToDb(userId, pin.get());
                         }
                     });
                     AlertDialog alertDialog = alert.create();
@@ -230,6 +233,19 @@ public class PinCodeViewModel extends AndroidViewModel {
             }, 3000);
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
+        }
+    }
+
+    private void addToDb(String userId, String pin) {
+        try {
+            AppDatabase db = AppDatabase.getDbInstance(this.getApplication());
+            Users users = new Users();
+            users.user_id = userId;
+            users.pin_code = pin;
+            db.userDao().insertUsers(users);
+            Log.e("Room DB","Data added.");
+        } catch (Exception e) {
+            Log.e("Error=> ", e.getMessage());
         }
     }
 

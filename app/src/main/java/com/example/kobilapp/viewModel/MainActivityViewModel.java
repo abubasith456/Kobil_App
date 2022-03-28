@@ -15,10 +15,13 @@ import android.view.View;
 import com.example.kobilapp.MainActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
+import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
+import com.example.kobilapp.fragment.UsersFragment;
 import com.example.kobilapp.model.StatusCode;
+import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
@@ -78,14 +81,31 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void onStartClick(View view) {
         frameLayoutFragmentVisibility.set(true);
         initScreenVisibility.set(false);
+        AppDatabase db = AppDatabase.getDbInstance(activity);
+        List<Users> usersList=db.userDao().getAllUsers();
         List<String> value = StatusCode.getInstance().getStatusCode();
-        if (value != null && !value.get(0).equals("0")) {
+        if (usersList.size()>=2){
+            Fragment fragment = new UsersFragment();
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+            transaction.commit();
+            SharedPreference.getInstance().saveValue(getApplication(), "from", "UsersFragment");
+        }
+        else if (value != null && !value.get(0).equals("0")) {
             Fragment fragment = new LoginFragment();
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
             transaction.commit();
             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
-        } else {
+        }
+//        else if (usersList.size()>=2){
+//            Fragment fragment = new UsersFragment();
+//            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+//            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+//            transaction.commit();
+//            SharedPreference.getInstance().saveValue(getApplication(), "from", "UsersFragment");
+//        }
+        else {
             Fragment fragment = new ActivationFragment();
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);

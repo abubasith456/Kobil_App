@@ -47,16 +47,27 @@ public class LoginFragment extends Fragment {
             Log.e("FingerPrint=>", "Not assigned");
         }
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Toast.makeText(getActivity(), "Back pressed", Toast.LENGTH_SHORT).show();
-                Intent exitIntent = new Intent(Intent.ACTION_MAIN);
-                exitIntent.addCategory(Intent.CATEGORY_HOME);
-                exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(exitIntent);
-            }
-        });
+        String from = SharedPreference.getInstance().getValue(getContext(), "from");
+        if (from.equals("LoginFragment")) {
+            requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Toast.makeText(getActivity(), "Back pressed", Toast.LENGTH_SHORT).show();
+                    Intent exitIntent = new Intent(Intent.ACTION_MAIN);
+                    exitIntent.addCategory(Intent.CATEGORY_HOME);
+                    exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(exitIntent);
+                }
+            });
+        } else if (from.equals("UsersFragment")) {
+            requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+        }
+
 
     }
 

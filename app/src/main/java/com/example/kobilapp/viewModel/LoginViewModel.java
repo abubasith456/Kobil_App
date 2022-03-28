@@ -20,10 +20,12 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
+import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.DashboardFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
+import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -43,6 +45,7 @@ public class LoginViewModel extends AndroidViewModel {
     private BiometricPrompt.PromptInfo promptInfo;
     private Executor executor;
     private ProgressDialog progressdialog;
+    private String userIdFromDb;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -61,7 +64,6 @@ public class LoginViewModel extends AndroidViewModel {
     public void getFragment(LoginFragment loginFragment) {
         this.loginFragment = loginFragment;
         userId.set(SharedPreference.getInstance().getValue(loginFragment.getContext(), "userId"));
-
     }
 
     public void onPinTextChanged(CharSequence s, int start, int before, int count) {
@@ -90,6 +92,10 @@ public class LoginViewModel extends AndroidViewModel {
         } catch (Exception e) {
             Log.e("Error=>", e.getMessage());
         }
+    }
+
+    public void getUserInfo(String userId) {
+        this.userIdFromDb = userId;
     }
 
     private void executeLogin(String from) {
@@ -141,11 +147,13 @@ public class LoginViewModel extends AndroidViewModel {
                                         transaction.commit();
                                         SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
                                         SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
+
                                     }
                                 } catch (Exception e) {
                                     Log.e("Error=> ", e.getMessage());
                                 }
                             }
+
                         });
                         AlertDialog alertDialog = alert.create();
                         alertDialog.show();
@@ -161,6 +169,7 @@ public class LoginViewModel extends AndroidViewModel {
         }
 
     }
+
 
     public void showFingerLogin(LoginFragment loginFragment) {
         BiometricManager biometricManager = BiometricManager.from(loginFragment.getContext());
@@ -216,4 +225,5 @@ public class LoginViewModel extends AndroidViewModel {
         progressdialog.setMessage(message);
         progressdialog.show();
     }
+
 }
