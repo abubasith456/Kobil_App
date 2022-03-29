@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel.getActivity(this);
         mainActivityViewModel.showInitFragment();
         appLifecycle = new AppLifecycle();
-
     }
 
     @Override

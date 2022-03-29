@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,7 @@ import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
@@ -35,6 +37,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     private UsersFragment usersFragment;
     private List<Users> usersList;
     private List<String> user;
+    ArrayList<String> users = new ArrayList<>();
+    boolean isSelected = false;
 
     @NonNull
     @Override
@@ -82,6 +86,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         public UserViewHolder(@NonNull ListViewUsersBinding listViewUsersBinding) {
             super(listViewUsersBinding.getRoot());
             this.listViewUsersBinding = listViewUsersBinding;
+
+            listViewUsersBinding.cardViewUser.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    isSelected=true;
+                    Toast.makeText(usersFragment.getContext(), "Long pressed", Toast.LENGTH_SHORT).show();
+                    if (users.contains(user.get(getAdapterPosition()))){
+
+                    }
+                    return true;
+                }
+            });
 
             listViewUsersBinding.cardViewUser.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -25,6 +25,12 @@ import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
+import com.kobil.midapp.ast.api.AstUpdateEventListener;
+import com.kobil.midapp.ast.api.AstUpdateListener;
+import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstStatus;
+import com.kobil.midapp.ast.api.enums.AstUpdateStatus;
+import com.kobil.midapp.ast.api.enums.AstUpdateType;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 import java.util.List;
@@ -41,7 +47,8 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-//        sdkInit();
+        sdkInit();
+        registerUpdate();
 //        initScreenVisibility.set(true);
 ////        frameLayoutFragmentVisibility.set(false);
 //        progressBarVisibility.set(true);
@@ -55,22 +62,47 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     }
 
+    private void registerUpdate() {
+        try {
+            SdkListener listener = new SdkListener();
+            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
+            sdk.registerUpdate(new AstUpdateListener() {
+                @Override
+                public void onUpdateBegin(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
+                    Log.e("onUpdateBegin", "AstUpdateStatus: " + astUpdateStatus);
+                }
+
+                @Override
+                public void onOpenInfoUrlEnd(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
+                    Log.e("onOpenInfoUrlEnd", "AstUpdateStatus: " + astUpdateStatus);
+                }
+
+                @Override
+                public void onUpdateInformationAvailable(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, AstUpdateType astUpdateType, int i) {
+                    Log.e("onUpdateInformationAvailable", "Status: " + astStatus + " AstType: " + astDeviceType + " ExpireIn: " + i);
+                }
+            });
+        } catch (Exception exception) {
+            Log.e("Error==>", exception.getMessage());
+        }
+    }
+
     public void getActivity(MainActivity activity) {
         this.activity = activity;
     }
 
-//    private void sdkInit() {
-//        try {
-//            SdkListener listener = new SdkListener();
-//            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
-//            String localization = "en";
-//            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
-//            String appName = "Kobil App";
-//            sdk.init(localization, version, appName);
-//        } catch (Exception exception) {
-//            Log.e("Error==>", exception.getMessage());
-//        }
-//    }
+    private void sdkInit() {
+        try {
+            SdkListener listener = new SdkListener();
+            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
+            String localization = "en";
+            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
+            String appName = "Kobil App";
+            sdk.init(localization, version, appName);
+        } catch (Exception exception) {
+            Log.e("Error==>", exception.getMessage());
+        }
+    }
 
     public void showMenu(View view) {
         Fragment fragment = new SideMenuFragment("LoginFragment");

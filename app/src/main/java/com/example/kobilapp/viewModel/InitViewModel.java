@@ -34,7 +34,7 @@ public class InitViewModel extends AndroidViewModel {
 
     public InitViewModel(@NonNull Application application) {
         super(application);
-        sdkInit();
+//        sdkInit();
         progressBarVisibility.set(true);
         startButtonVisibility.set(false);
         Handler handler = new Handler();
@@ -48,18 +48,18 @@ public class InitViewModel extends AndroidViewModel {
         this.initFragment = initFragment;
     }
 
-    private void sdkInit() {
-        try {
-            SdkListener listener = new SdkListener();
-            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
-            String localization = "en";
-            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
-            String appName = "Kobil App";
-            sdk.init(localization, version, appName);
-        } catch (Exception exception) {
-            Log.e("Error==>", exception.getMessage());
-        }
-    }
+//    private void sdkInit() {
+//        try {
+//            SdkListener listener = new SdkListener();
+//            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
+//            String localization = "en";
+//            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
+//            String appName = "Kobil App";
+//            sdk.init(localization, version, appName);
+//        } catch (Exception exception) {
+//            Log.e("Error==>", exception.getMessage());
+//        }
+//    }
 
     public void onStartClick(View view) {
 //        AppDatabase db = AppDatabase.getDbInstance();

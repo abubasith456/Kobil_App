@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
 import com.kobil.midapp.ast.api.AstSdkListener;
+import com.kobil.midapp.ast.api.AstUpdateEventListener;
 import com.kobil.midapp.ast.api.enums.AstCheckPinReason;
 import com.kobil.midapp.ast.api.enums.AstConfigParameter;
 import com.kobil.midapp.ast.api.enums.AstConfirmationType;
@@ -18,6 +19,8 @@ import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
 import com.kobil.midapp.ast.api.enums.AstPropertySynchronizationDirection;
 import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
+import com.kobil.midapp.ast.api.enums.AstUpdateStatus;
+import com.kobil.midapp.ast.api.enums.AstUpdateType;
 import com.kobil.midapp.ast.api.enums.AstUrlBlockedReason;
 
 import java.util.ArrayList;
@@ -244,7 +247,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onDeactivateEnd(AstStatus astStatus, List<String> list) {
-        Log.e("AstSDKCallback", "onDeactivateEnd "+ list.toString());
+        Log.e("AstSDKCallback", "onDeactivateEnd " + list.toString());
         StatusCode.getInstance().setList(list);
 
     }
@@ -300,4 +303,5 @@ public class SdkListener implements AstSdkListener {
     public void onRegisterMessagingEnd(AstStatus astStatus) {
 
     }
+
 }
