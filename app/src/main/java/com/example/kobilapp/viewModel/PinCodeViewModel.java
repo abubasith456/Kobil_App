@@ -26,7 +26,7 @@ import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.LoginFragment;
-import com.example.kobilapp.fragment.PinCodeFragment;
+import com.example.kobilapp.fragment.UsersFragment;
 import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.model.Users;
@@ -181,7 +181,7 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     private void executeActivation(String fingerPrintStatus) {
         try {
-            showProcessBar("Please wait");
+            showProcessBar("Activating Please wait...");
             if (fingerPrintStatus.equals("success")) {
                 SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "success");
             } else {
@@ -191,7 +191,6 @@ public class PinCodeViewModel extends AndroidViewModel {
             AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
             char[] pinCode = pin.get().toCharArray();
             sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
-            List<String> value = StatusCode.getInstance().getStatusCode();
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 if (StatusMessage.getInstance().getStatus().equals("ok")) {
@@ -204,12 +203,22 @@ public class PinCodeViewModel extends AndroidViewModel {
                     alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Fragment fragment = new LoginFragment();
-                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                            transaction.commit();
-                            SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
-                            addToDb(userId, pin.get());
+                            List<String> value = StatusCode.getInstance().getList();
+                            Log.e("Value:=>", "" + value.size());
+                            if (value.size() >= 2) {
+                                Fragment fragment = new UsersFragment();
+                                FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                                transaction.commit();
+                                SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+                            } else {
+                                Fragment fragment = new LoginFragment();
+                                FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                                transaction.commit();
+                                SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+                            }
+//                            addToDb(userId, pin.get());
                         }
                     });
                     AlertDialog alertDialog = alert.create();
@@ -230,7 +239,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     AlertDialog alertDialog = alert.create();
                     alertDialog.show();
                 }
-            }, 3000);
+            }, 4000);
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
         }
@@ -243,7 +252,7 @@ public class PinCodeViewModel extends AndroidViewModel {
             users.user_id = userId;
             users.pin_code = pin;
             db.userDao().insertUsers(users);
-            Log.e("Room DB","Data added.");
+            Log.e("Room DB", "Data added.");
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
         }

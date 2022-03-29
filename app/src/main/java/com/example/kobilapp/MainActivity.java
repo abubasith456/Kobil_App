@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.setInitViewModel(mainActivityViewModel);
 //        activityInitBinding.setInitViewModel(mainActivityViewModel);
         mainActivityViewModel.getActivity(this);
+        mainActivityViewModel.showInitFragment();
         appLifecycle = new AppLifecycle();
 
     }

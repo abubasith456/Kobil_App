@@ -222,6 +222,7 @@ public class LoginViewModel extends AndroidViewModel {
     private void showProcessBar(String message) {
         progressdialog = new ProgressDialog((loginFragment.getContext()));
         progressdialog.setMessage(message);
+        progressdialog.setCancelable(false);
         progressdialog.show();
     }
 

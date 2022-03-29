@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -25,7 +25,6 @@
             android:id="@+id/frameLayoutLoginActivity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{initViewModel.frameLayoutFragmentVisibility?view.VISIBLE:view.GONE}"
             tools:context=".LoginActivity">
             <!-- Activity menu bar-->
             <RelativeLayout
@@ -89,43 +88,43 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/frameLayoutInitScreen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
-            android:visibility="@{initViewModel.initScreenVisibility?view.VISIBLE:view.GONE}">
+<!--        <FrameLayout-->
+<!--            android:id="@+id/frameLayoutInitScreen"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="@color/colorPrimaryDark"-->
+<!--            android:visibility="@{initViewModel.initScreenVisibility?view.VISIBLE:view.GONE}">-->
 
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="30dp"
-                android:visibility="@{initViewModel.progressBarVisibility?view.VISIBLE:view.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+<!--            <ProgressBar-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:layout_marginBottom="30dp"-->
+<!--                android:visibility="@{initViewModel.progressBarVisibility?view.VISIBLE:view.GONE}"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent" />-->
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="30dp"
-                android:background="@color/colorPrimary"
-                android:backgroundTint="@color/colorPrimary"
-                android:elevation="20dp"
-                android:onClick="@{(v)->initViewModel.onStartClick(v)}"
-                android:text="@string/start"
-                android:textColor="@color/white"
-                android:visibility="@{initViewModel.startButtonVisibility?view.VISIBLE:view.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </FrameLayout>
+<!--            <Button-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:layout_marginBottom="30dp"-->
+<!--                android:background="@color/colorPrimary"-->
+<!--                android:backgroundTint="@color/colorPrimary"-->
+<!--                android:elevation="20dp"-->
+<!--                android:onClick="@{(v)->initViewModel.onStartClick(v)}"-->
+<!--                android:text="@string/start"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:visibility="@{initViewModel.startButtonVisibility?view.VISIBLE:view.GONE}"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent" />-->
+<!--        </FrameLayout>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

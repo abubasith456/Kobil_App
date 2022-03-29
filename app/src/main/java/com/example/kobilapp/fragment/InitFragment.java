@@ -17,34 +17,32 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.kobilapp.R;
-import com.example.kobilapp.databinding.DashboardFragmentBinding;
-import com.example.kobilapp.viewModel.DashboardViewModel;
+import com.example.kobilapp.databinding.InitFragmentBinding;
+import com.example.kobilapp.viewModel.InitViewModel;
 
-public class DashboardFragment extends Fragment {
+public class InitFragment extends Fragment {
 
-    private DashboardViewModel mViewModel;
-    private DashboardFragmentBinding dashboardFragmentBinding;
+    private InitViewModel mViewModel;
+    private InitFragmentBinding initFragmentBinding;
 
-    public static DashboardFragment newInstance() {
-        return new DashboardFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        dashboardFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.dashboard_fragment, container, false);
-        return dashboardFragmentBinding.getRoot();
+        initFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.init_fragment, container, false);
+        return initFragmentBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(InitViewModel.class);
+        initFragmentBinding.setInitViewModel(mViewModel);
+        mViewModel.getFragment(this);
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Toast.makeText(getActivity(), "Back pressed", Toast.LENGTH_SHORT).show();
                 Intent exitIntent = new Intent(Intent.ACTION_MAIN);
                 exitIntent.addCategory(Intent.CATEGORY_HOME);
                 exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

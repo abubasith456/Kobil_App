@@ -19,8 +19,10 @@ import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.databinding.ListViewUsersBinding;
 import com.example.kobilapp.db.AppDatabase;
+import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.UsersFragment;
+import com.example.kobilapp.model.User;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -32,6 +34,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     private UsersFragment usersFragment;
     private List<Users> usersList;
+    private List<String> user;
 
     @NonNull
     @Override
@@ -43,15 +46,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(@NonNull UsersAdapter.UserViewHolder holder, int position) {
-        final Users users = usersList.get(position);
-        holder.listViewUsersBinding.setUsers(users);
+        User users = new User();
+        users.setUsername(user.get(position));
+        holder.listViewUsersBinding.setUser(users);
+//        final Users users = usersList.get(position);
+//        holder.listViewUsersBinding.setUsers(users);
         holder.listViewUsersBinding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        if (usersList.size() != 0) {
-            return usersList.size();
+        if (user.size() != 0) {
+            return user.size();
         } else {
             return 0;
         }
@@ -59,6 +65,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     public void getUsers(List<Users> users) {
         this.usersList = users;
+    }
+
+    public void getAstUser(List<String> user) {
+        this.user = user;
     }
 
     public void getFragment(UsersFragment usersFragment) {
@@ -77,7 +87,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                 @Override
                 public void onClick(View view) {
                     LoginFragment loginFragment = new LoginFragment();
-                    SharedPreference.getInstance().saveValue(usersFragment.getContext(), "userId", usersList.get(getAdapterPosition()).user_id);
+//                    SharedPreference.getInstance().saveValue(usersFragment.getContext(), "userId", usersList.get(getAdapterPosition()).user_id);
+                    SharedPreference.getInstance().saveValue(usersFragment.getContext(), "userId", user.get(getAdapterPosition()));
                     FragmentTransaction transaction = usersFragment.getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.frameLayoutLoginFragmentContainer, loginFragment);
                     transaction.addToBackStack(null);
@@ -92,18 +103,26 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                     Log.e("linearLayoutRemove:", "Pressed");
                     AlertDialog.Builder alert = new AlertDialog.Builder(usersFragment.getContext());
                     alert.setCancelable(true);
-                    alert.setMessage("Are you sure do you want to delete " + usersList.get(getAdapterPosition()).user_id + " user?");
+//                    alert.setMessage("Are you sure do you want to delete " + usersList.get(getAdapterPosition()).user_id + " user?");
+                    alert.setMessage("Are you sure do you want to delete " + user.get(getAdapterPosition()) + " user?");
                     alert.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            deleteUser(usersList.get(getAdapterPosition()).user_id);
-                            AppDatabase appDatabase = AppDatabase.getDbInstance(usersFragment.getContext());
-                            Users users = new Users();
-                            users.id = usersList.get(getAdapterPosition()).id;
-                            appDatabase.userDao().deleteUser(users);
-                            usersList.remove(getAdapterPosition());
+                            deleteUser(user.get(getAdapterPosition()));
+//                            deleteUser(usersList.get(getAdapterPosition()).user_id);
+//                            AppDatabase appDatabase = AppDatabase.getDbInstance(usersFragment.getContext());
+//                            Users users = new Users();
+//                            users.id = usersList.get(getAdapterPosition()).id;
+//                            appDatabase.userDao().deleteUser(users);
+//                            usersList.remove(getAdapterPosition());
+                            Fragment fragment = new InitFragment();
+                            FragmentTransaction transaction = usersFragment.getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frameLayoutForSideMenu, fragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                            user.remove(getAdapterPosition());
                             notifyItemRemoved(getAdapterPosition());
-                            Log.e("Print db size:",appDatabase.userDao().getAllUsers().toString());
+                            Log.e("Print db size:", String.valueOf(user.size()));
                         }
 
                     }).setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -118,9 +137,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             });
         }
     }
+
     private void deleteUser(String user_id) {
-        SdkListener listener = new SdkListener();
-        AstSdk sdk = AstSdkFactory.getSdk(usersFragment.getContext(), listener);
-        sdk.doDeactivate(user_id);
+        try {
+            SdkListener listener = new SdkListener();
+            AstSdk sdk = AstSdkFactory.getSdk(usersFragment.getContext(), listener);
+            sdk.doDeactivate(user_id);
+            Log.e("deleteUser:", "User deleted ");
+        } catch (Exception e) {
+            Log.e("Error:", e.getMessage());
+        }
     }
 }

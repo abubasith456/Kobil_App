@@ -5,18 +5,20 @@
 
     <data>
 
+        <!--        <variable-->
+        <!--            name="users"-->
+        <!--            type="com.example.kobilapp.model.Users" />-->
         <variable
-            name="users"
-            type="com.example.kobilapp.model.Users" />
+            name="user"
+            type="com.example.kobilapp.model.User" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="30dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="20dp"
         app:cardElevation="5dp"
         app:cardMaxElevation="2dp"
         app:cardPreventCornerOverlap="true"
@@ -25,62 +27,113 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:foregroundGravity="center"
-                app:cardCornerRadius="160dp"
-                app:cardElevation="16dp">
+                android:layout_margin="10dp"
+                android:padding="4dp">
 
-                <!-- simple image view -->
                 <ImageView
-
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/black"
-                    android:background="@drawable/icon_pin"/>
-
-            </androidx.cardview.widget.CardView>
+                    android:id="@+id/imageViewProductsImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/icon_pin"
+                    android:backgroundTint="@color/black" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="10dp"
-                android:text="@{users.user_id}"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@{user.username}"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutRemove"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
-                android:padding="4dp">
+                android:layout_centerVertical="true">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
                     android:background="@drawable/icon_remove"
                     android:backgroundTint="@color/red" />
 
             </LinearLayout>
 
-        </RelativeLayout>
 
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/linearLayoutProductsList"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_margin="5dp"-->
+            <!--                android:orientation="horizontal">-->
+
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_gravity="start"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:gravity="start|center_vertical"-->
+            <!--                    android:orientation="vertical"-->
+            <!--                    android:padding="5dp">-->
+
+
+            <!--                    <LinearLayout-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="7dp"-->
+            <!--                        android:layout_marginTop="3dp"-->
+            <!--                        android:layout_marginEnd="9sp"-->
+            <!--                        android:layout_marginBottom="3dp"-->
+            <!--                        android:gravity="center"-->
+            <!--                        android:orientation="horizontal">-->
+
+            <!--                        <ImageView-->
+            <!--                            android:id="@+id/imageViewProductsImage"-->
+            <!--                            android:layout_width="50dp"-->
+            <!--                            android:layout_height="50dp" />-->
+
+            <!--                        <TextView-->
+            <!--                            android:id="@+id/textViewProjectDetails"-->
+            <!--                            android:layout_width="match_parent"-->
+            <!--                            android:layout_height="wrap_content"-->
+            <!--                            android:layout_marginStart="5dp"-->
+            <!--                            android:ellipsize="end"-->
+            <!--                            android:gravity="start|center"-->
+            <!--                            android:singleLine="false"-->
+            <!--                            android:text="@{user.username}"-->
+            <!--                            android:textColor="@color/black"-->
+            <!--                            android:textSize="12sp" />-->
+
+            <!--                    </LinearLayout>-->
+
+
+            <!--                </LinearLayout>-->
+
+            <!--            </LinearLayout>-->
+
+            <!--    <View-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="@dimen/_1sdp"-->
+            <!--        android:layout_marginStart="@dimen/_10sdp"-->
+            <!--        android:layout_marginEnd="@dimen/_10sdp"-->
+            <!--        android:layout_marginTop="@dimen/_3sdp"-->
+            <!--        android:layout_marginBottom="@dimen/_3sdp"-->
+            <!--        android:background="#DBDBDB" />-->
+
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>

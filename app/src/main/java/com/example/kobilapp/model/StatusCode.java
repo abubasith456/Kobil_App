@@ -18,13 +18,12 @@ public class StatusCode {
         return instance;
     }
 
-    public List<String> getStatusCode() {
-        if (statusCode==null){
-            statusCode=new ArrayList<>();
+    public List<String> getList() {
+        if (statusCode == null) {
+            statusCode = new ArrayList<>();
             statusCode.add("0");
-            Log.e("getStatusCode: ", ""+"Zero added");
         }
-        Log.e("getStatusCode: ", ""+statusCode.toString());
+        Log.e("getList Called", "" + statusCode.toString());
         return statusCode;
     }
 
@@ -32,7 +31,10 @@ public class StatusCode {
         return errorCode;
     }
 
-    public void getStatusCode(List<String> statusCode) {
+    public void setList(List<String> statusCode) {
+        if (statusCode.size() == 0) {
+            statusCode = null;
+        }
         this.statusCode = statusCode;
     }
 

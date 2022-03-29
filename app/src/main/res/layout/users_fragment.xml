@@ -17,38 +17,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <!--        <androidx.cardview.widget.CardView-->
+        <!--            android:id="@+id/cardView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_marginStart="10dp"-->
+        <!--            android:layout_marginTop="20dp"-->
+        <!--            android:layout_marginEnd="10dp"-->
+        <!--            android:elevation="30dp"-->
+        <!--            app:cardBackgroundColor="@color/white"-->
+        <!--            app:cardCornerRadius="5dp"-->
+        <!--            app:cardElevation="5dp"-->
+        <!--            app:cardMaxElevation="2dp"-->
+        <!--            app:cardPreventCornerOverlap="true"-->
+        <!--            app:cardUseCompatPadding="true"-->
+        <!--            app:circularflow_defaultRadius="10dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent">-->
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
-            android:elevation="30dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp"
-            app:cardMaxElevation="2dp"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true"
-            app:circularflow_defaultRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@color/white"
+            android:padding="5dp">
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewUsers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="15dp">
+                tools:listitem="@layout/list_view_users" />
+        </FrameLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewUsers"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/list_view_users" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+        <!--        </androidx.cardview.widget.CardView>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

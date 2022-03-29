@@ -12,4 +12,5 @@
     <color name="red">#FF0000</color>
     <color name="light_black">#393939</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="green">#00FF00</color>
 </resources>

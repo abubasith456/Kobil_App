@@ -39,7 +39,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onLoginBegin(AstDeviceType astDeviceType, List<String> list) {
         Log.e("AstSDKCallback", "onLoginBegin() called ==> " + list);
-        StatusCode.getInstance().getStatusCode(list);
+        StatusCode.getInstance().setList(list);
     }
 
     @Override
@@ -244,8 +244,8 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onDeactivateEnd(AstStatus astStatus, List<String> list) {
-        Log.i("AstSDKCallback", "onDeactivateEnd "+ list.toString());
-        StatusCode.getInstance().getStatusCode(list);
+        Log.e("AstSDKCallback", "onDeactivateEnd "+ list.toString());
+        StatusCode.getInstance().setList(list);
 
     }
 

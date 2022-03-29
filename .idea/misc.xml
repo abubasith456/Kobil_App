@@ -12,10 +12,10 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/change_pin_fragment.xml" value="0.11332702636718756" />
         <entry key="app/src/main/res/layout/custom_layout.xml" value="0.11510416666666666" />
-        <entry key="app/src/main/res/layout/dashboard_fragment.xml" value="0.11510416666666666" />
-        <entry key="app/src/main/res/layout/init_fragment.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dashboard_fragment.xml" value="0.4889826456705729" />
+        <entry key="app/src/main/res/layout/init_fragment.xml" value="0.18138885498046878" />
         <entry key="app/src/main/res/layout/list_users.xml" value="0.11510416666666666" />
-        <entry key="app/src/main/res/layout/list_view_users.xml" value="0.20312499999999997" />
+        <entry key="app/src/main/res/layout/list_view_users.xml" value="0.20542449951171873" />
         <entry key="app/src/main/res/layout/login_fragment.xml" value="0.212237040201823" />
         <entry key="app/src/main/res/layout/menu_fragment.xml" value="0.26463877360026045" />
         <entry key="app/src/main/res/layout/pincode_fragment.xml" value="0.25" />
