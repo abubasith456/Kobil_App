@@ -58,8 +58,9 @@
                     android:layout_centerInParent="true"
                     android:backgroundTint="@color/white"
                     android:text="@string/bank"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:drawableStartCompat="@drawable/icon_bank"
                     app:drawableTint="@color/white" />
