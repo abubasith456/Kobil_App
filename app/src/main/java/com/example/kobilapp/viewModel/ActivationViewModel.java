@@ -80,15 +80,15 @@ public class ActivationViewModel extends AndroidViewModel {
         try {
             if (id.equals("")) {
                 userIdErrorVisibility.set(true);
-                userIdError.set("Enter the userId");
+                userIdError.set("Enter the username.");
                 valid = false;
             } else {
                 userIdErrorVisibility.set(false);
-                userIdError.set("Enter the userId");
+                userIdError.set("");
             }
             if (actCode.length == 0) {
                 activationErrorVisibility.set(true);
-                activationCodeError.set("Enter the activation code");
+                activationCodeError.set("Enter the activation code.");
                 valid = false;
             } else {
                 activationErrorVisibility.set(false);

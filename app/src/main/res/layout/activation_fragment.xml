@@ -30,10 +30,10 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="270dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
             android:elevation="30dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="5dp"
@@ -48,126 +48,117 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="30dp">
+                android:padding="20dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/linearLayoutIconUser"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:gravity="center"
-                        android:padding="12dp"
+                        android:padding="7dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/icon_person"
-                            android:backgroundTint="@color/black" />
+                            android:backgroundTint="@color/light_black" />
                     </LinearLayout>
 
                     <EditText
-                        android:id="@+id/editTextUsername"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="65dp"
-                        android:hint="Username"
-                        android:textColorHint="@color/light_black"
-                        android:textColor="@color/black"
-                        android:text="@={activationViewModel.userId}"
-
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textViewUserId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="65dp"
-                        android:text="@{activationViewModel.userIdError}"
+                        android:backgroundTint="@color/black"
+                        android:hint="Username"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:text="@={activationViewModel.userId}"
                         android:textColor="@color/red"
-                        android:textSize="12sp"
-                        android:visibility="@{activationViewModel.userIdErrorVisibility?view.VISIBLE:view.GONE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
-                        tools:layout_editor_absoluteX="10dp" />
+                        android:textColorHint="@color/light_black"
+                        android:textSize="13sp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@{activationViewModel.userIdError}"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:visibility="@{activationViewModel.userIdErrorVisibility?view.VISIBLE:view.GONE}" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:gravity="center"
-                        android:padding="12dp"
+                        android:padding="7dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/icon_key"
-                            android:backgroundTint="@color/black" />
+                            android:backgroundTint="@color/light_black" />
                     </LinearLayout>
 
                     <EditText
-                        android:id="@+id/editTextActivationCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="65dp"
+                        android:backgroundTint="@color/black"
                         android:hint="Activation code"
                         android:inputType="numberPassword"
-                        android:password="true"
+                        android:maxLines="1"
                         android:text="@={activationViewModel.activationCode}"
                         android:textColor="@color/black"
                         android:textColorHint="@color/light_black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:textSize="13sp" />
 
-                    <TextView
-                        android:id="@+id/textViewActivationCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="65dp"
-                        android:text="@{activationViewModel.activationCodeError}"
-                        android:textColor="@color/red"
-                        android:textSize="12sp"
-                        android:visibility="@{activationViewModel.activationErrorVisibility?view.VISIBLE:view.GONE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextActivationCode"
-                        tools:layout_editor_absoluteX="10dp" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@{activationViewModel.activationCodeError}"
+                    android:textColor="@color/red"
+                    android:textSize="12sp"
+                    android:visibility="@{activationViewModel.activationErrorVisibility?view.VISIBLE:view.GONE}" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="14dp"
-            android:elevation="20dp"
-            android:onClick="@{(v)->activationViewModel.onActivationClick(v)}"
-            android:text="Activate"
+            android:layout_marginEnd="25dp"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorPrimary"
+            android:elevation="20dp"
+            android:onClick="@{(v)->activationViewModel.onActivationClick(v)}"
+            android:text="Continue"
             app:cardPreventCornerOverlap="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

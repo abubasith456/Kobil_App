@@ -30,6 +30,32 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:foregroundGravity="center"
+            app:cardCornerRadius="160dp"
+            app:cardElevation="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/icon_pin"
+                    android:backgroundTint="@color/light_black"
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,40 +85,76 @@
                     android:text="@{loginViewModel.userId}"
                     android:textColor="@color/black"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="normal" />
 
-                <EditText
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:hint="PIN code"
-                    android:inputType="numberPassword"
-                    android:maxLength="8"
-                    android:onTextChanged="@{loginViewModel.onPinTextChanged}"
-                    android:text="@={loginViewModel.pinCode}"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/light_black" />
+                    android:layout_marginTop="25dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:padding="7dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/icon_pin"
+                            android:backgroundTint="@color/light_black" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/black"
+                        android:hint="PIN code"
+                        android:inputType="numberPassword"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:onTextChanged="@{loginViewModel.onPinTextChanged}"
+                        android:text="@={loginViewModel.pinCode}"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/light_black"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="45dp"
                     android:layout_marginEnd="5dp"
                     android:text="@{loginViewModel.pinError}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:visibility="@{loginViewModel.pinErrorVisibility?view.VISIBLE:view.GONE}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="Forgot password?"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="25dp"
             android:background="@color/colorPrimary"
             android:elevation="20dp"
             android:onClick="@{(v)->loginViewModel.onLoginClick(v)}"

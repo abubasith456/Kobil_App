@@ -24,6 +24,7 @@ import com.example.kobilapp.fragment.UsersFragment;
 import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
+import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.AstUpdateEventListener;
 import com.kobil.midapp.ast.api.AstUpdateListener;
@@ -44,6 +45,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 //    public ObservableField<Boolean> frameLayoutFragmentVisibility = new ObservableField<>();
 
     private MainActivity activity;
+    private Utils utils = new Utils();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -105,6 +107,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void showMenu(View view) {
+        utils.hideSoftKeyboard(activity);
         Fragment fragment = new SideMenuFragment("LoginFragment");
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayoutForSideMenu, fragment);

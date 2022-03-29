@@ -69,7 +69,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void onPinTextChanged(CharSequence s, int start, int before, int count) {
         try {
-            if (s.length() == 8) {
+            if (s.equals("")) {
+                pinErrorVisibility.set(true);
+                pinError.set("Please enter the PIN.");
+            } else if (s.length() == 8) {
                 pinErrorVisibility.set(false);
                 pinError.set("");
             } else {
@@ -88,7 +91,7 @@ public class LoginViewModel extends AndroidViewModel {
                 executeLogin("");
             } else if (pin.equals("")) {
                 pinErrorVisibility.set(true);
-                pinError.set("Enter the pin");
+                pinError.set("Please enter the PIN.");
             }
         } catch (Exception e) {
             Log.e("Error=>", e.getMessage());

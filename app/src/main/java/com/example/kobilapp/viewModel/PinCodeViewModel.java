@@ -101,8 +101,8 @@ public class PinCodeViewModel extends AndroidViewModel {
     public void onConfirmPinTextChanged(CharSequence s, int start, int before, int count) {
         String confirmPin = s.toString();
         if (pin.get().equals(confirmPin)) {
-            confirmPinErrorVisibility.set(true);
-            confirmPinError.set("PIN matched!");
+            confirmPinErrorVisibility.set(false);
+            confirmPinError.set("");
         } else {
             confirmPinErrorVisibility.set(true);
             confirmPinError.set("PIN not matched!");
@@ -115,14 +115,29 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     public void onSetPinClick(View view) {
         try {
-            if (pin.get() != null && confirmPin.get() != null) {
+            if (isValidate()) {
                 showFingerPrintAccess();
-
             }
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
         }
     }
+
+    private Boolean isValidate() {
+        boolean valid = true;
+        if (pin.get().equals("")) {
+            pinError1Visibility.set(true);
+            pinError1.set("Please enter the PIN.");
+            valid = false;
+        }
+        if (confirmPin.get().equals("")) {
+            confirmPinErrorVisibility.set(true);
+            confirmPinError.set("Please enter the PIN.");
+            valid=false;
+        }
+        return valid;
+    }
+
 
     private void showFingerPrintAccess() {
         try {
