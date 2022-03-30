@@ -4,13 +4,12 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.kobilapp.db.AppDatabase;
-import com.example.kobilapp.model.StatusCode;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.Users;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class UsersViewModel extends AndroidViewModel {
 
     public LiveData<List<String>> getUser() {
 
-        List<String> value = StatusCode.getInstance().getList();
+        List<String> value = Status.getInstance().getList();
         user.setValue(value);
         return user;
     }

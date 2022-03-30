@@ -27,7 +27,7 @@ import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.UsersFragment;
-import com.example.kobilapp.model.StatusCode;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
@@ -218,7 +218,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            List<String> value = StatusCode.getInstance().getList();
+                            List<String> value = Status.getInstance().getList();
                             Log.e("Value:=>", "" + value.size());
                             if (value.size() >= 2) {
                                 Fragment fragment = new UsersFragment();

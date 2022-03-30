@@ -2,10 +2,10 @@ package com.example.kobilapp;
 
 import android.util.Log;
 
-import com.example.kobilapp.model.StatusCode;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
 import com.kobil.midapp.ast.api.AstSdkListener;
-import com.kobil.midapp.ast.api.AstUpdateEventListener;
+import com.kobil.midapp.ast.api.AstUpdate;
 import com.kobil.midapp.ast.api.enums.AstCheckPinReason;
 import com.kobil.midapp.ast.api.enums.AstConfigParameter;
 import com.kobil.midapp.ast.api.enums.AstConfirmationType;
@@ -19,14 +19,34 @@ import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
 import com.kobil.midapp.ast.api.enums.AstPropertySynchronizationDirection;
 import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
-import com.kobil.midapp.ast.api.enums.AstUpdateStatus;
-import com.kobil.midapp.ast.api.enums.AstUpdateType;
 import com.kobil.midapp.ast.api.enums.AstUrlBlockedReason;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SdkListener implements AstSdkListener {
+
+    AstUpdate astUpdate;
+//
+////    public AstUpdate getAstUpdate() {
+////        return astUpdate;
+////    }
+
+    public void setAstUpdate(AstUpdate astUpdate) {
+        this.astUpdate = astUpdate;
+//        astUpdate.doStartUpdate(AstDeviceType.VIRTUALDEVICE);
+        astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+//        Log.e("setAstUpdate", "Called");
+
+    }
+
+//    public void doUpdate(){
+//        astUpdate.doStartUpdate(AstDeviceType.VIRTUALDEVICE);
+//    }
+//
+//    public void doOpenInfoUrl(){
+//        astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+//    }
 
     @Override
     public void onActivationBegin(AstDeviceType astDeviceType) {
@@ -42,7 +62,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onLoginBegin(AstDeviceType astDeviceType, List<String> list) {
         Log.e("AstSDKCallback", "onLoginBegin() called ==> " + list);
-        StatusCode.getInstance().setList(list);
+        Status.getInstance().setList(list);
     }
 
     @Override
@@ -52,6 +72,9 @@ public class SdkListener implements AstSdkListener {
         Log.e("AstSDKCallback", "onLoginEnd() called Login otp ==> " + s);
         Log.e("AstSDKCallback", "onLoginEnd() called userId ==> " + s1);
         Log.e("AstSDKCallback", "onLoginEnd() called Retry counter ==> " + i);
+        if(astStatus.equals(AstStatus.UPDATE_AVAILABLE)){
+            astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+        }
 
     }
 
@@ -141,7 +164,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onAlert(AstDeviceType astDeviceType, int i, int i1) {
         Log.e("AstSDKCallback", "onAlert(Subsystem " + i + ", ErrorCode " + i1 + ")called.");
-        StatusCode.getInstance().setErrorCode(i1);
+        Status.getInstance().setErrorCode(i1);
     }
 
     @Override
@@ -248,7 +271,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onDeactivateEnd(AstStatus astStatus, List<String> list) {
         Log.e("AstSDKCallback", "onDeactivateEnd " + list.toString());
-        StatusCode.getInstance().setList(list);
+        Status.getInstance().setList(list);
 
     }
 
@@ -303,5 +326,4 @@ public class SdkListener implements AstSdkListener {
     public void onRegisterMessagingEnd(AstStatus astStatus) {
 
     }
-
 }

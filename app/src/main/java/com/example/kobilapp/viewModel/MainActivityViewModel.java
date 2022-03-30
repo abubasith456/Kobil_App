@@ -1,5 +1,6 @@
 package com.example.kobilapp.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -8,25 +9,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
 import com.example.kobilapp.MainActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
-import com.example.kobilapp.db.AppDatabase;
-import com.example.kobilapp.fragment.ActivationFragment;
+import com.example.kobilapp.UpdateListener;
 import com.example.kobilapp.fragment.InitFragment;
-import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
-import com.example.kobilapp.fragment.UsersFragment;
-import com.example.kobilapp.model.StatusCode;
-import com.example.kobilapp.model.Users;
-import com.example.kobilapp.utils.SharedPreference;
+import com.example.kobilapp.listener.Update;
+import com.example.kobilapp.listener.UpdateImpl;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
-import com.kobil.midapp.ast.api.AstUpdateEventListener;
+import com.kobil.midapp.ast.api.AstUpdate;
 import com.kobil.midapp.ast.api.AstUpdateListener;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
@@ -34,9 +31,7 @@ import com.kobil.midapp.ast.api.enums.AstUpdateStatus;
 import com.kobil.midapp.ast.api.enums.AstUpdateType;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
-import java.util.List;
-
-public class MainActivityViewModel extends AndroidViewModel {
+public class MainActivityViewModel extends AndroidViewModel implements Update {
 
 //    public ObservableField<Boolean> progressBarVisibility = new ObservableField<>();
 //    public ObservableField<Boolean> startButtonVisibility = new ObservableField<>();
@@ -44,31 +39,45 @@ public class MainActivityViewModel extends AndroidViewModel {
 //    public ObservableField<Boolean> initScreenVisibility = new ObservableField<>();
 //    public ObservableField<Boolean> frameLayoutFragmentVisibility = new ObservableField<>();
 
+    @SuppressLint("StaticFieldLeak")
     private MainActivity activity;
-    private Utils utils = new Utils();
+    private final Utils utils = new Utils();
+    private final AstSdk sdk;
+    private AstUpdate astUpdate;
+    private SdkListener listener = new SdkListener();
+    UpdateListener updateListener = new UpdateListener() {
+        @Override
+        public void astUpdate(AstUpdate astUpdate) {
+            Log.e("MainActivity", "Ast called");
+        }
+    };
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        sdk = AstSdkFactory.getSdk(getApplication(), listener);
         sdkInit();
         registerUpdate();
-//        initScreenVisibility.set(true);
-////        frameLayoutFragmentVisibility.set(false);
-//        progressBarVisibility.set(true);
-//        startButtonVisibility.set(false);
-//        fieldVisibility.set(true);
-//        Handler handler = new Handler();
-//        handler.postDelayed(() -> {
-//            progressBarVisibility.set(false);
-//            startButtonVisibility.set(true);
-//        }, 3000);
+    }
 
+    public void getActivity(MainActivity activity) {
+        this.activity = activity;
+    }
+
+    private void sdkInit() {
+        try {
+            String localization = "en";
+            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
+            String appName = "Kobil App";
+            sdk.init(localization, version, appName);
+        } catch (Exception exception) {
+            Log.e("Error==>", exception.getMessage());
+        }
     }
 
     private void registerUpdate() {
         try {
-            SdkListener listener = new SdkListener();
-            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
-            sdk.registerUpdate(new AstUpdateListener() {
+            Log.e("registerUpdate", "Called");
+            astUpdate = sdk.registerUpdate(new AstUpdateListener() {
                 @Override
                 public void onUpdateBegin(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
                     Log.e("onUpdateBegin", "AstUpdateStatus: " + astUpdateStatus);
@@ -81,26 +90,17 @@ public class MainActivityViewModel extends AndroidViewModel {
 
                 @Override
                 public void onUpdateInformationAvailable(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, AstUpdateType astUpdateType, int i) {
-                    Log.e("onUpdateInformationAvailable", "Status: " + astStatus + " AstType: " + astDeviceType + " ExpireIn: " + i);
+                    Log.e("onUpdateInformationAvailable", "Status: " + astStatus + " AstType: " + astDeviceType + " UpdateURL: " + s + " infoUrl: " + s1 + " ExpireIn: " + i);
+                    Status.getInstance().setUpdateUrl(s);
+                    Status.getInstance().setInfoUrl(s1);
                 }
             });
-        } catch (Exception exception) {
-            Log.e("Error==>", exception.getMessage());
-        }
-    }
+//            updateListener.astUpdate(astUpdate);
+//            listener.setAstUpdate(astUpdate);
+            UpdateImpl update = new UpdateImpl(this::get);
+            update.get(astUpdate);
 
-    public void getActivity(MainActivity activity) {
-        this.activity = activity;
-    }
-
-    private void sdkInit() {
-        try {
-            SdkListener listener = new SdkListener();
-            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
-            String localization = "en";
-            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
-            String appName = "Kobil App";
-            sdk.init(localization, version, appName);
+            //       updateListener.setAstUpdate(astUpdate);
         } catch (Exception exception) {
             Log.e("Error==>", exception.getMessage());
         }
@@ -121,6 +121,11 @@ public class MainActivityViewModel extends AndroidViewModel {
         transaction.replace(R.id.frameLayoutForSideMenu, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void get(AstUpdate astUpdate) {
+
     }
 
 //    public void onStartClick(View view) {

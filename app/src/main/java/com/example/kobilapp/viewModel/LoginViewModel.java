@@ -18,15 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.kobilapp.AstUpdate;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
-import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.DashboardFragment;
 import com.example.kobilapp.fragment.LoginFragment;
-import com.example.kobilapp.model.StatusCode;
 import com.example.kobilapp.model.StatusMessage;
-import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -47,9 +43,12 @@ public class LoginViewModel extends AndroidViewModel {
     private Executor executor;
     private ProgressDialog progressdialog;
     private String userIdFromDb;
+    private final SdkListener listener = new SdkListener();
+    private final AstSdk sdk;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
+        sdk = AstSdkFactory.getSdk(getApplication(), listener);
         pinCode.set("");
         pinError.set("");
         pinErrorVisibility.set(false);
@@ -117,62 +116,66 @@ public class LoginViewModel extends AndroidViewModel {
                     pinChar = pin.toCharArray();
                 }
                 String userId = SharedPreference.getInstance().getValue(loginFragment.getContext(), "userId");
-                SdkListener listener = new SdkListener();
-                AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
                 sdk.doLogin(AstDeviceType.VIRTUALDEVICE, pinChar, userId);
                 showProcessBar("Logging in please wait...");
                 Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                    try {
-                        progressdialog.dismiss();
-//                        showDialog();
-                        Toast.makeText(getApplication(),
-                                "Error code => " + StatusCode.getInstance().getErrorCode() + " " +
-                                        "Status =>" + StatusMessage.getInstance().getStatus(), Toast.LENGTH_SHORT).show();
-                        AlertDialog.Builder alert = new AlertDialog.Builder(loginFragment.getContext());
-                        String message;
-                        if (StatusMessage.getInstance().getStatus().equals("ok")) {
-                            message = "Login successfully.";
-                        } else {
-                            message = StatusMessage.getInstance().getStatus();
-                        }
-                        alert.setMessage(message);
-                        alert.setCancelable(false);
-                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                try {
-                                    if (StatusMessage.getInstance().getStatus().equals("ok")) {
-                                        pinCode.set("");
-                                        Fragment fragment = DashboardFragment.newInstance();
-                                        FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
-                                        SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
-                                        SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
-                                    }
-                                } catch (Exception e) {
-                                    Log.e("Error=> ", e.getMessage());
-                                }
-                            }
+                handler.postDelayed(this::showAlertDialog, 5000);
 
-                        });
-                        AlertDialog alertDialog = alert.create();
-                        alertDialog.show();
-                    } catch (Exception e) {
-                        Log.e("Error=> ", e.getMessage());
-                    }
-                }, 5000);
             } else {
                 Toast.makeText(getApplication(), "Please check the internet connection!", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
         }
-
     }
 
+    private void showAlertDialog() {
+        try {
+            progressdialog.dismiss();
+            AlertDialog.Builder alert = new AlertDialog.Builder(loginFragment.getContext());
+            String message;
+            if (StatusMessage.getInstance().getStatus().equals("ok")) {
+                message = "Login successfully.";
+            } else {
+                message = StatusMessage.getInstance().getStatus();
+            }
+            alert.setMessage(message);
+            alert.setCancelable(false);
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    try {
+                        if (StatusMessage.getInstance().getStatus().equals("ok")) {
+                            pinCode.set("");
+                            Fragment fragment = DashboardFragment.newInstance();
+                            FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                            SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
+                            SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
+                        } else if (StatusMessage.getInstance().getStatus().equals("Update available!.")) {
+                            doUpdateApp();
+                        }
+                    } catch (Exception e) {
+                        Log.e("Error=> ", e.getMessage());
+                    }
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
+        } catch (Exception e) {
+            Log.e("Error=> ", e.getMessage());
+        }
+    }
+
+    private void doUpdateApp() {
+        try {
+
+        } catch (Exception e) {
+            Log.e("doUpdateAppError=> ", e.getMessage());
+        }
+    }
 
     public void showFingerLogin(LoginFragment loginFragment) {
         BiometricManager biometricManager = BiometricManager.from(loginFragment.getContext());
@@ -229,5 +232,4 @@ public class LoginViewModel extends AndroidViewModel {
         progressdialog.setCancelable(false);
         progressdialog.show();
     }
-
 }

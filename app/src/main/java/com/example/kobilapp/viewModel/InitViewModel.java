@@ -2,7 +2,6 @@ package com.example.kobilapp.viewModel;
 
 import android.app.Application;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,19 +9,14 @@ import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
 
 import com.example.kobilapp.R;
-import com.example.kobilapp.SdkListener;
-import com.example.kobilapp.db.AppDatabase;
 import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.UsersFragment;
-import com.example.kobilapp.model.StatusCode;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.utils.SharedPreference;
-import com.kobil.midapp.ast.api.AstSdk;
-import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 import java.util.List;
 
@@ -64,7 +58,7 @@ public class InitViewModel extends AndroidViewModel {
     public void onStartClick(View view) {
 //        AppDatabase db = AppDatabase.getDbInstance();
 //        List<Users> usersList=db.userDao().getAllUsers();
-        List<String> value = StatusCode.getInstance().getList();
+        List<String> value = Status.getInstance().getList();
 //        Log.e("RoomDb value:",usersList.toString());
         if (value.size() >= 2) {
             Fragment fragment = new UsersFragment();
