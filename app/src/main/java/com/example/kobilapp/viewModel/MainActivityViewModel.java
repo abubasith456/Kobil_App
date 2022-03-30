@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
@@ -18,8 +17,6 @@ import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.UpdateListener;
 import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
-import com.example.kobilapp.listener.Update;
-import com.example.kobilapp.listener.UpdateImpl;
 import com.example.kobilapp.model.Status;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -31,7 +28,7 @@ import com.kobil.midapp.ast.api.enums.AstUpdateStatus;
 import com.kobil.midapp.ast.api.enums.AstUpdateType;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
-public class MainActivityViewModel extends AndroidViewModel implements Update {
+public class MainActivityViewModel extends AndroidViewModel {
 
 //    public ObservableField<Boolean> progressBarVisibility = new ObservableField<>();
 //    public ObservableField<Boolean> startButtonVisibility = new ObservableField<>();
@@ -44,13 +41,8 @@ public class MainActivityViewModel extends AndroidViewModel implements Update {
     private final Utils utils = new Utils();
     private final AstSdk sdk;
     private AstUpdate astUpdate;
-    private SdkListener listener = new SdkListener();
-    UpdateListener updateListener = new UpdateListener() {
-        @Override
-        public void astUpdate(AstUpdate astUpdate) {
-            Log.e("MainActivity", "Ast called");
-        }
-    };
+    private final SdkListener listener = new SdkListener();
+    UpdateListener updateListener;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -96,9 +88,7 @@ public class MainActivityViewModel extends AndroidViewModel implements Update {
                 }
             });
 //            updateListener.astUpdate(astUpdate);
-//            listener.setAstUpdate(astUpdate);
-            UpdateImpl update = new UpdateImpl(this::get);
-            update.get(astUpdate);
+            listener.setAstUpdate(astUpdate);
 
             //       updateListener.setAstUpdate(astUpdate);
         } catch (Exception exception) {
@@ -121,11 +111,6 @@ public class MainActivityViewModel extends AndroidViewModel implements Update {
         transaction.replace(R.id.frameLayoutForSideMenu, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    @Override
-    public void get(AstUpdate astUpdate) {
-
     }
 
 //    public void onStartClick(View view) {
@@ -164,7 +149,6 @@ public class MainActivityViewModel extends AndroidViewModel implements Update {
 //            transaction.commit();
 //            SharedPreference.getInstance().saveValue(getApplication(), "from", "ActivationFragment");
 //        }
-//
 //    }
 
 }

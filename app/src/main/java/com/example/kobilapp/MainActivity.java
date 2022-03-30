@@ -13,7 +13,7 @@ import com.example.kobilapp.viewModel.MainActivityViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding activityMainBinding;
-    private MainActivityViewModel mainActivityViewModel;
+    MainActivityViewModel mainActivityViewModel;
     private AppLifecycle appLifecycle;
 
     @Override
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 //        appLifecycle.onStart();
     }
-
 
     @Override
     protected void onStop() {
