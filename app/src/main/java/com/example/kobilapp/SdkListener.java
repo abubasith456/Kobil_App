@@ -30,8 +30,11 @@ public class SdkListener implements AstSdkListener {
 
     public void setAstUpdate(AstUpdate astUpdate) {
         this.astUpdate = astUpdate;
-//        astUpdate.doStartUpdate(AstDeviceType.VIRTUALDEVICE);
-        astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+//        astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+    }
+
+    public AstUpdate getAstUpdate() {
+        return astUpdate;
     }
 
     @Override

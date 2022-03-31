@@ -29,6 +29,7 @@ import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.UsersFragment;
 import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
+import com.example.kobilapp.utils.UpdateApp;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -133,7 +134,7 @@ public class PinCodeViewModel extends AndroidViewModel {
         if (confirmPin.get().equals("")) {
             confirmPinErrorVisibility.set(true);
             confirmPinError.set("Please enter the PIN.");
-            valid=false;
+            valid = false;
         }
         return valid;
     }
@@ -239,16 +240,53 @@ public class PinCodeViewModel extends AndroidViewModel {
                     AlertDialog alertDialog = alert.create();
                     alertDialog.show();
 
+                } else if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
+                    progressdialog.dismiss();
+                    Log.e("executeActivation", "Called==> false part");
+                    SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
+                    alert.setTitle("Mandatory update available!");
+                    alert.setMessage("Do you update your app version?");
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                                UpdateApp updateApp = new UpdateApp();
+                                updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+                                pinCodeFragment.finish();
+                                System.exit(0);
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            pinCodeFragment.finish();
+                            System.exit(0);
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 } else {
                     progressdialog.dismiss();
                     Log.e("executeActivation", "Called==> false part");
                     SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
                     AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                     alert.setMessage(StatusMessage.getInstance().getStatus());
+                    if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
+                        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                pinCodeFragment.finish();
+                                System.exit(0);
+                            }
+                        });
+                    }
                     alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
+                                UpdateApp updateApp = new UpdateApp();
+                                updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+                            }
                         }
                     });
                     AlertDialog alertDialog = alert.create();

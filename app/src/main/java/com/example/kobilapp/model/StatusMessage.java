@@ -51,6 +51,9 @@ public class StatusMessage {
             case UPDATE_AVAILABLE:
                 statusMessage = "Update available!.";
                 break;
+            case UPDATE_NECESSARY:
+                statusMessage = "Update necessary!.";
+                break;
             case NOT_REACHABLE:
                 statusMessage = "Server not reachable";
                 break;

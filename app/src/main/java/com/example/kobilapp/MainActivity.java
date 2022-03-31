@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         activityMainBinding.setInitViewModel(mainActivityViewModel);
-//        activityInitBinding.setInitViewModel(mainActivityViewModel);
         mainActivityViewModel.getActivity(this);
         mainActivityViewModel.showInitFragment();
         appLifecycle = new AppLifecycle();

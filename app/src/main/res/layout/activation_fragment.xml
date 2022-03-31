@@ -83,7 +83,7 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:text="@={activationViewModel.userId}"
-                        android:textColor="@color/red"
+                        android:textColor="@color/black"
                         android:textColorHint="@color/light_black"
                         android:textSize="13sp" />
 

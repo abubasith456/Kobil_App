@@ -20,10 +20,12 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
+import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.fragment.DashboardFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
+import com.example.kobilapp.utils.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
@@ -133,35 +135,71 @@ public class LoginViewModel extends AndroidViewModel {
         try {
             progressdialog.dismiss();
             AlertDialog.Builder alert = new AlertDialog.Builder(loginFragment.getContext());
-            String message;
             if (StatusMessage.getInstance().getStatus().equals("ok")) {
-                message = "Login successfully.";
-            } else {
-                message = StatusMessage.getInstance().getStatus();
-            }
-            alert.setMessage(message);
-            alert.setCancelable(false);
-            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    try {
-                        if (StatusMessage.getInstance().getStatus().equals("ok")) {
-                            pinCode.set("");
-                            Fragment fragment = DashboardFragment.newInstance();
+                alert.setMessage("Login successfully.");
+                alert.setCancelable(false);
+                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            if (StatusMessage.getInstance().getStatus().equals("ok")) {
+                                pinCode.set("");
+                                Fragment fragment = DashboardFragment.newInstance();
+                                FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
+                                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                                SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
+                                SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error=> ", e.getMessage());
+                        }
+                    }
+                });
+            } else if (StatusMessage.getInstance().getStatus().equals("Update available!.")) {
+                alert.setTitle("Update available!");
+                alert.setMessage("Do you update your app version?");
+                alert.setCancelable(false);
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        UpdateApp updateApp = new UpdateApp();
+                        updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+                        loginFragment.requireActivity().finish();
+                        System.exit(0);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pinCode.set("");
+                        Fragment fragment = DashboardFragment.newInstance();
+                        FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                        SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
+                        SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
+                    }
+                });
+            }else {
+                alert.setMessage(StatusMessage.getInstance().getStatus());
+                alert.setCancelable(false);
+                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            Fragment fragment = ActivationFragment.newInstance();
                             FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                            transaction.addToBackStack(null);
                             transaction.commit();
-                            SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
-                            SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
-                        } else if (StatusMessage.getInstance().getStatus().equals("Update available!.")) {
-                            doUpdateApp();
+                        } catch (Exception e) {
+                            Log.e("Error=> ", e.getMessage());
                         }
-                    } catch (Exception e) {
-                        Log.e("Error=> ", e.getMessage());
                     }
-                }
-            });
+                });
+            }
+
             AlertDialog alertDialog = alert.create();
             alertDialog.show();
         } catch (Exception e) {
@@ -171,7 +209,7 @@ public class LoginViewModel extends AndroidViewModel {
 
     private void doUpdateApp() {
         try {
-
+            listener.getAstUpdate().doStartUpdate(AstDeviceType.VIRTUALDEVICE);
         } catch (Exception e) {
             Log.e("doUpdateAppError=> ", e.getMessage());
         }

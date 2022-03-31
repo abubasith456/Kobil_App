@@ -17,15 +17,9 @@ import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.UpdateListener;
 import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
-import com.example.kobilapp.model.Status;
+import com.example.kobilapp.utils.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
-import com.kobil.midapp.ast.api.AstUpdate;
-import com.kobil.midapp.ast.api.AstUpdateListener;
-import com.kobil.midapp.ast.api.enums.AstDeviceType;
-import com.kobil.midapp.ast.api.enums.AstStatus;
-import com.kobil.midapp.ast.api.enums.AstUpdateStatus;
-import com.kobil.midapp.ast.api.enums.AstUpdateType;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -39,9 +33,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     @SuppressLint("StaticFieldLeak")
     private MainActivity activity;
     private final Utils utils = new Utils();
-    private final AstSdk sdk;
-    private AstUpdate astUpdate;
-    private final SdkListener listener = new SdkListener();
+    private AstSdk sdk;
+    private SdkListener listener = new SdkListener();
     UpdateListener updateListener;
 
     public MainActivityViewModel(@NonNull Application application) {
@@ -68,29 +61,28 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private void registerUpdate() {
         try {
-            Log.e("registerUpdate", "Called");
-            astUpdate = sdk.registerUpdate(new AstUpdateListener() {
-                @Override
-                public void onUpdateBegin(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
-                    Log.e("onUpdateBegin", "AstUpdateStatus: " + astUpdateStatus);
-                }
-
-                @Override
-                public void onOpenInfoUrlEnd(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
-                    Log.e("onOpenInfoUrlEnd", "AstUpdateStatus: " + astUpdateStatus);
-                }
-
-                @Override
-                public void onUpdateInformationAvailable(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, AstUpdateType astUpdateType, int i) {
-                    Log.e("onUpdateInformationAvailable", "Status: " + astStatus + " AstType: " + astDeviceType + " UpdateURL: " + s + " infoUrl: " + s1 + " ExpireIn: " + i);
-                    Status.getInstance().setUpdateUrl(s);
-                    Status.getInstance().setInfoUrl(s1);
-                }
-            });
-//            updateListener.astUpdate(astUpdate);
-            listener.setAstUpdate(astUpdate);
-
-            //       updateListener.setAstUpdate(astUpdate);
+            UpdateApp updateApp = new UpdateApp();
+            updateApp.astUpdate(activity,sdk);
+//            AstUpdate astUpdate = sdk.registerUpdate(new AstUpdateListener() {
+//                @Override
+//                public void onUpdateBegin(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
+//                    Log.e("onUpdateBegin", "AstUpdateStatus: " + astUpdateStatus);
+//                }
+//
+//                @Override
+//                public void onOpenInfoUrlEnd(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {
+//                    Log.e("onOpenInfoUrlEnd", "AstUpdateStatus: " + astUpdateStatus);
+//                }
+//
+//                @Override
+//                public void onUpdateInformationAvailable(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, AstUpdateType astUpdateType, int i) {
+//                    Log.e("onUpdateInformationAvailable", "Status: " + astStatus + " AstType: " + astDeviceType + " UpdateURL: " + s + " infoUrl: " + s1 + " ExpireIn: " + i);
+//                    Status.getInstance().setUpdateUrl(s);
+//                    Status.getInstance().setInfoUrl(s1);
+//                }
+//            });
+////            updateListener.astUpdate(astUpdate);
+//            listener.setAstUpdate(astUpdate);
         } catch (Exception exception) {
             Log.e("Error==>", exception.getMessage());
         }
