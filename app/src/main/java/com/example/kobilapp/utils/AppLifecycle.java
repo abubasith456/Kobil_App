@@ -14,7 +14,7 @@ import com.example.kobilapp.SdkListener;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
-public class AppLifecycle extends Application implements LifecycleObserver {
+public class AppLifecycle implements LifecycleObserver {
 
     private Context context;
     private final SdkListener listener = new SdkListener();
@@ -27,7 +27,6 @@ public class AppLifecycle extends Application implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        super.onCreate();
         Log.e("App state on=> ", "onCreate");
     }
 
