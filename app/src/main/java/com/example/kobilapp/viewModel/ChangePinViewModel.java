@@ -126,16 +126,20 @@ public class ChangePinViewModel extends AndroidViewModel {
         if (currentPin.get().equals("")) {
             currentPinErrorVisibility.set(true);
             currentPinError.set("Please enter the current PIN.");
+            valid = false;
         } else {
             currentPinErrorVisibility.set(false);
             currentPinError.set("");
+            valid = true;
         }
         if (newConfirmPin.get().equals("")) {
             newConfirmPinErrorVisibility.set(true);
             newConfirmPinError.set("Please enter the new confirm PIN.");
+            valid = false;
         } else {
             currentPinErrorVisibility.set(false);
             currentPinError.set("");
+            valid = true;
         }
         return valid;
     }
@@ -170,9 +174,11 @@ public class ChangePinViewModel extends AndroidViewModel {
         if (newPin.get().equals(confirmPin)) {
             newConfirmPinErrorVisibility.set(true);
             newConfirmPinError.set("PIN matched!");
+            valid = true;
         } else {
             newConfirmPinErrorVisibility.set(true);
             newConfirmPinError.set("PIN not matched!");
+            valid = false;
         }
     }
 
