@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.setInitViewModel(mainActivityViewModel);
         mainActivityViewModel.getActivity(this);
         mainActivityViewModel.showInitFragment();
-        getLifecycle().addObserver(new AppLifecycle());
+        getLifecycle().addObserver(new AppLifecycle(getApplicationContext()));
     }
 
     @Override

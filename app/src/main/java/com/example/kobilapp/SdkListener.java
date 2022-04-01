@@ -181,12 +181,13 @@ public class SdkListener implements AstSdkListener {
         } catch (Exception e) {
             Log.i("AstAppConfig", "getAppConfigParameter: " + e.getMessage());
         }
+        Log.e("AstSDKCallback", "getAppConfigParameter called => " + astConfigParameter);
         return "";
     }
 
     @Override
     public void onCertificateDataAvailable(AstDeviceType astDeviceType, byte[] bytes) {
-        Log.e("onCertificateDataAvailable", "Called: " + Arrays.toString(bytes));
+//        Log.e("onCertificateDataAvailable", "Called: " + Arrays.toString(bytes));
     }
 
     @Override
@@ -276,6 +277,8 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onRegisterOfflineFunctionsEnd(AstStatus astStatus) {
+        Log.e("AstSDKCallback", "onRegisterOfflineFunctionsEnd Called: " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
 
     }
 
