@@ -58,6 +58,8 @@ public class PinCodeViewModel extends AndroidViewModel {
     private BiometricPrompt.PromptInfo promptInfo;
     private Executor executor;
     private ProgressDialog progressdialog;
+    boolean valid = true;
+
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
         pin.set("");
@@ -83,19 +85,24 @@ public class PinCodeViewModel extends AndroidViewModel {
         if (s.length() == 8) {
             pinError2.set("");
             pinError2Visibility.set(false);
+            valid = true;
         } else if (s.length() > 8) {
             pinError2.set("");
             pinError2Visibility.set(false);
+            valid = true;
         } else {
             pinError2.set("Minimum 8 digits.");
             pinError2Visibility.set(true);
+            valid = false;
         }
         if (s.length() != 0) {
             pinError1.set("");
             pinError1Visibility.set(false);
+            valid = true;
         } else {
             pinError1.set("PIN cannot empty.");
             pinError1Visibility.set(true);
+            valid = false;
         }
 
     }
@@ -105,9 +112,11 @@ public class PinCodeViewModel extends AndroidViewModel {
         if (pin.get().equals(confirmPin)) {
             confirmPinErrorVisibility.set(false);
             confirmPinError.set("");
+            valid = true;
         } else {
             confirmPinErrorVisibility.set(true);
             confirmPinError.set("PIN not matched!");
+            valid = false;
         }
     }
 
@@ -126,7 +135,6 @@ public class PinCodeViewModel extends AndroidViewModel {
     }
 
     private Boolean isValidate() {
-        boolean valid = true;
         if (pin.get().equals("")) {
             pinError1Visibility.set(true);
             pinError1.set("Please enter the PIN.");
