@@ -32,7 +32,6 @@ public class Status {
             statusCode = new ArrayList<>();
             statusCode.add("0");
         }
-        Log.e("getList Called", "" + statusCode.toString());
         return statusCode;
     }
 
@@ -45,7 +44,7 @@ public class Status {
         return errorCode;
     }
 
-    //Update url
+    //Update URL
     public String getUpdateUrl() {
         return updateUrl;
     }
@@ -54,6 +53,7 @@ public class Status {
         this.updateUrl = updateUrl;
     }
 
+    //Update URL info
     public String getInfoUrl() {
         return infoUrl;
     }

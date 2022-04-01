@@ -35,7 +35,7 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
     private UsersFragment usersFragment;
-    private List<Users> usersList;
+//    private List<Users> usersList;
     private List<String> user;
     ArrayList<String> users = new ArrayList<>();
     boolean isSelected = false;
@@ -67,9 +67,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         }
     }
 
-    public void getUsers(List<Users> users) {
-        this.usersList = users;
-    }
+//    public void getUsers(List<Users> users) {
+//        this.usersList = users;
+//    }
 
     public void getAstUser(List<String> user) {
         this.user = user;
@@ -116,7 +116,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             listViewUsersBinding.linearLayoutRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.e("linearLayoutRemove:", "Pressed");
                     AlertDialog.Builder alert = new AlertDialog.Builder(usersFragment.getContext());
                     alert.setCancelable(true);
 //                    alert.setMessage("Are you sure do you want to delete " + usersList.get(getAdapterPosition()).user_id + " user?");
