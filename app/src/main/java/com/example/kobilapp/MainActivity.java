@@ -7,14 +7,18 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.kobilapp.databinding.ActivityMainBinding;
 import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.utils.AppLifecycle;
 import com.example.kobilapp.viewModel.MainActivityViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +37,18 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel.getActivity(this);
         mainActivityViewModel.showInitFragment();
         getLifecycle().addObserver(new AppLifecycle(getApplicationContext()));
+    }
+
+    @Override
+    public void onConfigurationChanged(@NotNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

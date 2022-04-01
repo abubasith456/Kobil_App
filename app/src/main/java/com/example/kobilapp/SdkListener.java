@@ -147,6 +147,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public Object getAppConfigParameter(AstConfigParameter astConfigParameter) {
+        Log.e("AstSDKCallback", "getAppConfigParameter called ");
         try {
             switch (astConfigParameter) {
                 case USE_DEVICE_NAME_SOFTWARE:
@@ -181,7 +182,6 @@ public class SdkListener implements AstSdkListener {
         } catch (Exception e) {
             Log.i("AstAppConfig", "getAppConfigParameter: " + e.getMessage());
         }
-        Log.e("AstSDKCallback", "getAppConfigParameter called => " + astConfigParameter);
         return "";
     }
 

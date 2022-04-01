@@ -42,5 +42,4 @@ public class UpdateApp {
     public AstUpdate getAstUpdate() {
         return astUpdate;
     }
-
 }
