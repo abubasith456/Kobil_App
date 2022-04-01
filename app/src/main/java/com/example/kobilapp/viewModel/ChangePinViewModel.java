@@ -115,6 +115,7 @@ public class ChangePinViewModel extends AndroidViewModel {
     private void showProcessBar(String message) {
         progressdialog = new ProgressDialog(changePinFragment.getActivity());
         progressdialog.setMessage(message);
+        progressdialog.setCancelable(false);
         progressdialog.show();
     }
 

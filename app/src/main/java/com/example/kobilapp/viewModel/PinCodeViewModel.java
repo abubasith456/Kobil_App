@@ -117,7 +117,7 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     public void onSetPinClick(View view) {
         try {
-            if (isValidate()) {
+            if (isValidate() && pin.get().length() == 8 && confirmPin.get().length() == 8) {
                 showFingerPrintAccess();
             }
         } catch (Exception e) {
@@ -216,6 +216,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     Log.e("executeActivation", "Called==> true part");
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
                     SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
+                    alert.setCancelable(false);
                     alert.setMessage("Activated successfully.");
                     alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -280,6 +281,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     Log.e("executeActivation", "Called==> false part");
                     SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
                     alert.setMessage(StatusMessage.getInstance().getStatus());
+                    alert.setCancelable(false);
                     alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -313,6 +315,7 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     private void showProcessBar(String message) {
         progressdialog = new ProgressDialog((pinCodeFragment));
+        progressdialog.setCancelable(false);
         progressdialog.setMessage(message);
         progressdialog.show();
     }

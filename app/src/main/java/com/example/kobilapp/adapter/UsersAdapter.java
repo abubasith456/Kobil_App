@@ -35,7 +35,7 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
     private UsersFragment usersFragment;
-//    private List<Users> usersList;
+    //    private List<Users> usersList;
     private List<String> user;
     ArrayList<String> users = new ArrayList<>();
     boolean isSelected = false;
@@ -90,9 +90,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             listViewUsersBinding.cardViewUser.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    isSelected=true;
+                    isSelected = true;
                     Toast.makeText(usersFragment.getContext(), "Long pressed", Toast.LENGTH_SHORT).show();
-                    if (users.contains(user.get(getAdapterPosition()))){
+                    if (users.contains(user.get(getAdapterPosition()))) {
 
                     }
                     return true;
@@ -117,7 +117,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(usersFragment.getContext());
-                    alert.setCancelable(true);
+                    alert.setCancelable(false);
 //                    alert.setMessage("Are you sure do you want to delete " + usersList.get(getAdapterPosition()).user_id + " user?");
                     alert.setMessage("Are you sure do you want to delete " + user.get(getAdapterPosition()) + " user?");
                     alert.setPositiveButton("yes", new DialogInterface.OnClickListener() {
