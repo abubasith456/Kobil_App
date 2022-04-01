@@ -36,6 +36,7 @@ import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 import java.util.List;
@@ -219,7 +220,7 @@ public class PinCodeViewModel extends AndroidViewModel {
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
-                if (StatusMessage.getInstance().getStatus().equals("ok")) {
+                if (StatusMessage.getInstance().getAstStatus()==AstStatus.OK) {
                     progressdialog.dismiss();
                     Log.e("executeActivation", "Called==> true part");
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
@@ -248,7 +249,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                         }
                     });
 
-                } else if (StatusMessage.getInstance().getStatus().equals("Update available!.")) {
+                } else if (StatusMessage.getInstance().getAstStatus()==AstStatus.UPDATE_AVAILABLE) {
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
                     SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
                     progressdialog.dismiss();
@@ -264,7 +265,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                         }
                     });
-                } else if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
+                } else if (StatusMessage.getInstance().getAstStatus()== AstStatus.UPDATE_NECESSARY) {
                     progressdialog.dismiss();
                     alert.setTitle("Mandatory update available!");
                     alert.setMessage("Do you update your app version?");
@@ -288,7 +289,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     progressdialog.dismiss();
                     Log.e("executeActivation", "Called==> false part");
                     SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
-                    alert.setMessage(StatusMessage.getInstance().getStatus());
+                    alert.setMessage(StatusMessage.getInstance().getStatusMessage());
                     alert.setCancelable(false);
                     alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                         @Override

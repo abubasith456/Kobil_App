@@ -5,7 +5,6 @@ import android.util.Log;
 import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
 import com.kobil.midapp.ast.api.AstSdkListener;
-import com.kobil.midapp.ast.api.AstUpdate;
 import com.kobil.midapp.ast.api.enums.AstCheckPinReason;
 import com.kobil.midapp.ast.api.enums.AstConfigParameter;
 import com.kobil.midapp.ast.api.enums.AstConfirmationType;
@@ -22,6 +21,7 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.api.enums.AstUrlBlockedReason;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SdkListener implements AstSdkListener {
@@ -34,7 +34,7 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onActivationEnd(AstDeviceType astDeviceType, AstStatus astStatus) {
         Log.e("AstSDKCallback", "onActivationEnd() called ==> " + astStatus);
-        StatusMessage.getInstance().setStatus(astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onLoginEnd(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, int i, int i1) {
-        StatusMessage.getInstance().setStatus(astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
         Log.e("AstSDKCallback", "onLoginEnd() called ==> " + astStatus);
         Log.e("AstSDKCallback", "onLoginEnd() called Login otp ==> " + s);
         Log.e("AstSDKCallback", "onLoginEnd() called userId ==> " + s1);
@@ -61,13 +61,13 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onPinChangeBegin(AstDeviceType astDeviceType, AstStatus astStatus) {
         Log.e("AstSDKCallback", "onPinChangeBegin() called ==> " + astStatus);
-        StatusMessage.getInstance().setStatus(astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
     public void onPinChangeEnd(AstDeviceType astDeviceType, AstStatus astStatus, int i) {
         Log.e("AstSDKCallback", "onPinChangeEnd() called ==> " + astStatus);
-        StatusMessage.getInstance().setStatus(astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
@@ -83,26 +83,28 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onTransactionBlockBegin(AstDeviceType astDeviceType, int i) {
-
+        Log.e("AstSDKCallback", "onTransactionBlockBegin() called ==> " + i);
     }
 
     @Override
     public void onTransactionBlockEnd(AstDeviceType astDeviceType) {
-
+        Log.e("AstSDKCallback", "onTransactionBlockEnd() called ==> " + astDeviceType);
     }
 
     @Override
     public void onTransactionBegin(AstDeviceType astDeviceType, String s, AstConfirmationType astConfirmationType) {
-
+        Log.e("AstSDKCallback", "onTransactionBegin() called ==> " + astConfirmationType);
     }
 
     @Override
     public void onTransactionEnd(AstDeviceType astDeviceType, AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onTransactionEnd() called ==> " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
     public void onDisplayMessage(AstDeviceType astDeviceType, String s, AstMessageType astMessageType) {
+        Log.e("AstSDKCallback", "onDisplayMessage() called ==> " + astDeviceType + " AstMessageType: " + astMessageType.toString());
 
     }
 
@@ -128,12 +130,13 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onPinRequiredBegin(AstDeviceType astDeviceType, AstPinReason astPinReason) {
-
+        Log.e("AstSDKCallback", "onPinRequiredBegin() called ==> " + astDeviceType + " AstPinReason: " + astPinReason);
     }
 
     @Override
     public void onPinRequiredEnd(AstDeviceType astDeviceType, AstStatus astStatus, int i) {
-
+        Log.e("AstSDKCallback", "onPinRequiredEnd() called ==> " + astDeviceType + " AstStatus: " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
@@ -183,22 +186,22 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onCertificateDataAvailable(AstDeviceType astDeviceType, byte[] bytes) {
-//        Log.e("onCertificateDataAvailable", "Called: " + Arrays.toString(bytes));
+        Log.e("onCertificateDataAvailable", "Called: " + Arrays.toString(bytes));
     }
 
     @Override
     public void onUrlBlocked(String s, AstUrlBlockedReason astUrlBlockedReason) {
-
+        Log.e("onUrlBlocked", "Called: " + astUrlBlockedReason + " String: " + s);
     }
 
     @Override
     public void onTransportPinBegin(AstCheckPinReason astCheckPinReason) {
-
+        Log.e("AstSDKCallback", "onTransportPinBegin Called: " + astCheckPinReason);
     }
 
     @Override
     public void onTransportPinEnd(AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onTransportPinBegin Called: " + astStatus);
     }
 
     @Override
@@ -208,34 +211,35 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onPinUnblockEnd(AstStatus astStatus, int i) {
-
+        Log.e("AstSDKCallback", "onPinUnblockEnd Called: " + astStatus);
     }
 
     @Override
     public void onSetPropertyBegin(AstDeviceType astDeviceType, AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onSetPropertyBegin Called: " + astStatus);
     }
 
     @Override
     public void onSetPropertyEnd(AstDeviceType astDeviceType, AstStatus astStatus, int i, int i1) {
+        Log.e("AstSDKCallback", "onSetPropertyEnd Called: " + astStatus + " Subsystem: " + i + " Error code: " + i1);
 
     }
 
     @Override
     public void onGetPropertyBegin(AstDeviceType astDeviceType, AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onGetPropertyBegin Called: " + astStatus);
     }
 
     @Override
     public void onGetPropertyEnd(AstDeviceType astDeviceType, AstStatus astStatus,
                                  byte[] bytes, AstPropertyType astPropertyType, int i, int i1) {
-
+        Log.e("AstSDKCallback", "onGetPropertyEnd Called: " + astStatus + " PropertyData: " + bytes + " AstPropertyType: " + astPropertyType + " propertyTTL: " + i + " propertyFlags: " + i1);
     }
 
     @Override
     public void onInformationAvailable(AstContextType astContextType, AstInformationKey
             astInformationKey, Object o) {
-
+        Log.e("AstSDKCallback", "onInformationAvailable Called: " + "AstContextType: " + astContextType + " AstInformationKey: " + astInformationKey + " Object: " + o);
     }
 
     @Override
@@ -252,7 +256,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onDetectHwDevicesEnd(AstStatus astStatus, List<String> list) {
-
+        Log.e("AstSDKCallback", "onDetectHwDevicesEnd Called: " + astStatus + " UserList: " + list);
     }
 
     @Override
@@ -294,11 +298,12 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onSetUserIdEnd(AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onSetUserIdEnd " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
     public void onRegisterMessagingEnd(AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onRegisterMessagingEnd " + astStatus);
     }
 }

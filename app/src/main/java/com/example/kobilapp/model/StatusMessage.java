@@ -7,6 +7,7 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 public class StatusMessage {
     private static StatusMessage instance;
     private String statusMessage;
+    private AstStatus astStatus;
 
     public static StatusMessage getInstance() {
         if (instance == null) {
@@ -15,73 +16,80 @@ public class StatusMessage {
         return instance;
     }
 
-    public String getStatus() {
-        return statusMessage;
+    public AstStatus getAstStatus() {
+        return astStatus;
     }
 
-    public void setStatus(AstStatus astStatus) {
+    public void setAstStatus(AstStatus astStatus) {
+        this.astStatus = astStatus;
+        Log.e("setAstStatus =>", String.valueOf(astStatus));
+
+    }
+
+    public String getStatusMessage() {
+        Log.e("getStatusMessage =>", String.valueOf(astStatus));
         switch (astStatus) {
             case OK:
-                statusMessage = "ok";
-                break;
+                return "ok";
+
             case FAILED:
-                statusMessage = "Failed!";
-                break;
+                return "Failed!";
+
             case WRONG_CREDENTIALS:
-                statusMessage = "Invalid credential!.";
-                break;
+                return "Invalid credential!.";
+
             case INVALID_PIN:
-                statusMessage = "Invalid pin";
-                break;
+                return "Invalid pin";
+
             case LOCKED_USER:
-                statusMessage = "User locked";
-                break;
+                return "User locked";
+
             case PIN_BLOCKED:
-                statusMessage = "Your PIN is blocked.";
-                break;
+                return "Your PIN is blocked.";
+
             case REGISTER_APP:
-                statusMessage = "Please register your app.";
-                break;
+                return "Please register your app.";
+
             case LOGIN_REQUIRED:
-                statusMessage = "Login required";
-                break;
+                return "Login required";
+
             case ACCESS_DENIED:
-                statusMessage = "Access denied!.";
-                break;
+                return "Access denied!.";
+
             case UPDATE_AVAILABLE:
-                    statusMessage = "Update available!.";
-                break;
+                return "Update available!.";
+
             case UPDATE_NECESSARY:
-                statusMessage = "Update necessary!.";
-                break;
+                return "Update necessary!.";
+
             case NOT_REACHABLE:
-                statusMessage = "Server not reachable";
-                break;
+                return "Server not reachable";
+
             case ACTIVATION_CODE_EXPIRED:
-                statusMessage = "Activation code expired";
-                break;
+                return "Activation code expired";
+
             case APP_REGISTERED:
-                statusMessage = "App registered successfully";
-                break;
+                return "App registered successfully";
+
             case INVALID_STATE:
-                statusMessage = "Invalid state!";
-                break;
+                return "Invalid state!";
+
             case INVALID_KEY:
-                statusMessage = "Invalid key!";
-                break;
+                return "Invalid key!";
+
             case USER_ID_ALREADY_EXISTS:
-                statusMessage = "User ID already exist";
-                break;
+                return "User ID already exist";
+
             case ALREADY_CREATED:
-                statusMessage = "Already created!";
-                break;
+                return "Already created!";
+
             case INVALID_PARAMETER:
-                statusMessage = "Invalid parameter!";
-                break;
+                return "Invalid parameter!";
+
             default:
-                statusMessage = "";
+                return "";
         }
-        Log.e("StatusMessageClass=>", statusMessage);
+
     }
 
 }

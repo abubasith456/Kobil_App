@@ -24,6 +24,7 @@ import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstConfirmation;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 public class ChangePinViewModel extends AndroidViewModel {
@@ -84,9 +85,9 @@ public class ChangePinViewModel extends AndroidViewModel {
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
                     progressdialog.dismiss();
-                    if (StatusMessage.getInstance().getStatus().equals("ok")) {
+                    if (StatusMessage.getInstance().getAstStatus()== AstStatus.OK) {
                         alert = new AlertDialog.Builder(changePinFragment.getActivity());
-                        alert.setMessage(StatusMessage.getInstance().getStatus());
+                        alert.setMessage(StatusMessage.getInstance().getStatusMessage());
                         alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -97,7 +98,7 @@ public class ChangePinViewModel extends AndroidViewModel {
                         alertDialog.show();
                     } else {
                         alert = new AlertDialog.Builder(changePinFragment.getActivity());
-                        alert.setMessage(StatusMessage.getInstance().getStatus());
+                        alert.setMessage(StatusMessage.getInstance().getStatusMessage());
                         alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
