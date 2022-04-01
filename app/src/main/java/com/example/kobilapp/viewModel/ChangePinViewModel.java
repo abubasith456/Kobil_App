@@ -45,6 +45,7 @@ public class ChangePinViewModel extends AndroidViewModel {
     private ProgressDialog progressdialog;
     private AlertDialog.Builder alert;
     private AlertDialog alertDialog;
+    boolean valid = true;
 
     public ChangePinViewModel(@NonNull Application application) {
         super(application);
@@ -122,8 +123,6 @@ public class ChangePinViewModel extends AndroidViewModel {
     }
 
     public Boolean isValidate() {
-        Boolean valid = true;
-
         if (currentPin.get().equals("")) {
             currentPinErrorVisibility.set(true);
             currentPinError.set("Please enter the current PIN.");
@@ -138,7 +137,6 @@ public class ChangePinViewModel extends AndroidViewModel {
             currentPinErrorVisibility.set(false);
             currentPinError.set("");
         }
-
         return valid;
     }
 
@@ -146,19 +144,24 @@ public class ChangePinViewModel extends AndroidViewModel {
         if (s.length() == 8) {
             newPinError2.set("");
             newPinError2Visibility.set(false);
+            valid = true;
         } else if (s.length() > 8) {
             newPinError2.set("");
             newPinError2Visibility.set(false);
+            valid = true;
         } else {
             newPinError2.set("Minimum 8 digits.");
             newPinError2Visibility.set(true);
+            valid = false;
         }
         if (s.length() != 0) {
             newPinError1.set("");
             newPinError1Visibility.set(false);
+            valid = true;
         } else {
             newPinError1.set("PIN cannot empty.");
             newPinError1Visibility.set(true);
+            valid = false;
         }
     }
 
