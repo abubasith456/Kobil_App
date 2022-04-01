@@ -33,6 +33,7 @@ import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
+import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
@@ -57,7 +58,6 @@ public class PinCodeViewModel extends AndroidViewModel {
     private BiometricPrompt.PromptInfo promptInfo;
     private Executor executor;
     private ProgressDialog progressdialog;
-
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
         pin.set("");
@@ -143,7 +143,6 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     private void showFingerPrintAccess() {
         try {
-
             BiometricManager biometricManager = BiometricManager.from(pinCodeFragment);
             switch (biometricManager.canAuthenticate()) {
                 case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
@@ -198,6 +197,7 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     private void executeActivation(String fingerPrintStatus) {
         try {
+            Utils.getInstance().hideSoftKeyboard(pinCodeFragment);
             showProcessBar("Activating Please wait...");
             if (fingerPrintStatus.equals("success")) {
                 SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "success");

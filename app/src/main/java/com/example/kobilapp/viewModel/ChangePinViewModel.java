@@ -20,6 +20,7 @@ import com.example.kobilapp.fragment.ChangePinFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
+import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstConfirmation;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
@@ -74,6 +75,7 @@ public class ChangePinViewModel extends AndroidViewModel {
     public void onChangePinClick(View view) {
         try {
             if (isValidate()) {
+                Utils.getInstance().hideSoftKeyboard(changePinFragment.getActivity());
                 char[] currentPIN = currentPin.get().toCharArray();
                 char[] newPIN = newPin.get().toCharArray();
                 sdk.doPinChange(AstDeviceType.VIRTUALDEVICE, AstConfirmation.OK, currentPIN, newPIN);
