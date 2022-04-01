@@ -34,6 +34,7 @@ public class AppLifecycle implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onStop() {
+        // App in background
         Log.e("App state on=> ", "onStop");
     }
 

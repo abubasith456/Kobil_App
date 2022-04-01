@@ -26,17 +26,6 @@ import java.util.List;
 
 public class SdkListener implements AstSdkListener {
 
-    AstUpdate astUpdate;
-
-    public void setAstUpdate(AstUpdate astUpdate) {
-        this.astUpdate = astUpdate;
-//        astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
-    }
-
-    public AstUpdate getAstUpdate() {
-        return astUpdate;
-    }
-
     @Override
     public void onActivationBegin(AstDeviceType astDeviceType) {
         Log.e("AstSDKCallback", "onActivationBegin() called.");
@@ -61,9 +50,6 @@ public class SdkListener implements AstSdkListener {
         Log.e("AstSDKCallback", "onLoginEnd() called Login otp ==> " + s);
         Log.e("AstSDKCallback", "onLoginEnd() called userId ==> " + s1);
         Log.e("AstSDKCallback", "onLoginEnd() called Retry counter ==> " + i);
-//        if(astStatus.equals(AstStatus.UPDATE_AVAILABLE)){
-//            astUpdate.doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
-//        }
 
     }
 

@@ -33,13 +33,11 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel.getActivity(this);
         mainActivityViewModel.showInitFragment();
         getLifecycle().addObserver(new AppLifecycle());
-        appLifecycle = new AppLifecycle();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        appLifecycle.onStart();
     }
 
     @Override
@@ -55,6 +53,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        appLifecycle.onStop();
     }
 }

@@ -191,7 +191,6 @@ public class LoginViewModel extends AndroidViewModel {
                     }
                 });
             }
-
             AlertDialog alertDialog = alert.create();
             alertDialog.show();
         } catch (Exception e) {
@@ -201,7 +200,6 @@ public class LoginViewModel extends AndroidViewModel {
 
     private void doUpdateApp() {
         try {
-            listener.getAstUpdate().doStartUpdate(AstDeviceType.VIRTUALDEVICE);
         } catch (Exception e) {
             Log.e("doUpdateAppError=> ", e.getMessage());
         }
