@@ -40,6 +40,8 @@ public class LoginFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         loginFragmentBinding.setLoginViewModel(mViewModel);
         mViewModel.getFragment(this);
+
+        //For fingerprint access
         String check = SharedPreference.getInstance().getValue(getContext(), "fingerPrint");
         if (check.equals("success")) {
             mViewModel.showFingerLogin(this);
@@ -47,6 +49,7 @@ public class LoginFragment extends Fragment {
             Log.e("FingerPrint=>", "Not assigned");
         }
 
+        //Back press handle..
         String from = SharedPreference.getInstance().getValue(getContext(), "from");
         if (from.equals("LoginFragment")) {
             requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
@@ -59,7 +62,7 @@ public class LoginFragment extends Fragment {
                     startActivity(exitIntent);
                 }
             });
-        } else if (from.equals("UsersFragment")) {
+        } else if (from.equals("AdapterToLoginFragment")) {
             requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
                 @Override
                 public void handleOnBackPressed() {

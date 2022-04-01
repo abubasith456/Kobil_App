@@ -49,7 +49,7 @@ public class StatusMessage {
                 statusMessage = "Access denied!.";
                 break;
             case UPDATE_AVAILABLE:
-                statusMessage = "Update available!.";
+                    statusMessage = "Update available!.";
                 break;
             case UPDATE_NECESSARY:
                 statusMessage = "Update necessary!.";

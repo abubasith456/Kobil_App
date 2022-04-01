@@ -20,12 +20,11 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
-import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.fragment.DashboardFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
-import com.example.kobilapp.utils.UpdateApp;
+import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
@@ -182,20 +181,13 @@ public class LoginViewModel extends AndroidViewModel {
                         SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
                     }
                 });
-            }else {
+            } else {
                 alert.setMessage(StatusMessage.getInstance().getStatus());
                 alert.setCancelable(false);
                 alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        try {
-                            Fragment fragment = ActivationFragment.newInstance();
-                            FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
-                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                            transaction.commit();
-                        } catch (Exception e) {
-                            Log.e("Error=> ", e.getMessage());
-                        }
+                        pinCode.set("");
                     }
                 });
             }

@@ -1,4 +1,4 @@
-package com.example.kobilapp.utils;
+package com.example.kobilapp;
 
 import android.content.Context;
 import android.util.Log;

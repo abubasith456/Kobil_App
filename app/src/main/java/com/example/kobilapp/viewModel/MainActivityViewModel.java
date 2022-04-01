@@ -14,10 +14,9 @@ import android.view.View;
 import com.example.kobilapp.MainActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
-import com.example.kobilapp.UpdateListener;
 import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
-import com.example.kobilapp.utils.UpdateApp;
+import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
@@ -35,7 +34,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final Utils utils = new Utils();
     private AstSdk sdk;
     private SdkListener listener = new SdkListener();
-    UpdateListener updateListener;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);

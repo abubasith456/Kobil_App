@@ -60,6 +60,10 @@ public class SideMenuViewModel extends AndroidViewModel {
         } else if (from.equals("UsersFragment")) {
             changePinVisibility.set(false);
             addUserVisibility.set(true);
+        } else if (from.equals("AdapterToLoginFragment")) {
+            changePinVisibility.set(false);
+            addUserVisibility.set(true);
+            deleteUserVisibility.set(true);
         }
     }
 

@@ -25,11 +25,12 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.db.AppDatabase;
+import com.example.kobilapp.fragment.ActivationFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.UsersFragment;
 import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
-import com.example.kobilapp.utils.UpdateApp;
+import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.model.Users;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -209,13 +210,13 @@ public class PinCodeViewModel extends AndroidViewModel {
             sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
             Handler handler = new Handler();
             handler.postDelayed(() -> {
+                AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                 if (StatusMessage.getInstance().getStatus().equals("ok")) {
                     progressdialog.dismiss();
                     Log.e("executeActivation", "Called==> true part");
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
                     SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
-                    alert.setMessage(StatusMessage.getInstance().getStatus());
+                    alert.setMessage("Activated successfully.");
                     alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -237,24 +238,35 @@ public class PinCodeViewModel extends AndroidViewModel {
 //                            addToDb(userId, pin.get());
                         }
                     });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
 
+                } else if (StatusMessage.getInstance().getStatus().equals("Update available!.")) {
+                    SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
+                    SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
+                    progressdialog.dismiss();
+                    alert.setMessage("Activated successfully.");
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Fragment fragment = new LoginFragment();
+                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                            transaction.commit();
+                            SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+                        }
+                    });
                 } else if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
                     progressdialog.dismiss();
-                    Log.e("executeActivation", "Called==> false part");
-                    SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                     alert.setTitle("Mandatory update available!");
                     alert.setMessage("Do you update your app version?");
                     alert.setCancelable(false);
                     alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                                UpdateApp updateApp = new UpdateApp();
-                                updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
-                                pinCodeFragment.finish();
-                                System.exit(0);
+                            UpdateApp updateApp = new UpdateApp();
+                            updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+                            pinCodeFragment.finish();
+                            System.exit(0);
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
@@ -263,35 +275,23 @@ public class PinCodeViewModel extends AndroidViewModel {
                             System.exit(0);
                         }
                     });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
                 } else {
                     progressdialog.dismiss();
                     Log.e("executeActivation", "Called==> false part");
                     SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                     alert.setMessage(StatusMessage.getInstance().getStatus());
-                    if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
-                        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                pinCodeFragment.finish();
-                                System.exit(0);
-                            }
-                        });
-                    }
                     alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            if (StatusMessage.getInstance().getStatus().equals("Update necessary!.")) {
-                                UpdateApp updateApp = new UpdateApp();
-                                updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
-                            }
+                            Fragment fragment = ActivationFragment.newInstance();
+                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                            transaction.commit();
                         }
                     });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
                 }
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
             }, 4000);
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());

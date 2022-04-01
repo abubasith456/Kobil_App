@@ -109,7 +109,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                     transaction.replace(R.id.frameLayoutLoginFragmentContainer, loginFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
-                    SharedPreference.getInstance().saveValue(usersFragment.getContext(), "from", "UsersFragment");
+                    SharedPreference.getInstance().saveValue(usersFragment.getContext(), "from", "AdapterToLoginFragment");
                 }
             });
 

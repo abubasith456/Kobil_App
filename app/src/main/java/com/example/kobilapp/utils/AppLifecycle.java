@@ -9,23 +9,37 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-public class AppLifecycle extends Application implements LifecycleObserver {
+public class AppLifecycle implements LifecycleObserver {
 
-    @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        super.onCreate();
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onStop() {
-        Log.e("App on=> ", "Background");
+        Log.e("App state on=> ", "onCreate");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onStart() {
         // App in foreground
-        Log.e("App on=> ", "Foreground");
+        Log.e("App state on=> ", "onStart");
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void onResume() {
+        Log.e("App state on=> ", "onResume");
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onPause() {
+        Log.e("App state on=> ", "onPause");
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    public void onStop() {
+        Log.e("App state on=> ", "onStop");
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void onDestroy() {
+        Log.e("App state on=> ", "onDestroy");
     }
 
 }
