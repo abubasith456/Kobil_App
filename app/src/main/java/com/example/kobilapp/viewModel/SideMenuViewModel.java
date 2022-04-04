@@ -6,9 +6,22 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
@@ -31,16 +44,21 @@ import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 public class SideMenuViewModel extends AndroidViewModel {
+    private static final int RESULT_OK = 0;
     private SideMenuFragment sideMenuFragment;
     private String from;
     public ObservableField<Boolean> changePinVisibility = new ObservableField<>();
     public ObservableField<Boolean> addUserVisibility = new ObservableField<>();
     public ObservableField<Boolean> deleteUserVisibility = new ObservableField<>();
+    public ObservableField<Boolean> reportVisibility = new ObservableField<>();
+    public ObservableField<Boolean> contactDeskVisibility = new ObservableField<>();
     private ProgressDialog progressdialog;
 
     public SideMenuViewModel(@NonNull Application application) {
         super(application);
         deleteUserVisibility.set(false);
+        reportVisibility.set(true);
+        contactDeskVisibility.set(true);
     }
 
     public void getFragment(SideMenuFragment sideMenuFragment) {
@@ -96,7 +114,7 @@ public class SideMenuViewModel extends AndroidViewModel {
             AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment.getContext());
             builder.setMessage("Are you sure do you want to delete " + username + " user?");
             builder.setCancelable(false);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     showProcessBar("Deleting user....");
@@ -113,7 +131,7 @@ public class SideMenuViewModel extends AndroidViewModel {
                         SharedPreference.getInstance().saveValue(sideMenuFragment.getContext(), "from", "DashboardFragment");
                     }, 3000);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -134,6 +152,155 @@ public class SideMenuViewModel extends AndroidViewModel {
             transaction.replace(R.id.frameLayoutForSideMenu, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        } catch (Exception e) {
+            Log.e("Error=>", e.getMessage());
+        }
+    }
+
+    public void onContactDeskClick(View view) {
+        try {
+
+
+//            int index = (text.toString()).indexOf(url);
+//            spans.setSpan(clickSpan, index, url.length() + index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            TextView messageText = alertDialog.findViewById(android.R.id.message);
+//            messageText.setGravity(Gravity.CENTER);
+
+//            final SpannableString s = new SpannableString("Please send any questions to email@fake.com");
+//
+////added a TextView
+//            final TextView tx1 = new TextView(sideMenuFragment.getContext());
+//            tx1.setText(s);
+//            tx1.setAutoLinkMask(RESULT_OK);
+//            tx1.setMovementMethod(LinkMovementMethod.getInstance());
+//            Linkify.addLinks(s, Linkify.EMAIL_ADDRESSES);
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment.getContext());
+//            builder.setTitle("Contact Support Desk");
+//            builder.setMessage("Mobile Number:");
+//            builder.setCancelable(false);
+//            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                }
+//            });
+//            builder.setView(tx1);
+//            AlertDialog alertDialog = builder.create();
+//            alertDialog.show();
+//            TextView messageText = alertDialog.findViewById(android.R.id.message);
+//            messageText.setGravity(Gravity.CENTER);
+//            messageText.setMovementMethod(LinkMovementMethod.getInstance());
+
+            // Linkify the message
+//            final SpannableString fromMalta = new SpannableString("9585909514");// msg should have url to enable clicking
+//            final SpannableString fromAbroad = new SpannableString("7411606412");
+//            Linkify.addLinks(fromMalta, Linkify.PHONE_NUMBERS);
+//            Linkify.addLinks(fromAbroad, Linkify.PHONE_NUMBERS);
+
+//            final TextView message = new TextView(sideMenuFragment.getContext());
+//            // i.e.: R.string.dialog_message =>
+//            // "Test this dialog following the link to dtmilano.blogspot.com"
+//            final SpannableString s =
+//                    new SpannableString("9585909514");
+//            Linkify.addLinks(s, Linkify.PHONE_NUMBERS);
+//            message.setText(s);
+//            message.setMovementMethod(LinkMovementMethod.getInstance());
+
+//            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment.getContext());
+//            builder.setView(R.layout.alert_dialog);
+//
+//            final AlertDialog alertDialog = new AlertDialog.Builder(sideMenuFragment.getContext())
+//                    .setPositiveButton(android.R.string.ok, null)
+//                    .setMessage("The support team is available on weekends from 08.00-17.00 Kindly call: \n" +
+//                            "from Malta: \n" + fromMalta +
+//                            "\n from abroad: \n" + fromAbroad)
+//                    .setView(message)
+//                    .create();
+//
+//
+//            alertDialog.show();
+//
+//            // Make the textview clickable. Must be called after show()
+//            ((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+
+
+            final SpannableString fromMalta = new SpannableString("9585909514");// msg should have url to enable clicking
+            final SpannableString fromAbroad = new SpannableString("7411606412");
+            Linkify.addLinks(fromMalta, Linkify.PHONE_NUMBERS);
+            Linkify.addLinks(fromAbroad, Linkify.PHONE_NUMBERS);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(sideMenuFragment.getContext());
+// ...Irrelevant code for customizing the buttons and title
+            LayoutInflater inflater = sideMenuFragment.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.alert_dialog, null);
+            dialogBuilder.setView(dialogView);
+            TextView title = dialogView.findViewById(R.id.alertTitle);
+            title.setText("Contact Support Desk");
+            TextView message = dialogView.findViewById(R.id.message);
+            message.setText("The support team is available on weekends from 08.00-17.00 Kindly call:");
+            TextView message1 = dialogView.findViewById(R.id.message1);
+            message1.setText("from Malta:");
+            TextView message2 = dialogView.findViewById(R.id.message2);
+            message2.setText(fromMalta);
+            message2.setMovementMethod(LinkMovementMethod.getInstance());
+            TextView message3 = dialogView.findViewById(R.id.message3);
+            message3.setText("from abroad");
+            TextView message4 = dialogView.findViewById(R.id.message4);
+            message4.setText(fromAbroad);
+            message4.setMovementMethod(LinkMovementMethod.getInstance());
+            dialogBuilder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.show();
+        } catch (Exception e) {
+            Log.e("Error=>", e.getMessage());
+        }
+    }
+
+    public void onReportClick(View view) {
+        try {
+            String deviceName = SharedPreference.getInstance().getValue(sideMenuFragment.getContext(), "deviceName");
+            String deviceOSVersion = SharedPreference.getInstance().getValue(sideMenuFragment.getContext(), "deviceOSVersion");
+            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment.getContext());
+            builder.setTitle("Report");
+            builder.setMessage(Html.fromHtml("<b>" + " Device Name: " + "</b>" + deviceName +
+                    "<b>" + "<br>" + "Device OS: " + "</b>" + deviceOSVersion));
+            builder.setCancelable(false);
+            builder.setPositiveButton("SEND", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("message/rfc822");
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"appcenter@kobil.com"});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Report | Device issues");
+                        intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Hi Team," + "<br>" + "<br>" + "<b>" + "Device Name: " + "</b>" + deviceName
+                                + "<br>" + "<b>" + "Device OS version: " + "</b>" + deviceOSVersion + "<br>" + "<br>"
+                                + ".......Type your issues here......." + "<br>" + "<br>" + " Thank you."));
+                        try {
+                            sideMenuFragment.startActivity(Intent.createChooser(intent, "Send mail..."));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(sideMenuFragment.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Log.e("Error=>", e.getMessage());
+                    }
+
+                }
+            }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            TextView messageText = alertDialog.findViewById(android.R.id.message);
+            messageText.setGravity(Gravity.CENTER);
         } catch (Exception e) {
             Log.e("Error=>", e.getMessage());
         }

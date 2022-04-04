@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
+import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.AstSdkListener;
 import com.kobil.midapp.ast.api.enums.AstCheckPinReason;
 import com.kobil.midapp.ast.api.enums.AstConfigParameter;
@@ -21,10 +22,20 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.api.enums.AstUrlBlockedReason;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SdkListener implements AstSdkListener {
+
+    private static SdkListener instance;
+    private AstSdk sdk;
+
+    public static SdkListener getInstance() {
+        if (instance == null) {
+            instance = new SdkListener();
+        }
+        return instance;
+    }
+
 
     @Override
     public void onActivationBegin(AstDeviceType astDeviceType) {
@@ -47,9 +58,10 @@ public class SdkListener implements AstSdkListener {
     public void onLoginEnd(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, int i, int i1) {
         StatusMessage.getInstance().setAstStatus(astStatus);
         Log.e("AstSDKCallback", "onLoginEnd() called ==> " + astStatus);
-        Log.e("AstSDKCallback", "onLoginEnd() called Login otp ==> " + s);
-        Log.e("AstSDKCallback", "onLoginEnd() called userId ==> " + s1);
-        Log.e("AstSDKCallback", "onLoginEnd() called Retry counter ==> " + i);
+        Log.e("AstSDKCallback", "onLoginEnd() called ==> Login: " + s);
+        Log.e("AstSDKCallback", "onLoginEnd() called ==> userId:  " + s1);
+        Log.e("AstSDKCallback", "onLoginEnd() called ==> Retry counter: " + i);
+        Status.getInstance().setRetryCount(i);
 
     }
 
@@ -67,7 +79,9 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onPinChangeEnd(AstDeviceType astDeviceType, AstStatus astStatus, int i) {
         Log.e("AstSDKCallback", "onPinChangeEnd() called ==> " + astStatus);
+        Log.e("AstSDKCallback", "onPinChangeEnd() called ==> Retry counter ==> " + i);
         StatusMessage.getInstance().setAstStatus(astStatus);
+        Status.getInstance().setRetryCount(i);
     }
 
     @Override
@@ -137,6 +151,7 @@ public class SdkListener implements AstSdkListener {
     public void onPinRequiredEnd(AstDeviceType astDeviceType, AstStatus astStatus, int i) {
         Log.e("AstSDKCallback", "onPinRequiredEnd() called ==> " + astDeviceType + " AstStatus: " + astStatus);
         StatusMessage.getInstance().setAstStatus(astStatus);
+        Status.getInstance().setRetryCount(i);
     }
 
     @Override
@@ -262,17 +277,19 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onConnectHwDeviceEnd(AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onConnectHwDeviceEnd Called: " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
     public void onDisconnectHwDeviceEnd(AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onDisconnectHwDeviceEnd Called: " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
     public void appExit(int i) {
-
+        Log.e("AstSDKCallback", "appExit Called: " + i);
     }
 
     @Override

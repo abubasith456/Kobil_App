@@ -10,16 +10,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.ChangePinFragment;
-import com.example.kobilapp.fragment.LoginFragment;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
-import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstConfirmation;
@@ -47,6 +43,7 @@ public class ChangePinViewModel extends AndroidViewModel {
     private AlertDialog.Builder alert;
     private AlertDialog alertDialog;
     boolean valid = true;
+    private AstConfirmation astConfirmation;
 
     public ChangePinViewModel(@NonNull Application application) {
         super(application);
@@ -57,9 +54,15 @@ public class ChangePinViewModel extends AndroidViewModel {
         newPinError2Visibility.set(true);
         newPinError1.set("PIN cannot empty.");
         newPinError2.set("Minimum 8 digits.");
+
         listener = new SdkListener();
         sdk = AstSdkFactory.getSdk(getApplication(), listener);
         sdk.doPinChangeRequest(AstDeviceType.VIRTUALDEVICE);
+        if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+            astConfirmation = AstConfirmation.OK;
+        } else {
+            astConfirmation = AstConfirmation.CANCEL;
+        }
     }
 
     public void getFragment(ChangePinFragment changePinFragment) {
@@ -80,22 +83,47 @@ public class ChangePinViewModel extends AndroidViewModel {
                 Utils.getInstance().hideSoftKeyboard(changePinFragment.getActivity());
                 char[] currentPIN = currentPin.get().toCharArray();
                 char[] newPIN = newPin.get().toCharArray();
-                sdk.doPinChange(AstDeviceType.VIRTUALDEVICE, AstConfirmation.OK, currentPIN, newPIN);
+                sdk.doPinChange(AstDeviceType.VIRTUALDEVICE, astConfirmation, currentPIN, newPIN);
                 showProcessBar("Changing PIN.....");
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
                     progressdialog.dismiss();
-                    if (StatusMessage.getInstance().getAstStatus()== AstStatus.OK) {
-                        alert = new AlertDialog.Builder(changePinFragment.getActivity());
-                        alert.setMessage(StatusMessage.getInstance().getStatusMessage());
+                    alert = new AlertDialog.Builder(changePinFragment.getActivity());
+                    if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+                        alert.setMessage("PIN changed successfully.");
                         alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 changePinFragment.getActivity().getSupportFragmentManager().popBackStackImmediate();
                             }
                         });
-                        alertDialog = alert.create();
-                        alertDialog.show();
+                    } else if (StatusMessage.getInstance().getAstStatus() == AstStatus.INVALID_PIN || StatusMessage.getInstance().getAstStatus() == AstStatus.INVALID_STATE) {
+                        alert.setTitle("Error");
+                        alert.setMessage("PIN is incorrect. " + "\nAttempt left: " + Status.getInstance().getRetryCount());
+                        alert.setCancelable(false);
+                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                    } else if (Status.getInstance().getErrorCode() == 30) {
+                        alert.setTitle("Error");
+                        alert.setMessage("Your device has been locked (too many attempts)." + "\nPlease contact our support desk.");
+                        alert.setCancelable(false);
+                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                    } else if (Status.getInstance().getErrorCode() == 29) {
+                        alert.setTitle("Error");
+                        alert.setMessage("Your device has been locked." + "\nPlease contact our support desk.");
+                        alert.setCancelable(false);
+                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
                     } else {
                         alert = new AlertDialog.Builder(changePinFragment.getActivity());
                         alert.setMessage(StatusMessage.getInstance().getStatusMessage());
@@ -108,6 +136,8 @@ public class ChangePinViewModel extends AndroidViewModel {
                         alertDialog = alert.create();
                         alertDialog.show();
                     }
+                    alertDialog = alert.create();
+                    alertDialog.show();
                 }, 2000);
             }
         } catch (Exception e) {

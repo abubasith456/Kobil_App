@@ -1,7 +1,5 @@
 package com.example.kobilapp.model;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +9,7 @@ public class Status {
     private int errorCode;
     private String updateUrl = null;
     private String infoUrl = null;
+    private int retryCount = 5;
 
     public static Status getInstance() {
         if (instance == null) {
@@ -60,5 +59,14 @@ public class Status {
 
     public void setInfoUrl(String infoUrl) {
         this.infoUrl = infoUrl;
+    }
+
+    //Retry code
+    public int getRetryCount() {
+        return retryCount;
+    }
+
+    public void setRetryCount(int retryCount) {
+        this.retryCount = retryCount;
     }
 }

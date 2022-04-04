@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../Library/Android/sdk/platforms/android-32/data/res/layout/alert_dialog.xml" value="0.1109375" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.126" />
         <entry key="app/src/main/res/layout/activation_fragment.xml" value="0.30419987331127485" />
         <entry key="app/src/main/res/layout/activity_activation.xml" value="0.24791666666666667" />
@@ -10,6 +11,7 @@
         <entry key="app/src/main/res/layout/activity_init.xml" value="0.12782897949218747" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2007227579752604" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1001857039717085" />
+        <entry key="app/src/main/res/layout/alert_dialog.xml" value="0.3131759643554688" />
         <entry key="app/src/main/res/layout/change_pin_fragment.xml" value="0.11332702636718756" />
         <entry key="app/src/main/res/layout/custom_layout.xml" value="0.11510416666666666" />
         <entry key="app/src/main/res/layout/dashboard_fragment.xml" value="0.4889826456705729" />
@@ -20,7 +22,7 @@
         <entry key="app/src/main/res/layout/menu_fragment.xml" value="0.26463877360026045" />
         <entry key="app/src/main/res/layout/pincode_fragment.xml" value="0.3049530029296875" />
         <entry key="app/src/main/res/layout/scan_barcode_fragment.xml" value="0.11354166666666667" />
-        <entry key="app/src/main/res/layout/side_menu_fragment.xml" value="0.11510416666666666" />
+        <entry key="app/src/main/res/layout/side_menu_fragment.xml" value="0.2997355143229167" />
         <entry key="app/src/main/res/layout/users_fragment.xml" value="0.10104166666666667" />
       </map>
     </option>

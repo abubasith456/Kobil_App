@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Lifecycle;
 
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,9 @@ import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivityViewModel extends AndroidViewModel {
 
 //    public ObservableField<Boolean> progressBarVisibility = new ObservableField<>();
@@ -33,11 +37,11 @@ public class MainActivityViewModel extends AndroidViewModel {
     private MainActivity activity;
     private final Utils utils = new Utils();
     private AstSdk sdk;
-    private SdkListener listener = new SdkListener();
+//    private SdkListener listener = new SdkListener();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-        sdk = AstSdkFactory.getSdk(getApplication(), listener);
+        sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
         sdkInit();
         registerUpdate();
     }
@@ -60,7 +64,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private void registerUpdate() {
         try {
             UpdateApp updateApp = new UpdateApp();
-            updateApp.astUpdate(activity,sdk);
+            updateApp.astUpdate(activity, sdk);
 //            AstUpdate astUpdate = sdk.registerUpdate(new AstUpdateListener() {
 //                @Override
 //                public void onUpdateBegin(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {

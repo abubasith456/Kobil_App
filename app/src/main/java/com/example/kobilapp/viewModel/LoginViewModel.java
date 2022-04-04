@@ -22,6 +22,7 @@ import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.DashboardFragment;
 import com.example.kobilapp.fragment.LoginFragment;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.model.StatusMessage;
 import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.UpdateApp;
@@ -47,6 +48,7 @@ public class LoginViewModel extends AndroidViewModel {
     private String userIdFromDb;
     private final SdkListener listener = new SdkListener();
     private final AstSdk sdk;
+    private int retryCount = 6;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -178,6 +180,37 @@ public class LoginViewModel extends AndroidViewModel {
                         transaction.commit();
                         SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
                         SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
+                    }
+                });
+            } else if (StatusMessage.getInstance().getAstStatus() == AstStatus.WRONG_CREDENTIALS) {
+
+                alert.setTitle("Error");
+                alert.setMessage("Current PIN is invalid." + "\nAttempt left: " + Status.getInstance().getRetryCount());
+                alert.setCancelable(false);
+                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pinCode.set("");
+                    }
+                });
+            } else if (Status.getInstance().getErrorCode() == 30) {
+                alert.setTitle("Error");
+                alert.setMessage("Your device has been locked (too many attempts)." + "\nPlease contact our support desk.");
+                alert.setCancelable(false);
+                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pinCode.set("");
+                    }
+                });
+            } else if (Status.getInstance().getErrorCode() == 29) {
+                alert.setTitle("Error");
+                alert.setMessage("Your device has been locked." + "\nPlease contact our support desk.");
+                alert.setCancelable(false);
+                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pinCode.set("");
                     }
                 });
             } else {

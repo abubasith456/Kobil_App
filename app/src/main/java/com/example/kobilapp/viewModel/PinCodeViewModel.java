@@ -213,14 +213,13 @@ public class PinCodeViewModel extends AndroidViewModel {
             } else {
                 SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
             }
-            SdkListener listener = new SdkListener();
-            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
+            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
             char[] pinCode = pin.get().toCharArray();
             sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
-                if (StatusMessage.getInstance().getAstStatus()==AstStatus.OK) {
+                if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
                     progressdialog.dismiss();
                     Log.e("executeActivation", "Called==> true part");
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
@@ -249,7 +248,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                         }
                     });
 
-                } else if (StatusMessage.getInstance().getAstStatus()==AstStatus.UPDATE_AVAILABLE) {
+                } else if (StatusMessage.getInstance().getAstStatus() == AstStatus.UPDATE_AVAILABLE) {
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
                     SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
                     progressdialog.dismiss();
@@ -265,7 +264,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                         }
                     });
-                } else if (StatusMessage.getInstance().getAstStatus()== AstStatus.UPDATE_NECESSARY) {
+                } else if (StatusMessage.getInstance().getAstStatus() == AstStatus.UPDATE_NECESSARY) {
                     progressdialog.dismiss();
                     alert.setTitle("Mandatory update available!");
                     alert.setMessage("Do you update your app version?");

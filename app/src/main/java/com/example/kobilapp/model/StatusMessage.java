@@ -6,7 +6,7 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 
 public class StatusMessage {
     private static StatusMessage instance;
-    private String statusMessage;
+//    private String statusMessage;
     private AstStatus astStatus;
 
     public static StatusMessage getInstance() {

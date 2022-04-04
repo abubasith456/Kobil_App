@@ -1,10 +1,14 @@
 package com.example.kobilapp.utils;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -14,7 +18,9 @@ import com.example.kobilapp.SdkListener;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
-public class AppLifecycle implements LifecycleObserver {
+import java.lang.reflect.Field;
+
+public class AppLifecycle extends Application implements LifecycleObserver {
 
     private Context context;
     private final SdkListener listener = new SdkListener();
@@ -27,6 +33,7 @@ public class AppLifecycle implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
+        super.onCreate();
         Log.e("App state on=> ", "onCreate");
     }
 
@@ -39,6 +46,11 @@ public class AppLifecycle implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
         sdk.resume();
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        SharedPreference.getInstance().saveValue(context, "deviceName", Build.MODEL);
+        SharedPreference.getInstance().saveValue(context, "deviceOSVersion", String.valueOf(Build.VERSION.SDK_INT));
         Log.e("App state on=> ", "onResume");
     }
 
