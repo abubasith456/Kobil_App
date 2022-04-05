@@ -36,6 +36,9 @@ import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstPropertyFlags;
+import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
+import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -61,9 +64,11 @@ public class PinCodeViewModel extends AndroidViewModel {
     private ProgressDialog progressdialog;
     boolean valid = true;
     private final AstSdk sdk;
+    private Handler handler;
 
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
+        handler = new Handler();
         pin.set("");
         confirmPin.set("");
         confirmPinError.set("");
@@ -217,7 +222,7 @@ public class PinCodeViewModel extends AndroidViewModel {
             }
             char[] pinCode = pin.get().toCharArray();
             sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
-            Handler handler = new Handler();
+
             handler.postDelayed(() -> {
                 AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                 if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
@@ -245,7 +250,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                                 SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                             }
 //                            addToDb(userId, pin.get());
-                            setUserId(userId);
+//                            setUserId(userId);
                         }
                     });
 
@@ -302,9 +307,46 @@ public class PinCodeViewModel extends AndroidViewModel {
                 }
                 AlertDialog alertDialog = alert.create();
                 alertDialog.show();
-            }, 4000);
+            }, 12000);
+            setProperty();
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
+        }
+    }
+
+    private void setProperty() {
+        try {
+            handler.postDelayed(() -> {
+                if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+                    sdk.doLogin(AstDeviceType.VIRTUALDEVICE, pin.get().toCharArray(), userId);
+                    handler.postDelayed(() -> {
+                        if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+                            try {
+                                sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
+                                handler.postDelayed(() -> {
+                                    String deviceName = SharedPreference.getInstance().getValue(pinCodeFragment, "deviceName");
+                                    String ipAddress = SharedPreference.getInstance().getValue(pinCodeFragment, "deviceIPAddress");
+                                    byte[] name = deviceName.getBytes();
+                                    byte[] ip = ipAddress.getBytes();
+                                    int flag = AstPropertyFlags.NONE;
+                                    sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
+                                            name,
+                                            AstPropertyType.UTF8STRING,
+                                            AstPropertyOwner.OWNER_DEVICE,
+                                            10, flag);
+                                    handler.postDelayed(() -> {
+                                        sdk.exit(0);
+                                    }, 1000);
+                                }, 3000);
+                            } catch (Exception e) {
+                                Log.e("Error=> ", e.getMessage());
+                            }
+                        }
+                    }, 4000);
+                }
+            }, 4000);
+        } catch (Exception e) {
+            Log.e("Error =>", e.getMessage());
         }
     }
 

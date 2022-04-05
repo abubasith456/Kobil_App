@@ -132,26 +132,26 @@ public class LoginViewModel extends AndroidViewModel {
                 showProcessBar("Logging in please wait...");
 
                 handler.postDelayed(this::showAlertDialog, 9000);
-                handler.postDelayed(() -> {
-
-                    if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
-                        try {
-                            sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
-                            handler.postDelayed(() -> {
-                                String deviceName = SharedPreference.getInstance().getValue(loginFragment.getContext(), "deviceName");
-                                byte[] name = deviceName.getBytes();
-                                int flag = AstPropertyFlags.NONE;
-                                sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
-                                        name,
-                                        AstPropertyType.UTF8STRING,
-                                        AstPropertyOwner.OWNER_DEVICE,
-                                        10, flag);
-                            }, 3000);
-                        } catch (Exception e) {
-                            Log.e("Error=> ", e.getMessage());
-                        }
-                    }
-                }, 5000);
+//                handler.postDelayed(() -> {
+//
+//                    if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+//                        try {
+//                            sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
+//                            handler.postDelayed(() -> {
+//                                String deviceName = SharedPreference.getInstance().getValue(loginFragment.getContext(), "deviceName");
+//                                byte[] name = deviceName.getBytes();
+//                                int flag = AstPropertyFlags.NONE;
+//                                sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
+//                                        name,
+//                                        AstPropertyType.UTF8STRING,
+//                                        AstPropertyOwner.OWNER_DEVICE,
+//                                        10, flag);
+//                            }, 3000);
+//                        } catch (Exception e) {
+//                            Log.e("Error=> ", e.getMessage());
+//                        }
+//                    }
+//                }, 5000);
 
             } else {
                 Toast.makeText(getApplication(), "Please check the internet connection!", Toast.LENGTH_SHORT).show();
@@ -180,7 +180,8 @@ public class LoginViewModel extends AndroidViewModel {
                             transaction.commit();
                             SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
-                            doRegisterOfflineFunction();
+//                            doRegisterOfflineFunction();
+//                            sdk.suspend();
                             setProperty();
                         } catch (Exception e) {
                             Log.e("Error=> ", e.getMessage());

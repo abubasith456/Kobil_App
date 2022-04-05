@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.setInitViewModel(mainActivityViewModel);
         mainActivityViewModel.getActivity(this);
         mainActivityViewModel.showInitFragment();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 101);
-        }
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 101);
+//        }
         getLifecycle().addObserver(new AppLifecycle(getApplicationContext()));
     }
 
@@ -64,26 +64,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 101:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    SharedPreference.getInstance().saveValue(getApplicationContext(), "deviceName", Build.MODEL);
-                    SharedPreference.getInstance().saveValue(getApplicationContext(), "deviceOSVersion", Build.VERSION.BASE_OS);
-
-                } else {
-                    //not granted
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        switch (requestCode) {
+//            case 101:
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//                        return;
+//                    }
+//                    SharedPreference.getInstance().saveValue(getApplicationContext(), "deviceName", Build.MODEL);
+//                    SharedPreference.getInstance().saveValue(getApplicationContext(), "deviceOSVersion", Build.VERSION.BASE_OS);
+//
+//                } else {
+//                    //not granted
+//                }
+//                break;
+//            default:
+//                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        }
+//    }
 
 
     @Override

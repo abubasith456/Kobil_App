@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -46,11 +48,15 @@ public class AppLifecycle extends Application implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
         sdk.resume();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
         SharedPreference.getInstance().saveValue(context, "deviceName", Build.MODEL);
         SharedPreference.getInstance().saveValue(context, "deviceOSVersion", String.valueOf(Build.VERSION.SDK_INT));
+        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        SharedPreference.getInstance().saveValue(context, "deviceIPAddress", ip);
+        Log.e("IP address", ip);
         Log.e("App state on=> ", "onResume");
     }
 
