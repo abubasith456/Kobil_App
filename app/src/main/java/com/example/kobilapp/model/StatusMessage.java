@@ -6,8 +6,9 @@ import com.kobil.midapp.ast.api.enums.AstStatus;
 
 public class StatusMessage {
     private static StatusMessage instance;
-//    private String statusMessage;
+    //    private String statusMessage;
     private AstStatus astStatus;
+    private byte[] propertyValue;
 
     public static StatusMessage getInstance() {
         if (instance == null) {
@@ -89,7 +90,13 @@ public class StatusMessage {
             default:
                 return "";
         }
-
     }
 
+    public void setPropertyValue(byte[] propertyValue) {
+        this.propertyValue = propertyValue;
+    }
+
+    public byte[] getPropertyValue() {
+        return propertyValue;
+    }
 }

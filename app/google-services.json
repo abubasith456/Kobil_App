@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "556694938614",
+    "project_id": "apps-e13c8",
+    "storage_bucket": "apps-e13c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556694938614:android:6da9daaf3b7b221cd01dd7",
+        "android_client_info": {
+          "package_name": "com.example.kobilapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556694938614-l9pdji34c893nvj5dpka0nq3hhi6dve9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1-m8j9hLfNoPLrR890XDuDfV1CEF-Oi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556694938614-l9pdji34c893nvj5dpka0nq3hhi6dve9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

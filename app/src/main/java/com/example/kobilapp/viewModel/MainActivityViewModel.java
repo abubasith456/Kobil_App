@@ -19,7 +19,13 @@ import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
 import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.kobil.midapp.ast.api.AstSdk;
+import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
+import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
 import java.util.ArrayList;
@@ -36,7 +42,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     @SuppressLint("StaticFieldLeak")
     private MainActivity activity;
     private final Utils utils = new Utils();
-    private AstSdk sdk;
+    private final AstSdk sdk;
 //    private SdkListener listener = new SdkListener();
 
     public MainActivityViewModel(@NonNull Application application) {
@@ -44,6 +50,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
         sdkInit();
         registerUpdate();
+        tokenFCM();
     }
 
     public void getActivity(MainActivity activity) {
@@ -85,6 +92,26 @@ public class MainActivityViewModel extends AndroidViewModel {
 //            });
 ////            updateListener.astUpdate(astUpdate);
 //            listener.setAstUpdate(astUpdate);
+        } catch (Exception exception) {
+            Log.e("Error==>", exception.getMessage());
+        }
+    }
+
+    private void tokenFCM() {
+        try {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("FCM token", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            Log.e("FCM token", "" + token);
+                        }
+                    });
         } catch (Exception exception) {
             Log.e("Error==>", exception.getMessage());
         }

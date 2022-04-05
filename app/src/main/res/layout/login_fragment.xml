@@ -141,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="30dp"
-                    android:text="Forgot password?"
+                    android:text="Forgot PIN?"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="13sp" />

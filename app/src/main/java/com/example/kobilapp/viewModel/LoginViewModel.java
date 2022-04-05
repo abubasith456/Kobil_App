@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.kobilapp.AstOffline;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.DashboardFragment;
@@ -29,6 +30,9 @@ import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstPropertyFlags;
+import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
+import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -47,12 +51,16 @@ public class LoginViewModel extends AndroidViewModel {
     private ProgressDialog progressdialog;
     private String userIdFromDb;
     private final SdkListener listener = new SdkListener();
+    Handler handler;
     private final AstSdk sdk;
+    private final AstOffline astOffline;
     private int retryCount = 6;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
+        handler = new Handler();
         sdk = AstSdkFactory.getSdk(getApplication(), listener);
+        astOffline = new AstOffline();
         pinCode.set("");
         pinError.set("");
         pinErrorVisibility.set(false);
@@ -122,8 +130,28 @@ public class LoginViewModel extends AndroidViewModel {
                 String userId = SharedPreference.getInstance().getValue(loginFragment.getContext(), "userId");
                 sdk.doLogin(AstDeviceType.VIRTUALDEVICE, pinChar, userId);
                 showProcessBar("Logging in please wait...");
-                Handler handler = new Handler();
-                handler.postDelayed(this::showAlertDialog, 5000);
+
+                handler.postDelayed(this::showAlertDialog, 9000);
+                handler.postDelayed(() -> {
+
+                    if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+                        try {
+                            sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
+                            handler.postDelayed(() -> {
+                                String deviceName = SharedPreference.getInstance().getValue(loginFragment.getContext(), "deviceName");
+                                byte[] name = deviceName.getBytes();
+                                int flag = AstPropertyFlags.NONE;
+                                sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
+                                        name,
+                                        AstPropertyType.UTF8STRING,
+                                        AstPropertyOwner.OWNER_DEVICE,
+                                        10, flag);
+                            }, 3000);
+                        } catch (Exception e) {
+                            Log.e("Error=> ", e.getMessage());
+                        }
+                    }
+                }, 5000);
 
             } else {
                 Toast.makeText(getApplication(), "Please check the internet connection!", Toast.LENGTH_SHORT).show();
@@ -152,6 +180,8 @@ public class LoginViewModel extends AndroidViewModel {
                             transaction.commit();
                             SharedPreference.getInstance().saveValue(getApplication(), "showFingerId", "true");
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "DashboardFragment");
+                            doRegisterOfflineFunction();
+                            setProperty();
                         } catch (Exception e) {
                             Log.e("Error=> ", e.getMessage());
                         }
@@ -164,10 +194,7 @@ public class LoginViewModel extends AndroidViewModel {
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        UpdateApp updateApp = new UpdateApp();
-                        updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
-                        loginFragment.requireActivity().finish();
-                        System.exit(0);
+                        doUpdateAppAvailable();
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -230,8 +257,29 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    private void doUpdateApp() {
+    private void doRegisterOfflineFunction() {
         try {
+            astOffline.getAstFunction(loginFragment.getContext(), sdk);
+
+        } catch (Exception e) {
+            Log.e("Error=> ", e.getMessage());
+        }
+    }
+
+    private void setProperty() {
+        try {
+
+        } catch (Exception e) {
+            Log.e("Error=> ", e.getMessage());
+        }
+    }
+
+    private void doUpdateAppAvailable() {
+        try {
+            UpdateApp updateApp = new UpdateApp();
+            updateApp.getAstUpdate().doOpenInfoUrl(AstDeviceType.VIRTUALDEVICE);
+//            loginFragment.requireActivity().finish();
+//            System.exit(0);
         } catch (Exception e) {
             Log.e("doUpdateAppError=> ", e.getMessage());
         }

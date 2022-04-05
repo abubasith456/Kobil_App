@@ -58,7 +58,7 @@ public class SdkListener implements AstSdkListener {
     public void onLoginEnd(AstDeviceType astDeviceType, AstStatus astStatus, String s, String s1, int i, int i1) {
         StatusMessage.getInstance().setAstStatus(astStatus);
         Log.e("AstSDKCallback", "onLoginEnd() called ==> " + astStatus);
-        Log.e("AstSDKCallback", "onLoginEnd() called ==> Login: " + s);
+        Log.e("AstSDKCallback", "onLoginEnd() called ==> Login OTP: " + s);
         Log.e("AstSDKCallback", "onLoginEnd() called ==> userId:  " + s1);
         Log.e("AstSDKCallback", "onLoginEnd() called ==> Retry counter: " + i);
         Status.getInstance().setRetryCount(i);
@@ -244,12 +244,14 @@ public class SdkListener implements AstSdkListener {
     @Override
     public void onGetPropertyBegin(AstDeviceType astDeviceType, AstStatus astStatus) {
         Log.e("AstSDKCallback", "onGetPropertyBegin Called: " + astStatus);
+        StatusMessage.getInstance().setAstStatus(astStatus);
     }
 
     @Override
     public void onGetPropertyEnd(AstDeviceType astDeviceType, AstStatus astStatus,
                                  byte[] bytes, AstPropertyType astPropertyType, int i, int i1) {
         Log.e("AstSDKCallback", "onGetPropertyEnd Called: " + astStatus + " PropertyData: " + bytes + " AstPropertyType: " + astPropertyType + " propertyTTL: " + i + " propertyFlags: " + i1);
+        StatusMessage.getInstance().setPropertyValue(bytes);
     }
 
     @Override
@@ -294,7 +296,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onRegisterOfflineFunctionsEnd(AstStatus astStatus) {
-        Log.e("AstSDKCallback", "onRegisterOfflineFunctionsEnd Called: " + astStatus);
+        Log.e("AstSDKCallback", "onRegisterOfflineFunctionsEnd Called: " + "Status: " + astStatus);
         StatusMessage.getInstance().setAstStatus(astStatus);
 
     }

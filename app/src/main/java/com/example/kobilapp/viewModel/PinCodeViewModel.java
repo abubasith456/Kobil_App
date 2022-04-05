@@ -60,6 +60,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     private Executor executor;
     private ProgressDialog progressdialog;
     boolean valid = true;
+    private final AstSdk sdk;
 
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
@@ -71,6 +72,7 @@ public class PinCodeViewModel extends AndroidViewModel {
         pinError2Visibility.set(true);
         pinError1.set("PIN cannot empty.");
         pinError2.set("Minimum 8 digits.");
+        sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
     }
 
     public void getFragment(FragmentActivity pinCodeFragment) {
@@ -213,7 +215,6 @@ public class PinCodeViewModel extends AndroidViewModel {
             } else {
                 SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
             }
-            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
             char[] pinCode = pin.get().toCharArray();
             sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
             Handler handler = new Handler();
@@ -221,7 +222,6 @@ public class PinCodeViewModel extends AndroidViewModel {
                 AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
                 if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
                     progressdialog.dismiss();
-                    Log.e("executeActivation", "Called==> true part");
                     SharedPreference.getInstance().saveValue(getApplication(), "userId", userId);
                     SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
                     alert.setCancelable(false);
@@ -245,6 +245,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                                 SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                             }
 //                            addToDb(userId, pin.get());
+                            setUserId(userId);
                         }
                     });
 
@@ -286,7 +287,6 @@ public class PinCodeViewModel extends AndroidViewModel {
                     });
                 } else {
                     progressdialog.dismiss();
-                    Log.e("executeActivation", "Called==> false part");
                     SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
                     alert.setMessage(StatusMessage.getInstance().getStatusMessage());
                     alert.setCancelable(false);
@@ -305,6 +305,14 @@ public class PinCodeViewModel extends AndroidViewModel {
             }, 4000);
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
+        }
+    }
+
+    private void setUserId(String userId) {
+        try {
+            sdk.doSetUserId(userId);
+        } catch (Exception e) {
+            Log.e("Error =>", e.getMessage());
         }
     }
 
