@@ -95,7 +95,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="5dp"
                     android:text="@{activationViewModel.userIdError}"
-                    android:textColor="@color/black"
+                    android:textColor="@color/red"
                     android:textSize="12sp"
                     android:visibility="@{activationViewModel.userIdErrorVisibility?view.VISIBLE:view.GONE}" />
 

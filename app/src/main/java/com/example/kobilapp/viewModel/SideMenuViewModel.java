@@ -47,6 +47,7 @@ public class SideMenuViewModel extends AndroidViewModel {
     private static final int RESULT_OK = 0;
     private SideMenuFragment sideMenuFragment;
     private String from;
+    public ObservableField<Boolean> selectLanguageVisibility = new ObservableField<>();
     public ObservableField<Boolean> changePinVisibility = new ObservableField<>();
     public ObservableField<Boolean> addUserVisibility = new ObservableField<>();
     public ObservableField<Boolean> deleteUserVisibility = new ObservableField<>();
@@ -59,6 +60,7 @@ public class SideMenuViewModel extends AndroidViewModel {
         deleteUserVisibility.set(false);
         reportVisibility.set(true);
         contactDeskVisibility.set(true);
+        selectLanguageVisibility.set(true);
     }
 
     public void getFragment(SideMenuFragment sideMenuFragment) {
@@ -88,6 +90,38 @@ public class SideMenuViewModel extends AndroidViewModel {
     public void closeMenu(View view) {
         try {
             sideMenuFragment.getActivity().getSupportFragmentManager().popBackStackImmediate();
+        } catch (Exception e) {
+            Log.e("Error=>", e.getMessage());
+        }
+    }
+
+    public void selectLanguageClick(View view) {
+        try {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(sideMenuFragment.getContext());
+            alertDialog.setTitle("Select Language");
+            String[] items = {"English", "German"};
+            int checkedItem = 0;
+            alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            Toast.makeText(sideMenuFragment.getContext(), "Clicked on English", Toast.LENGTH_LONG).show();
+                            break;
+                        case 1:
+                            Toast.makeText(sideMenuFragment.getContext(), "Clicked on German", Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                }
+            }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            AlertDialog alert = alertDialog.create();
+            alert.setCanceledOnTouchOutside(false);
+            alert.show();
         } catch (Exception e) {
             Log.e("Error=>", e.getMessage());
         }

@@ -162,7 +162,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public Object getAppConfigParameter(AstConfigParameter astConfigParameter) {
-        Log.e("AstSDKCallback", "getAppConfigParameter called ");
+        Log.e("AstSDKCallback", "getAppConfigParameter called");
         try {
             switch (astConfigParameter) {
                 case USE_DEVICE_NAME_SOFTWARE:
@@ -176,7 +176,7 @@ public class SdkListener implements AstSdkListener {
                 case CONNECTION_RETRY_COUNTER:
                     return 5;
                 case CONNECTION_RETRY_INTERVAL:
-                    return 5;
+                    return 6;
                 case SERVER_BUSY_TIMEOUT:
                     return 30;
                 case CONFIG_BUNDLE:
