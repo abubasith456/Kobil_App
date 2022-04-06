@@ -6,6 +6,7 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.Html;
@@ -264,10 +265,10 @@ public class SideMenuViewModel extends AndroidViewModel {
             Linkify.addLinks(fromMalta, Linkify.PHONE_NUMBERS);
             Linkify.addLinks(fromAbroad, Linkify.PHONE_NUMBERS);
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(sideMenuFragment.getContext());
-// ...Irrelevant code for customizing the buttons and title
             LayoutInflater inflater = sideMenuFragment.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.alert_dialog, null);
             dialogBuilder.setView(dialogView);
+
             TextView title = dialogView.findViewById(R.id.alertTitle);
             title.setText("Contact Support Desk");
             TextView message = dialogView.findViewById(R.id.message);
@@ -275,6 +276,7 @@ public class SideMenuViewModel extends AndroidViewModel {
             TextView message1 = dialogView.findViewById(R.id.message1);
             message1.setText("from Malta:");
             TextView message2 = dialogView.findViewById(R.id.message2);
+            message2.setTextColor(Color.BLACK);
             message2.setText(fromMalta);
             message2.setMovementMethod(LinkMovementMethod.getInstance());
             TextView message3 = dialogView.findViewById(R.id.message3);
@@ -289,6 +291,13 @@ public class SideMenuViewModel extends AndroidViewModel {
                 }
             });
             AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                }
+            });
             alertDialog.show();
         } catch (Exception e) {
             Log.e("Error=>", e.getMessage());
@@ -332,6 +341,13 @@ public class SideMenuViewModel extends AndroidViewModel {
                 }
             });
             AlertDialog alertDialog = builder.create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                }
+            });
             alertDialog.show();
             TextView messageText = alertDialog.findViewById(android.R.id.message);
             messageText.setGravity(Gravity.CENTER);
@@ -352,7 +368,7 @@ public class SideMenuViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog((sideMenuFragment.getContext()));
+        progressdialog = new ProgressDialog(sideMenuFragment.getContext(),R.style.MyAlertDialogStyle);
         progressdialog.setMessage(message);
         progressdialog.setCancelable(false);
         progressdialog.show();

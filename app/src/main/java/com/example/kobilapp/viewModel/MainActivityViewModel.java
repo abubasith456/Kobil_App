@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
@@ -18,6 +19,7 @@ import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
 import com.example.kobilapp.UpdateApp;
+import com.example.kobilapp.utils.SharedPreference;
 import com.example.kobilapp.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,9 +35,9 @@ import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
-//    public ObservableField<Boolean> progressBarVisibility = new ObservableField<>();
+    //    public ObservableField<Boolean> progressBarVisibility = new ObservableField<>();
 //    public ObservableField<Boolean> startButtonVisibility = new ObservableField<>();
-//    public ObservableField<Boolean> fieldVisibility = new ObservableField<>();
+    public ObservableField<Boolean> menuVisibility = new ObservableField<>();
 //    public ObservableField<Boolean> initScreenVisibility = new ObservableField<>();
 //    public ObservableField<Boolean> frameLayoutFragmentVisibility = new ObservableField<>();
 
@@ -47,10 +49,12 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        menuVisibility.set(true);
         sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
         sdkInit();
         registerUpdate();
         tokenFCM();
+
     }
 
     public void getActivity(MainActivity activity) {

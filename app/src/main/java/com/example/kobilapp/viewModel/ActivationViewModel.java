@@ -30,8 +30,8 @@ import java.util.Objects;
 
 public class ActivationViewModel extends AndroidViewModel {
 
-    public MutableLiveData<String> userId = new MutableLiveData<>();
-    public MutableLiveData<String> activationCode = new MutableLiveData<>();
+    public ObservableField<String> userId = new ObservableField<>();
+    public ObservableField<String> activationCode = new ObservableField<>();
     public ObservableField<String> userIdError = new ObservableField<>();
     public ObservableField<String> activationCodeError = new ObservableField<>();
     public ObservableField<Boolean> userIdErrorVisibility = new ObservableField<>();
@@ -40,8 +40,8 @@ public class ActivationViewModel extends AndroidViewModel {
 
     public ActivationViewModel(@NonNull Application application) {
         super(application);
-        userId.setValue("");
-        activationCode.setValue("");
+        userId.set("");
+        activationCode.set("");
         userIdErrorVisibility.set(false);
         activationErrorVisibility.set(false);
     }
@@ -52,8 +52,8 @@ public class ActivationViewModel extends AndroidViewModel {
 
     public void onActivationClick(View view) {
         try {
-            String id = userId.getValue();
-            char[] actCode = Objects.requireNonNull(activationCode.getValue()).toCharArray();
+            String id = userId.get();
+            char[] actCode = Objects.requireNonNull(activationCode.get()).toCharArray();
             Log.e("print code=>", Arrays.toString(actCode));
 //            SdkListener listener = new SdkListener();
 //            AstSdk sdk = AstSdkFactory.getSdk(getApplication(), listener);
@@ -61,21 +61,30 @@ public class ActivationViewModel extends AndroidViewModel {
             if (validate()) {
                 Fragment fragment = new PinCodeFragment(id, actCode);
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                transaction.replace(R.id.frameLayoutForSideMenu, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
+                resetFields();
             }
-
-
         } catch (Exception e) {
             Log.e("Error==> ", e.getMessage());
         }
     }
 
+    private void resetFields() {
+        userId.set("");
+        userIdError.set("");
+        userIdErrorVisibility.set(false);
+        activationCode.set("");
+        activationCodeError.set("");
+        activationErrorVisibility.set(false);
+    }
+
     private boolean validate() {
         Boolean valid = true;
-        String id = userId.getValue();
-        char[] actCode = Objects.requireNonNull(activationCode.getValue()).toCharArray();
+        String id = userId.get();
+        char[] actCode = Objects.requireNonNull(activationCode.get()).toCharArray();
         Log.e("print code=>", Arrays.toString(actCode));
         try {
             if (id.equals("")) {

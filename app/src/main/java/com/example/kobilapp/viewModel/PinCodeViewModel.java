@@ -89,6 +89,11 @@ public class PinCodeViewModel extends AndroidViewModel {
         this.activationCode = activationCode;
     }
 
+    public void onBackClick(View view){
+        pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
+    }
+
+
     public void onPinTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() == 8) {
             pinError2.set("");
@@ -231,18 +236,20 @@ public class PinCodeViewModel extends AndroidViewModel {
                     SharedPreference.getInstance().saveValue(getApplication(), "pinCode", pin.get());
                     alert.setCancelable(false);
                     alert.setMessage("Activated successfully.");
-                    alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             List<String> value = Status.getInstance().getList();
                             Log.e("Value:=>", "" + value.size());
                             if (value.size() >= 2) {
+                                pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
                                 Fragment fragment = new UsersFragment();
                                 FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                                 transaction.commit();
                                 SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
                             } else {
+                                pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
                                 Fragment fragment = new LoginFragment();
                                 FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
@@ -260,7 +267,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     progressdialog.dismiss();
                     alert.setMessage("Activated successfully.");
                     alert.setCancelable(false);
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Fragment fragment = new LoginFragment();
@@ -275,7 +282,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                     alert.setTitle("Mandatory update available!");
                     alert.setMessage("Do you update your app version?");
                     alert.setCancelable(false);
-                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             UpdateApp updateApp = new UpdateApp();
@@ -283,7 +290,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                             pinCodeFragment.finish();
                             System.exit(0);
                         }
-                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             pinCodeFragment.finish();
@@ -295,9 +302,10 @@ public class PinCodeViewModel extends AndroidViewModel {
                     SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
                     alert.setMessage(StatusMessage.getInstance().getStatusMessage());
                     alert.setCancelable(false);
-                    alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                    alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
 //                            Fragment fragment = ActivationFragment.newInstance();
 //                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
 //                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
@@ -372,7 +380,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog((pinCodeFragment));
+        progressdialog = new ProgressDialog(pinCodeFragment,R.style.MyAlertDialogStyle);
         progressdialog.setCancelable(false);
         progressdialog.setMessage(message);
         progressdialog.show();

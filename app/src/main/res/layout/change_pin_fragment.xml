@@ -77,9 +77,9 @@
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:elevation="30dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="5dp"
@@ -104,10 +104,12 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
+                        android:id="@+id/linearLayout3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="8dp"
                         android:gravity="center"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -128,9 +130,11 @@
                         android:hint="Current PIN"
                         android:inputType="number"
                         android:maxLength="8"
+                        android:backgroundTint="@color/black"
                         android:password="true"
                         android:text="@={changePinViewModel.currentPin}"
                         android:textColor="@color/black"
+                        android:textSize="15sp"
                         android:textColorHint="@color/light_black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -158,14 +162,15 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayoutIconUser"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="8dp"
                         android:gravity="center"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0">
+                        app:layout_constraintVertical_bias="0.033">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -182,6 +187,8 @@
                         android:hint="New PIN"
                         android:inputType="numberPassword"
                         android:maxLength="8"
+                        android:textSize="15sp"
+                        android:backgroundTint="@color/black"
                         android:onTextChanged="@{changePinViewModel.onPinTextChanged}"
                         android:text="@={changePinViewModel.newPin}"
                         android:textColor="@color/black"
@@ -226,8 +233,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="8dp"
                         android:gravity="center"
                         android:padding="12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -249,7 +257,9 @@
                         android:layout_marginStart="50dp"
                         android:hint="Confirm pin"
                         android:inputType="number"
+                        android:textSize="15sp"
                         android:maxLength="8"
+                        android:backgroundTint="@color/black"
                         android:onTextChanged="@{changePinViewModel.onConfirmPinTextChanged}"
                         android:password="true"
                         android:text="@={changePinViewModel.newConfirmPin}"
@@ -278,10 +288,10 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="14dp"
+            android:layout_marginEnd="25dp"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorPrimary"
             android:elevation="20dp"

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.fragment.ChangePinFragment;
 import com.example.kobilapp.model.Status;
@@ -101,7 +102,7 @@ public class ChangePinViewModel extends AndroidViewModel {
                         alert.setTitle("Error");
                         alert.setMessage("PIN is incorrect. " + "\nAttempt left: " + Status.getInstance().getRetryCount());
                         alert.setCancelable(false);
-                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }
@@ -110,7 +111,7 @@ public class ChangePinViewModel extends AndroidViewModel {
                         alert.setTitle("Error");
                         alert.setMessage("Your device has been locked (too many attempts)." + "\nPlease contact our support desk.");
                         alert.setCancelable(false);
-                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }
@@ -119,7 +120,7 @@ public class ChangePinViewModel extends AndroidViewModel {
                         alert.setTitle("Error");
                         alert.setMessage("Your device has been locked." + "\nPlease contact our support desk.");
                         alert.setCancelable(false);
-                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                             }
@@ -127,7 +128,7 @@ public class ChangePinViewModel extends AndroidViewModel {
                     } else {
                         alert = new AlertDialog.Builder(changePinFragment.getActivity());
                         alert.setMessage(StatusMessage.getInstance().getStatusMessage());
-                        alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                        alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -147,7 +148,7 @@ public class ChangePinViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog(changePinFragment.getActivity());
+        progressdialog = new ProgressDialog(changePinFragment.getActivity(), R.style.MyAlertDialogStyle);
         progressdialog.setMessage(message);
         progressdialog.setCancelable(false);
         progressdialog.show();

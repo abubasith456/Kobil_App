@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -168,7 +170,7 @@ public class LoginViewModel extends AndroidViewModel {
             if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
                 alert.setMessage("Login successfully.");
                 alert.setCancelable(false);
-                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
@@ -192,12 +194,12 @@ public class LoginViewModel extends AndroidViewModel {
                 alert.setTitle("Update available!");
                 alert.setMessage("Do you update your app version?");
                 alert.setCancelable(false);
-                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         doUpdateAppAvailable();
                     }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pinCode.set("");
@@ -215,7 +217,7 @@ public class LoginViewModel extends AndroidViewModel {
                 alert.setTitle("Error");
                 alert.setMessage("Current PIN is invalid." + "\nAttempt left: " + Status.getInstance().getRetryCount());
                 alert.setCancelable(false);
-                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pinCode.set("");
@@ -225,7 +227,7 @@ public class LoginViewModel extends AndroidViewModel {
                 alert.setTitle("Error");
                 alert.setMessage("Your device has been locked (too many attempts)." + "\nPlease contact our support desk.");
                 alert.setCancelable(false);
-                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pinCode.set("");
@@ -235,7 +237,7 @@ public class LoginViewModel extends AndroidViewModel {
                 alert.setTitle("Error");
                 alert.setMessage("Your device has been locked." + "\nPlease contact our support desk.");
                 alert.setCancelable(false);
-                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pinCode.set("");
@@ -244,7 +246,7 @@ public class LoginViewModel extends AndroidViewModel {
             } else {
                 alert.setMessage(StatusMessage.getInstance().getStatusMessage());
                 alert.setCancelable(false);
-                alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pinCode.set("");
@@ -252,6 +254,13 @@ public class LoginViewModel extends AndroidViewModel {
                 });
             }
             AlertDialog alertDialog = alert.create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                }
+            });
             alertDialog.show();
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());
@@ -336,7 +345,7 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog((loginFragment.getContext()));
+        progressdialog = new ProgressDialog(loginFragment.getContext(),R.style.MyAlertDialogStyle);
         progressdialog.setMessage(message);
         progressdialog.setCancelable(false);
         progressdialog.show();
