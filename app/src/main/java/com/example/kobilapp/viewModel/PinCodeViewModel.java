@@ -298,10 +298,10 @@ public class PinCodeViewModel extends AndroidViewModel {
                     alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Fragment fragment = ActivationFragment.newInstance();
-                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                            transaction.commit();
+//                            Fragment fragment = ActivationFragment.newInstance();
+//                            FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+//                            transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+//                            transaction.commit();
                         }
                     });
                 }
