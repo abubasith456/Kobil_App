@@ -134,6 +134,7 @@ public class SideMenuViewModel extends AndroidViewModel {
             sideMenuFragment.getActivity().getSupportFragmentManager().popBackStack();
             Fragment fragment = new ActivationFragment();
             FragmentTransaction transaction = sideMenuFragment.getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -160,6 +161,7 @@ public class SideMenuViewModel extends AndroidViewModel {
                         sideMenuFragment.getActivity().getSupportFragmentManager().popBackStack();
                         Fragment fragment = new InitFragment();
                         FragmentTransaction transaction = sideMenuFragment.getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                         transaction.replace(R.id.frameLayoutForSideMenu, fragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
@@ -184,6 +186,7 @@ public class SideMenuViewModel extends AndroidViewModel {
         try {
             Fragment fragment = new ChangePinFragment();
             FragmentTransaction transaction = sideMenuFragment.getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             transaction.replace(R.id.frameLayoutForSideMenu, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -368,7 +371,7 @@ public class SideMenuViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog(sideMenuFragment.getContext(),R.style.MyAlertDialogStyle);
+        progressdialog = new ProgressDialog(sideMenuFragment.getContext(), R.style.MyAlertDialogStyle);
         progressdialog.setMessage(message);
         progressdialog.setCancelable(false);
         progressdialog.show();

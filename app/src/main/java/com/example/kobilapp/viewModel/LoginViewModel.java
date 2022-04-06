@@ -5,7 +5,6 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +31,6 @@ import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
-import com.kobil.midapp.ast.api.enums.AstPropertyFlags;
-import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
-import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -177,6 +173,7 @@ public class LoginViewModel extends AndroidViewModel {
                             pinCode.set("");
                             Fragment fragment = DashboardFragment.newInstance();
                             FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left);
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                             transaction.addToBackStack(null);
                             transaction.commit();
@@ -205,6 +202,7 @@ public class LoginViewModel extends AndroidViewModel {
                         pinCode.set("");
                         Fragment fragment = DashboardFragment.newInstance();
                         FragmentTransaction transaction = loginFragment.getParentFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
                         transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
@@ -269,7 +267,7 @@ public class LoginViewModel extends AndroidViewModel {
 
     private void doRegisterOfflineFunction() {
         try {
-            astOffline.getAstFunction(loginFragment.getContext(), sdk);
+            astOffline.setAstOfflineFunction(loginFragment.getContext(), sdk);
 
         } catch (Exception e) {
             Log.e("Error=> ", e.getMessage());

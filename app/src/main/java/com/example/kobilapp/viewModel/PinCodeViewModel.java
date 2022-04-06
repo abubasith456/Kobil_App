@@ -89,7 +89,7 @@ public class PinCodeViewModel extends AndroidViewModel {
         this.activationCode = activationCode;
     }
 
-    public void onBackClick(View view){
+    public void onBackClick(View view) {
         pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
     }
 
@@ -245,6 +245,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                                 pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
                                 Fragment fragment = new UsersFragment();
                                 FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                                 transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                                 transaction.commit();
                                 SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
@@ -252,6 +253,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                                 pinCodeFragment.getSupportFragmentManager().popBackStackImmediate();
                                 Fragment fragment = new LoginFragment();
                                 FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                                 transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                                 transaction.commit();
                                 SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
@@ -272,6 +274,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Fragment fragment = new LoginFragment();
                             FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                             transaction.commit();
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
@@ -380,7 +383,7 @@ public class PinCodeViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog(pinCodeFragment,R.style.MyAlertDialogStyle);
+        progressdialog = new ProgressDialog(pinCodeFragment, R.style.MyAlertDialogStyle);
         progressdialog.setCancelable(false);
         progressdialog.setMessage(message);
         progressdialog.show();

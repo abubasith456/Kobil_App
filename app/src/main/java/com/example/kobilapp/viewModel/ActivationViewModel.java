@@ -61,6 +61,7 @@ public class ActivationViewModel extends AndroidViewModel {
             if (validate()) {
                 Fragment fragment = new PinCodeFragment(id, actCode);
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
                 transaction.replace(R.id.frameLayoutForSideMenu, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();

@@ -12,11 +12,7 @@ public class AstOffline {
 
     private static AstOfflineFunctions astOfflineFunctions;
 
-    public AstOffline(){
-
-    }
-
-    public AstOfflineFunctions getAstFunction(Context context, AstSdk astSdk) {
+    public void setAstOfflineFunction(Context context, AstSdk astSdk) {
         astOfflineFunctions = astSdk.doRegisterOfflineFunctions(new AstOfflineFunctionsListener() {
             @Override
             public void onProvidePinBegin() {
@@ -43,7 +39,11 @@ public class AstOffline {
                 Log.e("AstOfflineFunctions", "onGetReSynchronizationDataEnd called ==> Status: " + astStatus + " tring: " + s);
             }
         });
+    }
+
+    public AstOfflineFunctions getAstOfflineFunctions() {
         return astOfflineFunctions;
     }
+
 
 }
