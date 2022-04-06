@@ -14,7 +14,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-        Log.d(TAG, "Refreshed token: " + message);
+        Log.d(TAG, "onMessageReceived: " + message);
     }
 
     @Override

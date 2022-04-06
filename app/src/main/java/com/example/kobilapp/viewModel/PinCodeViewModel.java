@@ -308,7 +308,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                 AlertDialog alertDialog = alert.create();
                 alertDialog.show();
             }, 12000);
-            setProperty();
+//            setProperty();
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
         }
