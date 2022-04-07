@@ -274,7 +274,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Fragment fragment = new LoginFragment();
                             FragmentTransaction transaction = pinCodeFragment.getSupportFragmentManager().beginTransaction();
-                            transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
+                            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
                             transaction.commit();
                             SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
@@ -318,7 +318,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                 }
                 AlertDialog alertDialog = alert.create();
                 alertDialog.show();
-            }, 12000);
+            }, 16000);
 //            setProperty();
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
@@ -347,15 +347,15 @@ public class PinCodeViewModel extends AndroidViewModel {
                                             10, flag);
                                     handler.postDelayed(() -> {
                                         sdk.exit(0);
-                                    }, 1000);
-                                }, 3000);
+                                    }, 3000);
+                                }, 2000);
                             } catch (Exception e) {
                                 Log.e("Error=> ", e.getMessage());
                             }
                         }
                     }, 4000);
                 }
-            }, 4000);
+            }, 3000);
         } catch (Exception e) {
             Log.e("Error =>", e.getMessage());
         }

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
@@ -44,9 +45,11 @@ import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
+import java.util.Objects;
+
 public class SideMenuViewModel extends AndroidViewModel {
     private static final int RESULT_OK = 0;
-    private SideMenuFragment sideMenuFragment;
+    private FragmentActivity sideMenuFragment;
     private String from;
     public ObservableField<Boolean> selectLanguageVisibility = new ObservableField<>();
     public ObservableField<Boolean> changePinVisibility = new ObservableField<>();
@@ -54,19 +57,23 @@ public class SideMenuViewModel extends AndroidViewModel {
     public ObservableField<Boolean> deleteUserVisibility = new ObservableField<>();
     public ObservableField<Boolean> reportVisibility = new ObservableField<>();
     public ObservableField<Boolean> contactDeskVisibility = new ObservableField<>();
+    public ObservableField<Boolean> logoutVisibility = new ObservableField<>();
     private ProgressDialog progressdialog;
+    private final AstSdk sdk;
 
     public SideMenuViewModel(@NonNull Application application) {
         super(application);
+        sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
         deleteUserVisibility.set(false);
         reportVisibility.set(true);
         contactDeskVisibility.set(true);
         selectLanguageVisibility.set(true);
+        logoutVisibility.set(false);
     }
 
-    public void getFragment(SideMenuFragment sideMenuFragment) {
+    public void getFragment(FragmentActivity sideMenuFragment) {
         this.sideMenuFragment = sideMenuFragment;
-        from = SharedPreference.getInstance().getValue(sideMenuFragment.getContext(), "from");
+        from = SharedPreference.getInstance().getValue(sideMenuFragment, "from");
         if (from.equals("LoginFragment")) {
             changePinVisibility.set(false);
             addUserVisibility.set(true);
@@ -78,6 +85,7 @@ public class SideMenuViewModel extends AndroidViewModel {
         } else if (from.equals("DashboardFragment")) {
             changePinVisibility.set(true);
             deleteUserVisibility.set(false);
+            logoutVisibility.set(true);
         } else if (from.equals("UsersFragment")) {
             changePinVisibility.set(false);
             addUserVisibility.set(true);
@@ -90,7 +98,7 @@ public class SideMenuViewModel extends AndroidViewModel {
 
     public void closeMenu(View view) {
         try {
-            sideMenuFragment.getActivity().getSupportFragmentManager().popBackStackImmediate();
+            sideMenuFragment.getSupportFragmentManager().popBackStackImmediate();
         } catch (Exception e) {
             Log.e("Error=>", e.getMessage());
         }
@@ -98,7 +106,7 @@ public class SideMenuViewModel extends AndroidViewModel {
 
     public void selectLanguageClick(View view) {
         try {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(sideMenuFragment.getContext());
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(sideMenuFragment);
             alertDialog.setTitle("Select Language");
             String[] items = {"English", "German"};
             int checkedItem = 0;
@@ -107,10 +115,10 @@ public class SideMenuViewModel extends AndroidViewModel {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
-                            Toast.makeText(sideMenuFragment.getContext(), "Clicked on English", Toast.LENGTH_LONG).show();
+                            Toast.makeText(sideMenuFragment, "Clicked on English", Toast.LENGTH_LONG).show();
                             break;
                         case 1:
-                            Toast.makeText(sideMenuFragment.getContext(), "Clicked on German", Toast.LENGTH_LONG).show();
+                            Toast.makeText(sideMenuFragment, "Clicked on German", Toast.LENGTH_LONG).show();
                             break;
                     }
                 }
@@ -131,10 +139,10 @@ public class SideMenuViewModel extends AndroidViewModel {
     public void onAddUserClick(View view) {
         try {
             Log.e("Clicked", "onClicked");
-            sideMenuFragment.getActivity().getSupportFragmentManager().popBackStack();
+            sideMenuFragment.getSupportFragmentManager().popBackStack();
             Fragment fragment = new ActivationFragment();
-            FragmentTransaction transaction = sideMenuFragment.getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(  R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
+            FragmentTransaction transaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -146,8 +154,8 @@ public class SideMenuViewModel extends AndroidViewModel {
     public void onDeleteUserClick(View view) {
         try {
             Log.e("Clicked", "onDeleteUserClick");
-            String username = SharedPreference.getInstance().getValue(sideMenuFragment.getContext(), "userId");
-            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment.getContext());
+            String username = SharedPreference.getInstance().getValue(sideMenuFragment, "userId");
+            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment);
             builder.setMessage("Are you sure do you want to delete " + username + " user?");
             builder.setCancelable(false);
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -158,14 +166,14 @@ public class SideMenuViewModel extends AndroidViewModel {
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         progressdialog.dismiss();
-                        sideMenuFragment.getActivity().getSupportFragmentManager().popBackStack();
+                        sideMenuFragment.getSupportFragmentManager().popBackStack();
                         Fragment fragment = new InitFragment();
-                        FragmentTransaction transaction = sideMenuFragment.getActivity().getSupportFragmentManager().beginTransaction();
+                        FragmentTransaction transaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
                         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                         transaction.replace(R.id.frameLayoutForSideMenu, fragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        SharedPreference.getInstance().saveValue(sideMenuFragment.getContext(), "from", "DashboardFragment");
+                        SharedPreference.getInstance().saveValue(sideMenuFragment, "from", "DashboardFragment");
                     }, 3000);
                 }
             }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -185,7 +193,7 @@ public class SideMenuViewModel extends AndroidViewModel {
     public void onChangePinClick(View view) {
         try {
             Fragment fragment = new ChangePinFragment();
-            FragmentTransaction transaction = sideMenuFragment.getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
             transaction.replace(R.id.frameLayoutForSideMenu, fragment);
             transaction.addToBackStack(null);
@@ -267,7 +275,7 @@ public class SideMenuViewModel extends AndroidViewModel {
             final SpannableString fromAbroad = new SpannableString("7411606412");
             Linkify.addLinks(fromMalta, Linkify.PHONE_NUMBERS);
             Linkify.addLinks(fromAbroad, Linkify.PHONE_NUMBERS);
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(sideMenuFragment.getContext());
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(sideMenuFragment);
             LayoutInflater inflater = sideMenuFragment.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.alert_dialog, null);
             dialogBuilder.setView(dialogView);
@@ -309,9 +317,9 @@ public class SideMenuViewModel extends AndroidViewModel {
 
     public void onReportClick(View view) {
         try {
-            String deviceName = SharedPreference.getInstance().getValue(sideMenuFragment.getContext(), "deviceName");
-            String deviceOSVersion = SharedPreference.getInstance().getValue(sideMenuFragment.getContext(), "deviceOSVersion");
-            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment.getContext());
+            String deviceName = SharedPreference.getInstance().getValue(sideMenuFragment, "deviceName");
+            String deviceOSVersion = SharedPreference.getInstance().getValue(sideMenuFragment, "deviceOSVersion");
+            AlertDialog.Builder builder = new AlertDialog.Builder(sideMenuFragment);
             builder.setTitle("Report");
             builder.setMessage(Html.fromHtml("<b>" + " Device Name: " + "</b>" + deviceName +
                     "<b>" + "<br>" + "Device OS: " + "</b>" + deviceOSVersion));
@@ -330,7 +338,7 @@ public class SideMenuViewModel extends AndroidViewModel {
                         try {
                             sideMenuFragment.startActivity(Intent.createChooser(intent, "Send mail..."));
                         } catch (android.content.ActivityNotFoundException ex) {
-                            Toast.makeText(sideMenuFragment.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(sideMenuFragment, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         Log.e("Error=>", e.getMessage());
@@ -359,10 +367,31 @@ public class SideMenuViewModel extends AndroidViewModel {
         }
     }
 
+    public void onLogoutClick(View view) {
+        try {
+            showProcessBar("Logging out....");
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                sdk.exit(0);
+                progressdialog.dismiss();
+                sideMenuFragment.getSupportFragmentManager().popBackStackImmediate();
+                Fragment fragment = new LoginFragment();
+                FragmentTransaction transaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                transaction.commit();
+                SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+            }, 2000);
+
+        } catch (Exception e) {
+            Log.e("Error:", e.getMessage());
+        }
+    }
+
     private void deleteUser(String user_id) {
         try {
             SdkListener listener = new SdkListener();
-            AstSdk sdk = AstSdkFactory.getSdk(sideMenuFragment.getContext(), listener);
+            AstSdk sdk = AstSdkFactory.getSdk(sideMenuFragment, listener);
             sdk.doDeactivate(user_id);
             Log.e("deleteUser:", "User deleted " + user_id);
         } catch (Exception e) {
@@ -371,7 +400,7 @@ public class SideMenuViewModel extends AndroidViewModel {
     }
 
     private void showProcessBar(String message) {
-        progressdialog = new ProgressDialog(sideMenuFragment.getContext(), R.style.MyAlertDialogStyle);
+        progressdialog = new ProgressDialog(sideMenuFragment, R.style.MyAlertDialogStyle);
         progressdialog.setMessage(message);
         progressdialog.setCancelable(false);
         progressdialog.show();

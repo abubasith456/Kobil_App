@@ -20,11 +20,11 @@
         <entry key="app/src/main/res/layout/init_fragment.xml" value="0.12646942138671877" />
         <entry key="app/src/main/res/layout/list_users.xml" value="0.11510416666666666" />
         <entry key="app/src/main/res/layout/list_view_users.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.277603907943461" />
+        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.21390609300205476" />
         <entry key="app/src/main/res/layout/menu_fragment.xml" value="0.26463877360026045" />
         <entry key="app/src/main/res/layout/pincode_fragment.xml" value="0.3049530029296875" />
         <entry key="app/src/main/res/layout/scan_barcode_fragment.xml" value="0.11354166666666667" />
-        <entry key="app/src/main/res/layout/side_menu_fragment.xml" value="0.2997355143229167" />
+        <entry key="app/src/main/res/layout/side_menu_fragment.xml" value="0.26920623779296876" />
         <entry key="app/src/main/res/layout/users_fragment.xml" value="0.10104166666666667" />
       </map>
     </option>

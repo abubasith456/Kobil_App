@@ -39,7 +39,7 @@ public class SideMenuFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SideMenuViewModel.class);
         sideMenuFragmentBinding.setSideMenuViewModel(mViewModel);
-        mViewModel.getFragment(this);
+        mViewModel.getFragment(getActivity());
     }
 
 }

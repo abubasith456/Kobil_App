@@ -65,7 +65,6 @@ public class ActivationViewModel extends AndroidViewModel {
                 transaction.replace(R.id.frameLayoutForSideMenu, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
                 resetFields();
             }
         } catch (Exception e) {

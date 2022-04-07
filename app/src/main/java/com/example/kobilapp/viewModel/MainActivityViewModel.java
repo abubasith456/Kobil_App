@@ -65,7 +65,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         try {
             String localization = "en";
             byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
-            String appName = "Kobil App";
+            String appName = getApplication().getString(R.string.app_name);
             sdk.init(localization, version, appName);
         } catch (Exception exception) {
             Log.e("Error==>", exception.getMessage());
@@ -125,6 +125,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         utils.hideSoftKeyboard(activity);
         Fragment fragment = new SideMenuFragment("LoginFragment");
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(R.id.frameLayoutForSideMenu, fragment);
         transaction.addToBackStack(null);
         transaction.commit();

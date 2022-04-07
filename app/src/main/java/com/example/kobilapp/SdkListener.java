@@ -305,17 +305,18 @@ public class SdkListener implements AstSdkListener {
     public void onPropertySynchronization(String s, AstPropertyOwner
             astPropertyOwner, AstPropertySynchronizationDirection
                                                   astPropertySynchronizationDirection, AstStatus astStatus) {
-
+        Log.e("AstSDKCallback", "onPropertySynchronization Called: " + "Status: " + astStatus + " AstPropertySynchronizationDirection: " + astPropertySynchronizationDirection +
+                " String: " + s + " AstPropertyOwner: " + astPropertyOwner);
     }
 
     @Override
     public void onBusyBegin() {
-
+        Log.e("AstSDKCallback", "onBusyBegin: Called");
     }
 
     @Override
     public void onBusyEnd() {
-
+        Log.e("AstSDKCallback", "onBusyEnd: Called");
     }
 
     @Override

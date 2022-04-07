@@ -31,6 +31,9 @@ import com.example.kobilapp.UpdateApp;
 import com.example.kobilapp.utils.Utils;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.api.enums.AstDeviceType;
+import com.kobil.midapp.ast.api.enums.AstPropertyFlags;
+import com.kobil.midapp.ast.api.enums.AstPropertyOwner;
+import com.kobil.midapp.ast.api.enums.AstPropertyType;
 import com.kobil.midapp.ast.api.enums.AstStatus;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -130,26 +133,26 @@ public class LoginViewModel extends AndroidViewModel {
                 showProcessBar("Logging in please wait...");
 
                 handler.postDelayed(this::showAlertDialog, 9000);
-//                handler.postDelayed(() -> {
-//
-//                    if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
-//                        try {
-//                            sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
-//                            handler.postDelayed(() -> {
-//                                String deviceName = SharedPreference.getInstance().getValue(loginFragment.getContext(), "deviceName");
-//                                byte[] name = deviceName.getBytes();
-//                                int flag = AstPropertyFlags.NONE;
-//                                sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
-//                                        name,
-//                                        AstPropertyType.UTF8STRING,
-//                                        AstPropertyOwner.OWNER_DEVICE,
-//                                        10, flag);
-//                            }, 3000);
-//                        } catch (Exception e) {
-//                            Log.e("Error=> ", e.getMessage());
-//                        }
-//                    }
-//                }, 5000);
+                handler.postDelayed(() -> {
+
+                    if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
+                        try {
+                            sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
+                            handler.postDelayed(() -> {
+                                String deviceName = SharedPreference.getInstance().getValue(loginFragment.getContext(), "deviceName");
+                                byte[] name = deviceName.getBytes();
+                                int flag = AstPropertyFlags.NONE;
+                                sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
+                                        name,
+                                        AstPropertyType.UTF8STRING,
+                                        AstPropertyOwner.OWNER_DEVICE,
+                                        10, flag);
+                            }, 3000);
+                        } catch (Exception e) {
+                            Log.e("Error=> ", e.getMessage());
+                        }
+                    }
+                }, 5000);
 
             } else {
                 Toast.makeText(getApplication(), "Please check the internet connection!", Toast.LENGTH_SHORT).show();
