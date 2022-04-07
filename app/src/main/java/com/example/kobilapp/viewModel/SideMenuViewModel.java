@@ -42,6 +42,7 @@ import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
 import com.example.kobilapp.utils.SharedPreference;
+import com.kobil.midapp.ast.api.AstLogListener;
 import com.kobil.midapp.ast.api.AstSdk;
 import com.kobil.midapp.ast.sdk.AstSdkFactory;
 
@@ -382,7 +383,6 @@ public class SideMenuViewModel extends AndroidViewModel {
                 transaction.commit();
                 SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
             }, 2000);
-
         } catch (Exception e) {
             Log.e("Error:", e.getMessage());
         }

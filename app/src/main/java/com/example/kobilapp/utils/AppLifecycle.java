@@ -25,12 +25,11 @@ import java.lang.reflect.Field;
 public class AppLifecycle extends Application implements LifecycleObserver {
 
     private Context context;
-    private final SdkListener listener = new SdkListener();
     private final AstSdk sdk;
 
     public AppLifecycle(Context context) {
         this.context = context;
-        sdk = AstSdkFactory.getSdk(context, listener);
+        sdk = AstSdkFactory.getSdk(context, SdkListener.getInstance());
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

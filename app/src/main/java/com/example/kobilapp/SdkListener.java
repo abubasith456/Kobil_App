@@ -124,22 +124,23 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onInfoHardwareDisplayMessageBegin() {
+        Log.e("AstSDKCallback", "onInfoHardwareDisplayMessageBegin() called" );
 
     }
 
     @Override
     public void onInfoHardwareDisplayMessageEnd() {
-
+        Log.e("AstSDKCallback", "onInfoHardwareDisplayMessageEnd() called" );
     }
 
     @Override
     public void onInfoHardwareTransactionBegin() {
-
+        Log.e("AstSDKCallback", "onInfoHardwareTransactionBegin() called" );
     }
 
     @Override
     public void onInfoHardwareTransactionEnd() {
-
+        Log.e("AstSDKCallback", "onInfoHardwareTransactionEnd() called" );
     }
 
     @Override
@@ -222,7 +223,7 @@ public class SdkListener implements AstSdkListener {
 
     @Override
     public void onPinUnblockBegin() {
-
+        Log.e("AstSDKCallback", "onPinUnblockBegin() Called: ");
     }
 
     @Override
