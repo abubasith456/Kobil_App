@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class PinCodeFragment extends Fragment {
         pincodeFragmentBinding.setPinCodeViewModel(mViewModel);
         mViewModel.getValue(userId,activationCode);
         mViewModel.getFragment(getActivity());
+        pincodeFragmentBinding.editTextConfirmCode.setTransformationMethod(new PasswordTransformationMethod());
         // TODO: Use the ViewModel
     }
 

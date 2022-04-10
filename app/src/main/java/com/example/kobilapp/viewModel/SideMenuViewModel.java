@@ -1,5 +1,6 @@
 package com.example.kobilapp.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -32,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 
+import com.example.kobilapp.AstListener;
 import com.example.kobilapp.MainActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
@@ -41,6 +43,8 @@ import com.example.kobilapp.fragment.ChangePinFragment;
 import com.example.kobilapp.fragment.InitFragment;
 import com.example.kobilapp.fragment.LoginFragment;
 import com.example.kobilapp.fragment.SideMenuFragment;
+import com.example.kobilapp.fragment.UsersFragment;
+import com.example.kobilapp.model.Status;
 import com.example.kobilapp.utils.SharedPreference;
 import com.kobil.midapp.ast.api.AstLogListener;
 import com.kobil.midapp.ast.api.AstSdk;
@@ -50,6 +54,7 @@ import java.util.Objects;
 
 public class SideMenuViewModel extends AndroidViewModel {
     private static final int RESULT_OK = 0;
+    @SuppressLint("StaticFieldLeak")
     private FragmentActivity sideMenuFragment;
     private String from;
     public ObservableField<Boolean> selectLanguageVisibility = new ObservableField<>();
@@ -60,11 +65,10 @@ public class SideMenuViewModel extends AndroidViewModel {
     public ObservableField<Boolean> contactDeskVisibility = new ObservableField<>();
     public ObservableField<Boolean> logoutVisibility = new ObservableField<>();
     private ProgressDialog progressdialog;
-    private final AstSdk sdk;
 
     public SideMenuViewModel(@NonNull Application application) {
         super(application);
-        sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
+        AstListener.getInstance().setAstSdk(getApplication());
         deleteUserVisibility.set(false);
         reportVisibility.set(true);
         contactDeskVisibility.set(true);
@@ -373,16 +377,27 @@ public class SideMenuViewModel extends AndroidViewModel {
             showProcessBar("Logging out....");
             Handler handler = new Handler();
             handler.postDelayed(() -> {
-                sdk.exit(0);
+                AstListener.getInstance().getAstSdk().exit(0);
                 progressdialog.dismiss();
                 sideMenuFragment.getSupportFragmentManager().popBackStackImmediate();
-                Fragment fragment = new LoginFragment();
-                FragmentTransaction transaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-                transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
-                transaction.commit();
-                SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
-            }, 2000);
+
+                AstListener.getInstance().initSdk();
+                if (Status.getInstance().getList().size()>=2){
+                    Fragment usersFragment = new UsersFragment();
+                    FragmentTransaction fragmentTransaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                    fragmentTransaction.replace(R.id.frameLayoutLoginFragmentContainer, usersFragment);
+                    fragmentTransaction.commit();
+                    SharedPreference.getInstance().saveValue(getApplication(), "from", "UsersFragment");
+                }else {
+                    Fragment fragment = new LoginFragment();
+                    FragmentTransaction transaction = sideMenuFragment.getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                    transaction.replace(R.id.frameLayoutLoginFragmentContainer, fragment);
+                    transaction.commit();
+                    SharedPreference.getInstance().saveValue(getApplication(), "from", "LoginFragment");
+                }
+            }, 3000);
         } catch (Exception e) {
             Log.e("Error:", e.getMessage());
         }

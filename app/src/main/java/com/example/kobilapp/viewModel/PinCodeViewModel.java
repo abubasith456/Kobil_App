@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.kobilapp.AstListener;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
 import com.example.kobilapp.db.AppDatabase;
@@ -63,12 +64,12 @@ public class PinCodeViewModel extends AndroidViewModel {
     private Executor executor;
     private ProgressDialog progressdialog;
     boolean valid = true;
-    private final AstSdk sdk;
     private Handler handler;
 
     public PinCodeViewModel(@NonNull Application application) {
         super(application);
         handler = new Handler();
+        AstListener.getInstance().setAstSdk(getApplication());
         pin.set("");
         confirmPin.set("");
         confirmPinError.set("");
@@ -77,7 +78,6 @@ public class PinCodeViewModel extends AndroidViewModel {
         pinError2Visibility.set(true);
         pinError1.set("PIN cannot empty.");
         pinError2.set("Minimum 8 digits.");
-        sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
     }
 
     public void getFragment(FragmentActivity pinCodeFragment) {
@@ -226,7 +226,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                 SharedPreference.getInstance().saveValue(getApplication(), "fingerPrint", "cancelled");
             }
             char[] pinCode = pin.get().toCharArray();
-            sdk.doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
+            AstListener.getInstance().getAstSdk().doActivation(AstDeviceType.VIRTUALDEVICE, pinCode, userId, activationCode);
 
             handler.postDelayed(() -> {
                 AlertDialog.Builder alert = new AlertDialog.Builder(pinCodeFragment);
@@ -319,7 +319,7 @@ public class PinCodeViewModel extends AndroidViewModel {
                 AlertDialog alertDialog = alert.create();
                 alertDialog.show();
             }, 16000);
-//            setProperty();
+            setProperty();
         } catch (Exception e) {
             Log.e("Error fingerPrint=>", e.getMessage());
         }
@@ -329,24 +329,25 @@ public class PinCodeViewModel extends AndroidViewModel {
         try {
             handler.postDelayed(() -> {
                 if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
-                    sdk.doLogin(AstDeviceType.VIRTUALDEVICE, pin.get().toCharArray(), userId);
+                    AstListener.getInstance().getAstSdk().doLogin(AstDeviceType.VIRTUALDEVICE, pin.get().toCharArray(), userId);
                     handler.postDelayed(() -> {
                         if (StatusMessage.getInstance().getAstStatus() == AstStatus.OK) {
                             try {
-                                sdk.doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
+                                AstListener.getInstance().getAstSdk().doSetPropertyRequest(AstDeviceType.VIRTUALDEVICE);
                                 handler.postDelayed(() -> {
                                     String deviceName = SharedPreference.getInstance().getValue(pinCodeFragment, "deviceName");
                                     String ipAddress = SharedPreference.getInstance().getValue(pinCodeFragment, "deviceIPAddress");
                                     byte[] name = deviceName.getBytes();
                                     byte[] ip = ipAddress.getBytes();
                                     int flag = AstPropertyFlags.NONE;
-                                    sdk.doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
+                                    AstListener.getInstance().getAstSdk().doSetProperty(AstDeviceType.VIRTUALDEVICE, "KS.DeviceName",
                                             name,
                                             AstPropertyType.UTF8STRING,
                                             AstPropertyOwner.OWNER_DEVICE,
                                             10, flag);
                                     handler.postDelayed(() -> {
-                                        sdk.exit(0);
+                                        AstListener.getInstance().getAstSdk().exit(0);
+                                        AstListener.getInstance().initSdk();
                                     }, 3000);
                                 }, 2000);
                             } catch (Exception e) {
@@ -363,7 +364,7 @@ public class PinCodeViewModel extends AndroidViewModel {
 
     private void setUserId(String userId) {
         try {
-            sdk.doSetUserId(userId);
+            AstListener.getInstance().getAstSdk().doSetUserId(userId);
         } catch (Exception e) {
             Log.e("Error =>", e.getMessage());
         }

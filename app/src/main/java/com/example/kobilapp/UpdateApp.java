@@ -19,6 +19,14 @@ import com.kobil.midapp.ast.sdk.AstSdkFactory;
 public class UpdateApp {
 
     private static AstUpdate astUpdate;
+    private static UpdateApp instance;
+
+    public static UpdateApp getInstance() {
+        if (instance == null) {
+            instance = new UpdateApp();
+        }
+        return instance;
+    }
 
     public void astUpdate(Context context, AstSdk sdk) {
         astUpdate = sdk.registerUpdate(new AstUpdateListener() {

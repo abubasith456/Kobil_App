@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.kobilapp.AstListener;
 import com.example.kobilapp.MainActivity;
 import com.example.kobilapp.R;
 import com.example.kobilapp.SdkListener;
@@ -44,13 +45,12 @@ public class MainActivityViewModel extends AndroidViewModel {
     @SuppressLint("StaticFieldLeak")
     private MainActivity activity;
     private final Utils utils = new Utils();
-    private final AstSdk sdk;
 //    private SdkListener listener = new SdkListener();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        AstListener.getInstance().setAstSdk(application.getApplicationContext());
         menuVisibility.set(true);
-        sdk = AstSdkFactory.getSdk(getApplication(), SdkListener.getInstance());
         sdkInit();
         registerUpdate();
         tokenFCM();
@@ -63,10 +63,11 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private void sdkInit() {
         try {
-            String localization = "en";
-            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
-            String appName = getApplication().getString(R.string.app_name);
-            sdk.init(localization, version, appName);
+//            String localization = "en";
+//            byte[] version = new byte[]{2, 5, 0, 0, 0, 0};
+//            String appName = getApplication().getString(R.string.app_name);
+//            sdk.init(localization, version, appName);
+            AstListener.getInstance().initSdk();
         } catch (Exception exception) {
             Log.e("Error==>", exception.getMessage());
         }
@@ -74,8 +75,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private void registerUpdate() {
         try {
-            UpdateApp updateApp = new UpdateApp();
-            updateApp.astUpdate(activity, sdk);
+            UpdateApp.getInstance().astUpdate(activity, AstListener.getInstance().getAstSdk());
 //            AstUpdate astUpdate = sdk.registerUpdate(new AstUpdateListener() {
 //                @Override
 //                public void onUpdateBegin(AstDeviceType astDeviceType, AstUpdateStatus astUpdateStatus) {

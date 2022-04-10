@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class ActivationFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ActivationViewModel.class);
         activationFragmentBinding.setActivationViewModel(mViewModel);
         mViewModel.getFragment(getActivity());
+        activationFragmentBinding.editTextUserName.setTransformationMethod(new PasswordTransformationMethod());
 
         // TODO: Use the ViewModel
     }

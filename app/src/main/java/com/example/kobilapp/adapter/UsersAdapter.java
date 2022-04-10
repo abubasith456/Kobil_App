@@ -106,6 +106,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 //                    SharedPreference.getInstance().saveValue(usersFragment.getContext(), "userId", usersList.get(getAdapterPosition()).user_id);
                     SharedPreference.getInstance().saveValue(usersFragment.getContext(), "userId", user.get(getAdapterPosition()));
                     FragmentTransaction transaction = usersFragment.getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                     transaction.replace(R.id.frameLayoutLoginFragmentContainer, loginFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
@@ -133,6 +134,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                             Fragment fragment = new InitFragment();
                             FragmentTransaction transaction = usersFragment.getActivity().getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.frameLayoutForSideMenu, fragment);
+                            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                             transaction.addToBackStack(null);
                             transaction.commit();
                             user.remove(getAdapterPosition());
